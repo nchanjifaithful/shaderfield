@@ -14,7 +14,6 @@ The repository also contains the **Shaderfield site**, a component browser where
 
 - [Quick start](#quick-start)
 - [Repository layout](#repository-layout)
-- [Hosting the site](#hosting-the-site)
 - [Using the shaders on a website](#using-the-shaders-on-a-website)
 - [Using the shaders in motion video](#using-the-shaders-in-motion-video)
 - [Using it with AI coding agents](#using-it-with-ai-coding-agents)
@@ -63,37 +62,6 @@ shaderfield/
 ├── .nojekyll               Stops GitHub Pages from processing the files
 └── README.md
 ```
-
----
-
-## Hosting the site
-
-The site is static. No build step, no package install.
-
-### GitHub Pages
-
-1. Create a repository and upload the contents of this folder to the repository root.
-2. Go to **Settings → Pages**.
-3. Under **Source**, choose **Deploy from a branch**. Pick `main` and `/ (root)`, then save.
-4. After a minute the site is live at `https://<user>.github.io/<repo>/`.
-
-### Netlify, Vercel, Cloudflare Pages
-
-Point the project at the folder. There is no build command, and the output/publish directory is the root.
-
-### Locally
-
-The site loads scripts, so open it through a local server rather than `file://`:
-
-```bash
-npx serve .
-# or
-python3 -m http.server 8080
-```
-
-Then open `http://localhost:8080` (or the port shown).
-
-> **Note:** The site (`index.html` + `support.js`) loads React from unpkg.com at runtime, so it needs internet access. **The library `shaderfield.js` has no dependencies and makes no network requests.**
 
 ---
 
