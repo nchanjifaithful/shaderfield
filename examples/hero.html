@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shaderfield example: hero background</title>
+<style>
+  html, body { margin: 0; background: #09090b; color: #f2f2f4; font-family: Helvetica, Arial, sans-serif; }
+  .hero { position: relative; height: 100vh; min-height: 520px; overflow: hidden; }
+  .hero shader-field { position: absolute; inset: 0; }
+  .hero::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(to top, rgba(9,9,11,0.9), rgba(9,9,11,0) 60%); }
+  .copy { position: absolute; left: 48px; bottom: 56px; z-index: 1; max-width: 560px; }
+  h1 { margin: 0 0 16px; font-size: clamp(48px, 8vw, 112px); font-weight: 400; letter-spacing: -0.05em; line-height: 0.95; }
+  p { margin: 0; font-size: 18px; line-height: 1.5; color: #d4d5db; }
+  .switch { position: absolute; right: 48px; top: 40px; left: 48px; justify-content: flex-end; z-index: 1; display: flex; gap: 6px; flex-wrap: wrap; }
+  .switch button { all: unset; cursor: pointer; padding: 8px 14px; border-radius: 999px; font-size: 13px; border: 1px solid rgba(242,242,244,0.3); }
+  .switch button:hover { border-color: #f2f2f4; }
+</style>
+</head>
+<body>
+  <section class="hero">
+    <shader-field id="bg" effect="halo" palette="aqua" interactive></shader-field>
+    <div class="copy">
+      <h1 id="title">Something new is taking shape.</h1>
+      <p>A live Shaderfield background behind ordinary HTML. Move your cursor over it.</p>
+    </div>
+    <div class="switch">
+      <button data-e="halo">Halo</button>
+      <button data-e="current">Current</button>
+      <button data-e="fret">Fret</button>
+      <button data-e="skein">Skein</button>
+      <button data-e="harmonia">Harmonia</button>
+      <button data-e="thermal">Thermal</button>
+      <button data-e="mesh">Mesh</button>
+    </div>
+  </section>
+
+  <script src="../shaderfield.js"></script>
+  <script>
+    // Attributes update live: change effect, palette or any parameter.
+    const bg = document.getElementById("bg");
+    document.querySelectorAll("[data-e]").forEach(b =>
+      b.addEventListener("click", () => {
+        bg.removeAttribute("palette");          // fall back to the effect's own palette
+        bg.setAttribute("effect", b.dataset.e);
+      })
+    );
+    Shaderfield.motion.rise(document.getElementById("title"), { by: "word" });
+  </script>
+</body>
+</html>

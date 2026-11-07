@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shaderfield example: frame-accurate video render</title>
+<style>
+  html, body { margin: 0; background: #09090b; color: #f2f2f4; font-family: Helvetica, Arial, sans-serif; }
+  main { max-width: 1100px; margin: 0 auto; padding: 48px 24px; display: flex; flex-direction: column; gap: 20px; }
+  #plate { position: relative; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: #000; }
+  .row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; font-size: 14px; color: #a4a6b0; }
+  input[type=range] { flex: 1; accent-color: #f2f2f4; }
+  button { all: unset; cursor: pointer; padding: 9px 16px; border-radius: 999px; font-size: 13px; border: 1px solid rgba(242,242,244,0.3); color: #f2f2f4; }
+</style>
+</head>
+<body>
+<main>
+  <h1 style="margin:0;font-weight:400;letter-spacing:-0.03em">Frame-accurate rendering</h1>
+  <p style="margin:0;color:#a4a6b0;line-height:1.5">
+    With <code>autoplay: false</code> the field only draws when you call <code>render(seconds)</code>.
+    The same time always produces the same frame, which is what video tools like Remotion need.
+    Scrub the timeline, or record a WebM/MP4 of the plate.
+  </p>
+  <div id="plate"></div>
+  <div class="row">
+    <span id="tc">3.00 s</span>
+    <input id="scrub" type="range" min="0" max="10" step="0.01" value="3">
+    <button id="rec">Record 6 s · 1080p</button>
+  </div>
+</main>
+
+<script src="../shaderfield.js"></script>
+<script>
+  const field = Shaderfield.mount(document.getElementById("plate"), {
+    effect: "skein",
+    palette: "aurora",
+    autoplay: false,      // nothing animates on its own
+    interactive: false,
+    params: { wave: 0.7, draw: 1 }
+  });
+
+  const scrub = document.getElementById("scrub"), tc = document.getElementById("tc");
+  const draw = () => {
+    const t = parseFloat(scrub.value);
+    // ramp a parameter over time, exactly like you would per frame in a video composition
+    field.set("draw", Math.min(1, t / 2));
+    field.render(t);
+    tc.textContent = t.toFixed(2) + " s";
+  };
+  scrub.addEventListener("input", draw);
+  draw();
+
+  // Remotion equivalent:
+  //   const frame = useCurrentFrame(); const { fps } = useVideoConfig();
+  //   useLayoutEffect(() => { field.render(frame / fps); }, [frame]);
+
+  document.getElementById("rec").onclick = async (e) => {
+    e.target.textContent = "Recording…";
+    field.paused = false;                        // let it run in real time while recording
+    const blob = await field.record({ seconds: 6, width: 1920, height: 1080, fps: 60 });
+    field.paused = true;
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "shaderfield-skein." + (blob.type.includes("mp4") ? "mp4" : "webm");
+    a.click();
+    e.target.textContent = "Record 6 s · 1080p";
+  };
+</script>
+</body>
+</html>
