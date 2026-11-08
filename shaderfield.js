@@ -2062,10 +2062,29 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
     const X = (t) => ((ax * t + bx) * t + cx) * t, Y = (t) => ((ay * t + by) * t + cy) * t, dX = (t) => (3 * ax * t + 2 * bx) * t + cx;
     return (x) => { x = clamp(x); let t = x; for (let i = 0; i < 8; i++) { const d = dX(t); if (Math.abs(d) < 1e-6) break; t -= (X(t) - x) / d; } return Y(clamp(t)); }; };
   const ROLL = bez(0.76, 0, 0.24, 1);
+  // Word swap by typing: delete the last word, pause, type the next; the caret blinks while idle (Signpost Typewriter)
+  function typeSwap(el, words, o = {}) {
+    const TY = o.type ?? 0.055, DL = o.del ?? 0.032, hold = o.hold ?? 1.6, gap = o.gap ?? 0.12, block = o.caret === "block";
+    el.textContent = ""; el.style.display = "inline-flex"; el.style.alignItems = "center"; el.style.gap = block ? "0.07em" : "0.08em"; el.style.whiteSpace = "nowrap";
+    const txt = document.createElement("span"), car = document.createElement("span"); el.append(txt, car);
+    car.style.cssText = `flex:none;display:inline-block;width:${block ? "0.55em" : "0.05em"};height:0.8em;background:${o.caretColor || "currentColor"};`;
+    const seg = words.map((w, i) => { const prev = words[(i - 1 + words.length) % words.length], d = prev.length * DL, s = d + gap, e = s + w.length * TY; return { w, prev, d, s, e, L: e + hold }; });
+    const total = seg.reduce((a, b) => a + b.L, 0);
+    return loopFx(t => {
+      let u = t % total, i = 0; while (u > seg[i].L) { u -= seg[i].L; i++; } const g = seg[i]; let text, active = true, last = 0;
+      if (t < seg[0].L && i === 0) { text = g.w; active = false; last = 0; }
+      else if (u < g.d) text = g.prev.slice(0, g.prev.length - Math.floor(u / DL) - 1);
+      else if (u < g.s) { text = ""; active = false; last = g.d; }
+      else if (u < g.e) text = g.w.slice(0, Math.floor((u - g.s) / TY) + 1);
+      else { text = g.w; active = false; last = g.e; }
+      if (txt.textContent !== text) txt.textContent = text;
+      car.style.opacity = active || Math.floor((u - last + 0.53) / 0.53) % 2 === 0 ? 1 : 0;
+    });
+  }
   const HUES = ["#ff5f6d", "#ffb347", "#ffe66d", "#4ade80", "#38bdf8", "#818cf8", "#e879f9"];
   const conicG = (d, h) => `conic-gradient(from ${d.toFixed(1)}deg, ${(h || HUES).join(", ")}, ${(h || HUES)[0]})`;
   const exIn = (t) => (t <= 0 ? 0 : Math.pow(2, 10 * clamp(t) - 10));
   const ob21 = (t) => { t = clamp(t); const c1 = 2.1, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, countUp, tick, bars, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, countUp, tick, bars, typeSwap, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

@@ -3,7 +3,7 @@
 Live shaders and motion effects for websites and motion video. They come from the Shaders Lab launch films and ship as **one dependency-free JavaScript file**.
 
 - **27 shaders**: GLSL fields (Current, Fret, Skein, Harmonia, Halo, Thermal), text and glyph shaders (Decrypt, Data Wall, Sweep, Rain, Asciify, Glyph Graph, Sand), particles (Assemble), Canvas 2D scenes (Mesh, Aurora, Horizon, Blink, Drift, Sparkle, Filings, Gather, Lattice, Orbits, Prism) and two 3D glass pieces in an optional add-on (Glass Icons, Glass Coins). Each has its own parameters, palettes, cursor interaction, PNG export and video recording.
-- **8 motion effects**: text entrances, interface micro-motion and scene transitions, all plain DOM.
+- **9 motion effects**: text entrances, interface micro-motion and scene transitions, all plain DOM.
 - **3 ways to use it**: a `<shader-field>` HTML element for websites, a frame-accurate `render(t)` API for video tools, and a ready-made AI prompt generated in the lab.
 
 The repository also contains the **Shaderfield site**, a component browser where you can try every effect live, tune it, and copy the code, an AI prompt or a video render.
@@ -671,6 +671,7 @@ All helpers are in `Shaderfield.motion`. Helpers that run once return a **Promis
 | `rise(el, { by, stagger, duration, ease, out, delay })` | Gloww, Blastlabs, Closebook, Orfa Agents | Masked rise per `"char"` or `"word"`. `out: true` runs the exit. |
 | `countUp(el, { from, to, decimals, prefix, suffix, duration, delay })` | Tended HR, Closebook | Expo number tween with tabular figures. |
 | `revealWords(el, { dim, accent })` → stop | Tended HR, Closebook | Scroll-linked word reveal. Wrap words in `*asterisks*` to accent them. |
+| `typeSwap(el, words, { caret, caretColor, type, del, gap, hold })` → stop | Signpost Typewriter | Deletes the last word, pauses, types the next. `caret`: `"bar"` or `"block"`. |
 
 ### Interface
 
