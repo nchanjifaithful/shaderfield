@@ -2,7 +2,7 @@
 
 Live shaders and motion effects for websites and motion video. They come from the Shaders Lab launch films and ship as **one dependency-free JavaScript file**.
 
-- **7 GPU shaders**: Current, Fret, Skein, Harmonia, Halo, Thermal and Mesh. Each has its own parameters, 8 palettes, cursor and click interaction, PNG export and video recording.
+- **27 shaders**: GLSL fields (Current, Fret, Skein, Harmonia, Halo, Thermal), text and glyph shaders (Decrypt, Data Wall, Sweep, Rain, Asciify, Glyph Graph, Sand), particles (Assemble), Canvas 2D scenes (Mesh, Aurora, Horizon, Blink, Drift, Sparkle, Filings, Gather, Lattice, Orbits, Prism) and two 3D glass pieces in an optional add-on (Glass Icons, Glass Coins). Each has its own parameters, palettes, cursor interaction, PNG export and video recording.
 - **7 motion effects**: text entrances, interface micro-motion and scene transitions, all plain DOM.
 - **3 ways to use it**: a `<shader-field>` HTML element for websites, a frame-accurate `render(t)` API for video tools, and a ready-made AI prompt generated in the lab.
 
@@ -51,9 +51,12 @@ To see it working, open `examples/hero.html`.
 ```
 shaderfield/
 ├── index.html              The Shaderfield site (component browser + lab)
+├── Shaderfield.dc.html     Editable source of the site. index.html is a copy of it.
 ├── support.js              Runtime the site needs. Not needed for the library.
 ├── shaderfield-demos.js    Demo stages for the site. Not needed for the library.
-├── shaderfield.js          ← THE LIBRARY. This is the only file your projects need.
+├── shaderfield.js          ← THE LIBRARY. This is the only file most projects need.
+├── shaderfield-glass.js    Optional add-on for the two 3D glass shaders (loads three.js).
+├── assets/thinker.jpg      Default image for the Assemble shader.
 ├── examples/
 │   ├── hero.html           Shader background behind a hero, with an effect switcher
 │   ├── motion.html         typeIn, countUp, tick, bars, curtain, revealWords
@@ -319,6 +322,277 @@ Interaction: moving the cursor pushes the lattice, and a click strikes it. Palet
 
 ---
 
+
+### Text, images and switches
+Shaders marked with a default text draw that text themselves. Set your own with the `text` attribute (or `Shaderfield.mount(el, { text })`, or `field.setText()`). Separate lines with `|`; effects that cycle (Sweep, Sand, Blink) step through them.
+
+```html
+<shader-field effect="sweep" text="Every few centuries, the ground shifts.|This is our industrial revolution."></shader-field>
+<shader-field effect="assemble" src="statue.jpg"></shader-field>
+```
+
+`src` (or `field.setSource(imgOrCanvasOrVideo)`) gives Assemble its image; without one it uses `assets/thinker.jpg` next to the script. Params with a 0 – 1 range and step 1 (`paper`, `dots`, `invert`, `magnet`) are on/off switches. `charset`: 0 ascii, 1 blocks, 2 binary. Blink `edges`: 0 none, 1 left, 2 right, 3 radial.
+
+WebGL2 shaders fall back to a blank canvas where WebGL2 is unavailable.
+
+### 3D glass add-on
+Glass Icons and Glass Coins use three.js, so they live in a separate file that loads three.js from esm.sh the first time one is shown. The core file stays dependency-free.
+
+```html
+<script src="shaderfield.js"></script>
+<script src="shaderfield-glass.js"></script>
+<shader-field effect="coins" paper="1"></shader-field>
+```
+
+### Decrypt, from *Meridian Launch* (WebGL2)
+Text is rebuilt from best-fit glyphs and kept scrambled. A lens with a glowing, aberrated rim decodes it as it passes.
+Interaction: move to decode. Default palette: `aqua` (works with `aqua`, `ion`, `phosphor`, `ember`). Default text: “Something is thinking.”.
+
+| Param | Range | Default |
+|---|---|---|
+| `radius` (lens) | 0.05 – 1 | 0.34 |
+| `softness` | 0.02 – 1 | 0.5 |
+| `cell` | 8 – 32 | 15 |
+| `scramble` | 0 – 1 | 0.1 |
+| `edge` (edge glow) | 0 – 4 | 2 |
+| `split` (chroma split) | 0 – 30 | 10 |
+| `pass` (pass-through) | 0 – 1 | 0.15 |
+| `size` (text size) | 0.04 – 0.25 | 0.12 |
+
+### Data Wall, from *Meridian Launch* (WebGL2)
+A wall of backlog items held in cipher. Two lenses hunt across it and decode what they cross.
+Interaction: move to steer the first lens. Default palette: `aqua` (works with `aqua`, `ion`, `phosphor`, `ember`).
+
+| Param | Range | Default |
+|---|---|---|
+| `radius` (lens) | 0.05 – 0.6 | 0.22 |
+| `softness` | 0.02 – 1 | 0.5 |
+| `cell` | 8 – 32 | 15 |
+| `scramble` | 0 – 1 | 0.1 |
+| `edge` (edge glow) | 0 – 4 | 2 |
+| `split` (chroma split) | 0 – 30 | 10 |
+| `pass` (pass-through) | 0 – 1 | 0.15 |
+
+### Sand, from *Launch Film* (WebGL2)
+Each line forms out of drifting grains as a formation line sweeps down, holds, then blows back to dust.
+Interaction: move up and down to gather and scatter. Default palette: `mono` (works with `mono`). Default text: “Money still moves slowly. | Forms. Fees. Waiting. | Transactions, made effortless.”.
+
+| Param | Range | Default |
+|---|---|---|
+| `grain` | 1.5 – 8 | 3 |
+| `spread` | 20 – 600 | 220 |
+| `band` | 60 – 600 | 260 |
+| `swirl` | 0 – 200 | 60 |
+| `drift` | 0 – 2 | 0.7 |
+| `gravity` | -1 – 1 | 0.35 |
+| `cycle` | 2.5 – 12s | 5 |
+| `size` (text size) | 0.03 – 0.2 | 0.07 |
+
+### Assemble, from *No Peace*
+Thousands of particles orbit in a tilted ring, then swirl in to rebuild an image, catch a sweep of light and unravel again.
+Interaction: move to turn it · set src for your own image. Default palette: `solar` (works with `solar`, `mono`, `ember`).
+
+| Param | Range | Default |
+|---|---|---|
+| `grain` (density) | 2 – 6 | 3 |
+| `scale` | 0.4 – 1.6 | 1 |
+| `offset` | -0.4 – 0.4 | 0 |
+| `cycle` | 5 – 20s | 10 |
+| `bloom` | 0 – 1.5 | 0.9 |
+
+### Aurora, from *Going to Be Alright* (Canvas 2D)
+Aurora curtains sweep in from the left over a ridge and a rippling lake, flare, then fade to start again.
+Interaction: move to lead the sweep. Default palette: `aurora` (works with `aurora`, `ember`, `aqua`).
+
+| Param | Range | Default |
+|---|---|---|
+| `intensity` | 0.2 – 2 | 1 |
+| `cycle` | 5 – 20s | 9 |
+| `reflection` | 0 – 1 | 1 |
+| `stars` | 0 – 1 | 1 |
+| `grain` | 0 – 0.2 | 0.07 |
+
+### Horizon, from *Anticipating the Future* (Canvas 2D)
+A striped sun rises behind a wireframe valley that flies toward the camera.
+Interaction: move to steer. Default palette: `synth` (works with `synth`, `aqua`, `aurora`, `ember`).
+
+| Param | Range | Default |
+|---|---|---|
+| `rate` (flight) | 0 – 6 | 2 |
+| `peaks` | 0 – 2.5 | 1 |
+| `sun` | 0.4 – 1.6 | 1 |
+
+### Blink, from *Supreme Effort Squares* (Canvas 2D)
+A field of squares blinks up from the floor. Each line dissolves in square by square, holds, then blinks out.
+Interaction: move to stir the squares. Default palette: `ledger` (works with `ledger`, `phosphor`, `cobalt`, `ember`). Default text: “A supreme goal needs supreme effort. | Good enough never wins. | Supreme effort. Supreme results.”.
+
+| Param | Range | Default |
+|---|---|---|
+| `square` | 4 – 40 | 12 |
+| `gap` | 0 – 16 | 4 |
+| `field` | 0 – 1.02 | 0.4 |
+| `edges` (edge fade) | 0 – 3 | 0 |
+| `hold` | 1.2 – 6s | 2.6 |
+| `paper` | 0 – 1 | 1 |
+| `size` (text size) | 0.02 – 0.12 | 0.06 |
+
+### Drift, from *Idea Reveal* (Canvas 2D)
+Four soft colour pools drift and overlap on deep navy. Built as something for glass to refract.
+Interaction: move to part the colour. Default palette: `idea` (works with `idea`, `ion`, `aurora`, `ember`).
+
+| Param | Range | Default |
+|---|---|---|
+| `flow` | 0 – 4 | 1 |
+| `glow` | 0.2 – 1.6 | 1 |
+
+### Sparkle, from *Idea Reveal* (Canvas 2D)
+A four-point sparkle spins in, inhales, then punches toward the camera and becomes the window onto a colour field.
+Interaction: move to place the sparkle. Default palette: `idea` (works with `idea`, `ion`, `aurora`, `ember`).
+
+| Param | Range | Default |
+|---|---|---|
+| `size` | 0.4 – 3 | 1.4 |
+| `cycle` | 4 – 14s | 6 |
+| `flow` | 0 – 4 | 1 |
+| `glow` | 0.2 – 1.6 | 1 |
+
+### Filings, from *Magnetic Filings* (Canvas 2D)
+A grid of iron filings turns to face a magnet as it sweeps, arcs and orbits. Far filings answer a beat late; a second pole repels.
+Interaction: move to become the magnet. Default palette: `mono` (works with `mono`).
+
+| Param | Range | Default |
+|---|---|---|
+| `cell` | 24 – 120 | 54 |
+| `lag` | 0 – 3 | 1 |
+| `cycle` | 6 – 30s | 12 |
+| `magnet` (show magnet) | 0 – 1 | 1 |
+| `paper` | 0 – 1 | 1 |
+
+### Gather, from *Magnett Promo* (Canvas 2D)
+Filings at rest catch a passing magnet, then collapse inward and lock into a 5×5 mark around it before letting go.
+Interaction: move to pull the filings. Default palette: `mono` (works with `mono`).
+
+| Param | Range | Default |
+|---|---|---|
+| `cell` | 24 – 120 | 54 |
+| `cycle` | 6 – 24s | 10 |
+| `paper` | 0 – 1 | 1 |
+
+### Lattice, from *Ideas to Reality Promo* (Canvas 2D)
+An endless lattice of slowly turning wireframe cubes flows toward the camera and fades into the dark.
+Interaction: move to steer the camera. Default palette: `mono` (works with `mono`, `aqua`, `ember`, `aurora`).
+
+| Param | Range | Default |
+|---|---|---|
+| `rate` (flight) | 0 – 4 | 0.8 |
+| `spin` | 0 – 3 | 1 |
+| `size` (cube) | 0.3 – 2 | 1 |
+
+### Orbits, from *Ideas to Reality Promo* (Canvas 2D)
+Three rings tilt and sway around a glowing core, each carrying comets that stretch along their path.
+Interaction: move to tilt the rings. Default palette: `mono` (works with `mono`, `aqua`, `ember`, `aurora`).
+
+| Param | Range | Default |
+|---|---|---|
+| `scale` | 0.3 – 1.6 | 0.9 |
+| `rate` (orbit) | 0 – 3 | 1 |
+| `sway` | 0 – 3 | 1 |
+
+### Prism, from *Product Video* (Canvas 2D)
+Six spectrum blobs orbit on black and screen-blend into a soft, breathing rainbow wash.
+Interaction: move to draw the colour in. Default palette: `plasma` (works with `plasma`).
+
+| Param | Range | Default |
+|---|---|---|
+| `flow` | 0 – 3 | 1 |
+| `size` | 0.4 – 2 | 1 |
+| `glow` | 0.1 – 1 | 0.62 |
+| `pulse` | 0 – 2 | 1 |
+
+### Sweep, from *AI Revolution Sweep* (WebGL2)
+A band of glyphs sweeps across the frame, tears the scanlines and swaps one line of text for the next.
+Interaction: move across to scrub the sweep. Default palette: `phosphor` (works with `phosphor`, `cobalt`, `ledger`, `ember`). Default text: “Every few centuries, the ground shifts. | AI is turning thought into infrastructure. | This is our industrial revolution.”.
+
+| Param | Range | Default |
+|---|---|---|
+| `glyph` | 0.5 – 4 | 2 |
+| `band` | 0.05 – 0.6 | 0.28 |
+| `trail` | 0 – 2 | 0.75 |
+| `turbulence` | 0 – 1 | 0.5 |
+| `glow` | 0 – 2 | 2 |
+| `split` (chroma split) | 0 – 12 | 5 |
+| `tear` | 0 – 40 | 14 |
+| `flicker` | 0 – 1 | 0.35 |
+| `hold` | 0.4 – 6s | 1.6 |
+| `charset` | 0 – 2 | 0 |
+| `size` (text size) | 0.02 – 0.12 | 0.045 |
+
+### Rain, from *Living in the Matrix* (WebGL2)
+Columns of glyph rain fall over a line of text. Each falling head lights the words it passes.
+No cursor interaction. Default palette: `cobalt` (works with `cobalt`, `phosphor`, `ember`, `mono`). Default text: “Are we living in the matrix?”.
+
+| Param | Range | Default |
+|---|---|---|
+| `cell` | 8 – 40 | 15 |
+| `rate` (fall) | 0.05 – 1 | 0.2 |
+| `density` | 0.02 – 0.8 | 0.32 |
+| `trail` | 0.2 – 3 | 1.4 |
+| `glow` | 0 – 3 | 1.75 |
+| `light` | 0 – 3 | 1.2 |
+| `layers` | 1 – 3 | 2 |
+| `mutate` | 0 – 3 | 0 |
+| `show` (text) | 0 – 1 | 1 |
+| `size` (text size) | 0.02 – 0.14 | 0.056 |
+
+### Asciify, from *It Pays Off* (WebGL2)
+A soft lens turns whatever sits under it into 5×5 glyphs or halftone dots. It reads text along the line on its own.
+Interaction: move to steer the lens. Default palette: `ledger` (works with `ledger`, `phosphor`, `cobalt`). Default text: “Effort compounds quietly.”.
+
+| Param | Range | Default |
+|---|---|---|
+| `radius` (lens) | 0.05 – 0.45 | 0.16 |
+| `softness` | 0 – 1 | 1 |
+| `glyph` | 0.5 – 4 | 2 |
+| `dots` | 0 – 1 | 0 |
+| `charset` | 0 – 2 | 0 |
+| `glow` | 0 – 1 | 0.75 |
+| `split` (chroma split) | 0 – 1 | 0.75 |
+| `invert` | 0 – 1 | 0 |
+| `paper` | 0 – 1 | 1 |
+| `size` (text size) | 0.03 – 0.2 | 0.11 |
+
+### Glyph Graph, from *It Pays Off* (WebGL2)
+Columns of glyphs rise from the floor like a chart, keep moving, then climb to fill the frame and loop.
+No cursor interaction. Default palette: `ledger` (works with `ledger`, `phosphor`, `cobalt`).
+
+| Param | Range | Default |
+|---|---|---|
+| `height` | 0.1 – 0.9 | 0.4 |
+| `cycle` | 4 – 30s | 12 |
+| `glyph` | 0.5 – 4 | 2 |
+| `charset` | 0 – 2 | 0 |
+| `paper` | 0 – 1 | 1 |
+| `size` (text size) | 0.03 – 0.2 | 0.07 |
+
+### Glass Icons, from *Glass Icons* (WebGL 3D)
+Flat icons traced into dispersive glass. Each spins in from edge-on, settles, and whips out into a match cut to the next.
+Interaction: move to tilt the glass. Default palette: `cobalt` (works with `cobalt`, `ion`, `aurora`, `ember`). Needs `shaderfield-glass.js`.
+
+| Param | Range | Default |
+|---|---|---|
+| `hold` | 1.5 – 6s | 3 |
+| `dispersion` | 0 – 4 | 1.5 |
+| `depth` | 0.05 – 0.4 | 0.14 |
+
+### Glass Coins, from *Cryptar Glass Coins* (WebGL 3D)
+Two clear glass coins, rim to rim, roll against each other on a tilted axis under studio strip lights.
+Interaction: move to turn the axis. Default palette: `mono` (works with `mono`). Needs `shaderfield-glass.js`.
+
+| Param | Range | Default |
+|---|---|---|
+| `loop` | 3 – 16s | 7.25 |
+| `paper` | 0 – 1 | 1 |
+
 ## Palettes
 
 Each palette has four colours. The shaders blend between them.
@@ -332,7 +606,12 @@ Each palette has four colours. The shaders blend between them.
 | `aurora` | mint, azure, lime, teal | Skein |
 | `aqua` | sky, aqua, white, navy | Halo |
 | `heat` | blue, red-orange, yellow, deep navy | Thermal |
-| `mono` | cool greys | |
+| `mono` | cool greys | Sand, Filings, Gather, Lattice, Orbits, Glass Coins |
+| `phosphor` | terminal greens | Sweep |
+| `cobalt` | electric blues | Rain, Glass Icons |
+| `ledger` | green ink on paper | Asciify, Glyph Graph, Blink |
+| `idea` | indigo, cyan, lilac, sky | Drift, Sparkle |
+| `synth` | magenta, gold, pink, night | Horizon |
 
 You can add your own at runtime. Use RGB values from 0 to 1:
 
