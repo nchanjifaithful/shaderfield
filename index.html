@@ -18,15 +18,16 @@ a{color:#f2f2f4;text-decoration:none;}a:hover{color:#ffffff;}
 input[type=range]{accent-color:#f2f2f4;}
 input::placeholder{color:#6f717b;}
 </style>
-<script src="./shaderfield.js?v=1.1.4"></script>
-<script src="./shaderfield-demos.js?v=1.1.4"></script>
+<script src="./shaderfield.js?v=2.0.0"></script>
+<script src="./shaderfield-glass.js?v=2.0.0"></script>
+<script src="./shaderfield-demos.js?v=2.0.0"></script>
 </helmet>
 <div style="font-family:'Geist',Helvetica,Arial,sans-serif;background:#09090b;color:#f2f2f4;min-height:100vh;">
 
-  <header data-screen-label="Hero" style="position:relative;height:clamp(560px,86vh,860px);overflow:hidden;background:#000;">
+  <header data-screen-label="Hero" style="position:relative;min-height:clamp(560px,86vh,860px);overflow:hidden;background:#000;">
     <div ref="{{ heroRef }}" style="position:absolute;inset:0;"></div>
     <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(9,9,11,0.94) 0%,rgba(9,9,11,0.35) 45%,rgba(9,9,11,0) 70%,rgba(9,9,11,0) 82%,rgba(9,9,11,0.6) 100%);pointer-events:none;"></div>
-    <div style="position:absolute;inset:0;display:grid;grid-template-rows:auto 1fr auto;padding:clamp(20px,4vw,48px);pointer-events:none;">
+    <div style="position:relative;box-sizing:border-box;min-height:clamp(560px,86vh,860px);display:grid;grid-template-rows:auto 1fr auto;row-gap:40px;padding:clamp(20px,4vw,48px);pointer-events:none;">
       <nav style="display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;">
         <div style="display:flex;align-items:center;gap:10px;">
           <span style="width:14px;height:14px;border-radius:50%;background:#f2f2f4;"></span>
@@ -41,7 +42,7 @@ input::placeholder{color:#6f717b;}
       <div></div>
       <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:40px;flex-wrap:wrap;">
         <div style="max-width:640px;display:flex;flex-direction:column;gap:24px;">
-          <span style="font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#c9cad1;">Shaders Lab · 7 shaders · 7 motion effects · one file</span>
+          <span style="font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#c9cad1;">Shaders Lab · 27 shaders · 7 motion effects · one file</span>
           <h1 style="margin:0;font-weight:400;font-size:clamp(52px,8.5vw,128px);line-height:0.92;letter-spacing:-0.05em;">Shaderfield</h1>
           <p style="margin:0;font-size:clamp(16px,1.5vw,19px);line-height:1.5;color:#d4d5db;max-width:520px;text-wrap:pretty;">Every live effect from the Shaders Lab films, packed into one dependency-free file. Tune it here, then drop it into a website, render it to video, or hand the prompt to your AI.</p>
           <div style="display:flex;gap:12px;flex-wrap:wrap;pointer-events:auto;">
@@ -49,9 +50,9 @@ input::placeholder{color:#6f717b;}
             <a href="./shaderfield.js" download="shaderfield.js" style="padding:13px 22px;border-radius:999px;border:1px solid rgba(242,242,244,0.4);font-size:14px;" style-hover="border-color:#ffffff;">Download shaderfield.js</a>
           </div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:4px;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;pointer-events:auto;min-width:200px;">
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,auto));column-gap:22px;row-gap:2px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;pointer-events:auto;max-width:100%;">
           <sc-for list="{{ heroList }}" as="h" hint-placeholder-count="7">
-            <button onClick="{{ h.pick }}" style="all:unset;cursor:pointer;display:flex;justify-content:space-between;gap:20px;padding:5px 0;border-bottom:1px solid rgba(242,242,244,0.12);color:{{ h.color }};" style-hover="color:#ffffff;">
+            <button onClick="{{ h.pick }}" style="all:unset;cursor:pointer;display:flex;justify-content:space-between;gap:12px;padding:4px 0;border-bottom:1px solid rgba(242,242,244,0.12);color:{{ h.color }};white-space:nowrap;" style-hover="color:#ffffff;">
               <span>{{ h.num }}  {{ h.name }}</span><span>{{ h.mark }}</span>
             </button>
           </sc-for>
@@ -617,7 +618,7 @@ class Component extends DCLogic {
       goInstall: () => this.setView("install"),
       heroList: O.map((id, i) => ({ num: num(i), name: E[id].name, mark: id === S.heroId ? "●" : "", color: id === S.heroId ? "#ffffff" : "#9a9ca6", pick: () => { this.heroLocked = true; this.setHero(id); } })),
       startNav: [navItem("all", "Browse all", String(O.length + ALLM.length), true), navItem("install", "Installation", "", true)],
-      shaderNav: O.map(id => navItem(id, E[id].name, E[id].kind === "GLSL" ? "GL" : "2D", navQ(E[id].name, E[id].desc))),
+      shaderNav: O.map(id => navItem(id, E[id].name, E[id].kind === "GLSL" ? "GL" : E[id].kind === "WebGL 3D" ? "3D" : "2D", navQ(E[id].name, E[id].desc))),
       textNav: catNav("Text"), uiNav: catNav("Interface"), transNav: catNav("Transitions"),
       shaderCount: String(O.length), textCount: String(ALLM.filter(m => m.cat === "Text").length), uiCount: String(ALLM.filter(m => m.cat === "Interface").length), transCount: String(ALLM.filter(m => m.cat === "Transitions").length),
       filters: [["all", "All", O.length + ALLM.length], ["shaders", "Shaders", O.length], ...CATS.map(c => [c, c, ALLM.filter(m => m.cat === c).length])].map(([k, n, c]) => ({ name: n, count: String(c), pick: () => this.setState({ filter: k }), bg: S.filter === k ? ink : "transparent", color: S.filter === k ? "#09090b" : ink })),

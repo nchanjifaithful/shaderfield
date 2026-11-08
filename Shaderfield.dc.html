@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Shaderfield — live shaders for websites and motion video</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#09090b;color:#f2f2f4;-webkit-font-smoothing:antialiased;}
+a{color:#f2f2f4;text-decoration:none;}a:hover{color:#ffffff;}
+::selection{background:#f2f2f4;color:#09090b;}
+input[type=range]{accent-color:#f2f2f4;}
+input::placeholder{color:#6f717b;}
+</style>
+<script src="./shaderfield.js?v=2.0.0"></script>
+<script src="./shaderfield-glass.js?v=2.0.0"></script>
+<script src="./shaderfield-demos.js?v=2.0.0"></script>
+</helmet>
+<div style="font-family:'Geist',Helvetica,Arial,sans-serif;background:#09090b;color:#f2f2f4;min-height:100vh;">
+
+  <header data-screen-label="Hero" style="position:relative;min-height:clamp(560px,86vh,860px);overflow:hidden;background:#000;">
+    <div ref="{{ heroRef }}" style="position:absolute;inset:0;"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(9,9,11,0.94) 0%,rgba(9,9,11,0.35) 45%,rgba(9,9,11,0) 70%,rgba(9,9,11,0) 82%,rgba(9,9,11,0.6) 100%);pointer-events:none;"></div>
+    <div style="position:relative;box-sizing:border-box;min-height:clamp(560px,86vh,860px);display:grid;grid-template-rows:auto 1fr auto;row-gap:40px;padding:clamp(20px,4vw,48px);pointer-events:none;">
+      <nav style="display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="width:14px;height:14px;border-radius:50%;background:#f2f2f4;"></span>
+          <span>Shaderfield</span>
+        </div>
+        <div style="display:flex;gap:28px;pointer-events:auto;flex-wrap:wrap;align-items:center;">
+          <button onClick="{{ goAll }}" style="all:unset;cursor:pointer;color:#c9cad1;" style-hover="color:#ffffff;">Components</button>
+          <button onClick="{{ goInstall }}" style="all:unset;cursor:pointer;color:#c9cad1;" style-hover="color:#ffffff;">Installation</button>
+          <a href="./shaderfield.js" download="shaderfield.js" style="color:#ffffff;">Download ↓</a>
+        </div>
+      </nav>
+      <div></div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:40px;flex-wrap:wrap;">
+        <div style="max-width:640px;display:flex;flex-direction:column;gap:24px;">
+          <span style="font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#c9cad1;">Shaders Lab · 27 shaders · 7 motion effects · one file</span>
+          <h1 style="margin:0;font-weight:400;font-size:clamp(52px,8.5vw,128px);line-height:0.92;letter-spacing:-0.05em;">Shaderfield</h1>
+          <p style="margin:0;font-size:clamp(16px,1.5vw,19px);line-height:1.5;color:#d4d5db;max-width:520px;text-wrap:pretty;">Every live effect from the Shaders Lab films, packed into one dependency-free file. Tune it here, then drop it into a website, render it to video, or hand the prompt to your AI.</p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;pointer-events:auto;">
+            <button onClick="{{ goAll }}" style="all:unset;cursor:pointer;padding:13px 22px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:14px;font-weight:500;" style-hover="background:#ffffff;">Browse components</button>
+            <a href="./shaderfield.js" download="shaderfield.js" style="padding:13px 22px;border-radius:999px;border:1px solid rgba(242,242,244,0.4);font-size:14px;" style-hover="border-color:#ffffff;">Download shaderfield.js</a>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,auto));column-gap:22px;row-gap:2px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;pointer-events:auto;max-width:100%;">
+          <sc-for list="{{ heroList }}" as="h" hint-placeholder-count="7">
+            <button onClick="{{ h.pick }}" style="all:unset;cursor:pointer;display:flex;justify-content:space-between;gap:12px;padding:4px 0;border-bottom:1px solid rgba(242,242,244,0.12);color:{{ h.color }};white-space:nowrap;" style-hover="color:#ffffff;">
+              <span>{{ h.num }}  {{ h.name }}</span><span>{{ h.mark }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div id="library" ref="{{ shellRef }}" data-screen-label="Library" style="display:flex;flex-wrap:wrap;align-items:flex-start;border-top:1px solid rgba(242,242,244,0.08);">
+
+    <aside style="flex:1 1 240px;max-width:100%;position:sticky;top:0;max-height:100vh;overflow:auto;box-sizing:border-box;padding:24px 16px 40px;border-right:1px solid rgba(242,242,244,0.08);display:flex;flex-direction:column;gap:22px;">
+      <label style="display:flex;align-items:center;gap:8px;padding:9px 10px 9px 12px;border-radius:8px;background:#111114;outline:1px solid rgba(242,242,244,0.08);">
+        <input ref="{{ searchRef }}" value="{{ query }}" onChange="{{ onSearch }}" placeholder="Search…" style="all:unset;flex:1;min-width:0;font-size:13.5px;color:#f2f2f4;"></input>
+        <span style="font-family:'Geist Mono',monospace;font-size:11px;color:#a4a6b0;padding:2px 6px;border-radius:4px;background:#1b1b20;">⌘K</span>
+      </label>
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <span style="padding:0 10px 6px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#7d7f89;">Get started</span>
+        <sc-for list="{{ startNav }}" as="n" hint-placeholder-count="2">
+          <button onClick="{{ n.pick }}" style="all:unset;cursor:pointer;display:flex;justify-content:space-between;padding:7px 10px;border-radius:6px;font-size:13.5px;background:{{ n.bg }};color:{{ n.color }};" style-hover="color:#ffffff;"><span>{{ n.name }}</span><span style="font-family:'Geist Mono',monospace;font-size:11px;color:#7d7f89;">{{ n.meta }}</span></button>
+        </sc-for>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <span style="display:flex;justify-content:space-between;padding:0 10px 6px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#7d7f89;"><span>Shaders</span><span>{{ shaderCount }}</span></span>
+        <sc-for list="{{ shaderNav }}" as="n" hint-placeholder-count="7">
+          <button onClick="{{ n.pick }}" style="all:unset;cursor:pointer;display:{{ n.display }};justify-content:space-between;padding:7px 10px;border-radius:6px;font-size:13.5px;background:{{ n.bg }};color:{{ n.color }};" style-hover="color:#ffffff;"><span>{{ n.name }}</span><span style="font-family:'Geist Mono',monospace;font-size:10.5px;color:#7d7f89;">{{ n.meta }}</span></button>
+        </sc-for>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <span style="display:flex;justify-content:space-between;padding:0 10px 6px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#7d7f89;"><span>Text</span><span>{{ textCount }}</span></span>
+        <sc-for list="{{ textNav }}" as="n" hint-placeholder-count="9">
+          <button onClick="{{ n.pick }}" style="all:unset;cursor:pointer;display:{{ n.display }};justify-content:space-between;padding:7px 10px;border-radius:6px;font-size:13.5px;background:{{ n.bg }};color:{{ n.color }};" style-hover="color:#ffffff;"><span>{{ n.name }}</span><span style="font-family:'Geist Mono',monospace;font-size:10.5px;color:#7d7f89;">{{ n.meta }}</span></button>
+        </sc-for>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <span style="display:flex;justify-content:space-between;padding:0 10px 6px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#7d7f89;"><span>Interface</span><span>{{ uiCount }}</span></span>
+        <sc-for list="{{ uiNav }}" as="n" hint-placeholder-count="10">
+          <button onClick="{{ n.pick }}" style="all:unset;cursor:pointer;display:{{ n.display }};justify-content:space-between;padding:7px 10px;border-radius:6px;font-size:13.5px;background:{{ n.bg }};color:{{ n.color }};" style-hover="color:#ffffff;"><span>{{ n.name }}</span><span style="font-family:'Geist Mono',monospace;font-size:10.5px;color:#7d7f89;">{{ n.meta }}</span></button>
+        </sc-for>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <span style="display:flex;justify-content:space-between;padding:0 10px 6px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#7d7f89;"><span>Transitions</span><span>{{ transCount }}</span></span>
+        <sc-for list="{{ transNav }}" as="n" hint-placeholder-count="8">
+          <button onClick="{{ n.pick }}" style="all:unset;cursor:pointer;display:{{ n.display }};justify-content:space-between;padding:7px 10px;border-radius:6px;font-size:13.5px;background:{{ n.bg }};color:{{ n.color }};" style-hover="color:#ffffff;"><span>{{ n.name }}</span><span style="font-family:'Geist Mono',monospace;font-size:10.5px;color:#7d7f89;">{{ n.meta }}</span></button>
+        </sc-for>
+      </div>
+    </aside>
+
+    <main style="flex:999 1 640px;min-width:0;box-sizing:border-box;padding:clamp(28px,4vw,56px) clamp(20px,4vw,56px) 96px;">
+
+      <div style="display:{{ showAll }};">
+        <div style="display:flex;flex-direction:column;gap:14px;max-width:680px;margin-bottom:28px;">
+          <h2 style="margin:0;font-weight:400;font-size:clamp(34px,4vw,48px);letter-spacing:-0.035em;line-height:1;">Components</h2>
+          <p style="margin:0;color:#a4a6b0;font-size:15.5px;line-height:1.55;text-wrap:pretty;">Live shaders and motion effects from the Shaders Lab films. Hover a preview to play with it, open one to tune it and copy the code, the AI prompt or a video render.</p>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px;">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <sc-for list="{{ filters }}" as="f" hint-placeholder-count="3">
+              <button onClick="{{ f.pick }}" style="all:unset;cursor:pointer;display:flex;gap:8px;padding:7px 13px;border-radius:999px;font-size:13px;background:{{ f.bg }};color:{{ f.color }};outline:1px solid rgba(242,242,244,0.1);"><span>{{ f.name }}</span><span style="font-family:'Geist Mono',monospace;font-size:11px;opacity:0.7;">{{ f.count }}</span></button>
+            </sc-for>
+          </div>
+          <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#7d7f89;">{{ resultLabel }}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:28px 18px;">
+          <sc-for list="{{ shaderTiles }}" as="c" hint-placeholder-count="7">
+            <article onClick="{{ c.open }}" style="cursor:pointer;display:{{ c.display }};flex-direction:column;gap:12px;">
+              <div ref="{{ c.ref }}" style="position:relative;aspect-ratio:16/10;border-radius:12px;overflow:hidden;background:#000;outline:1px solid rgba(242,242,244,0.08);" style-hover="outline-color:rgba(242,242,244,0.35);"></div>
+              <div style="display:flex;flex-direction:column;gap:5px;">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;"><h3 style="margin:0;font-size:15.5px;font-weight:500;">{{ c.name }}</h3><span style="font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:#7d7f89;">{{ c.kind }}</span></div>
+                <p style="margin:0;color:#a4a6b0;font-size:13.5px;line-height:1.5;text-wrap:pretty;">{{ c.desc }}</p>
+              </div>
+            </article>
+          </sc-for>
+
+          <article onClick="{{ openType }}" style="cursor:pointer;display:{{ tileType }};flex-direction:column;gap:12px;">
+            <div onMouseEnter="{{ tileTypeHover }}" style="position:relative;aspect-ratio:16/10;border-radius:12px;overflow:hidden;background:#0d0d10;outline:1px solid rgba(242,242,244,0.08);display:flex;align-items:center;justify-content:center;" style-hover="outline-color:rgba(242,242,244,0.35);">
+              <div ref="{{ mtTypeRef }}" style="font-size:40px;font-weight:500;letter-spacing:-0.04em;white-space:nowrap;">Decode</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;"><h3 style="margin:0;font-size:15.5px;font-weight:500;">Type Entrances</h3><span style="font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:#7d7f89;">DOM</span></div>
+              <p style="margin:0;color:#a4a6b0;font-size:13.5px;line-height:1.5;">Five letter-by-letter entrances: soft, decode, flip, scatter and glitch.</p>
+            </div>
+          </article>
+          <article onClick="{{ openCurtain }}" style="cursor:pointer;display:{{ tileCurtain }};flex-direction:column;gap:12px;">
+            <div ref="{{ mtCurtainRef }}" onMouseEnter="{{ tileCurtainHover }}" style="position:relative;aspect-ratio:16/10;border-radius:12px;overflow:hidden;background:{{ mtCurtainBg }};color:{{ mtCurtainInk }};outline:1px solid rgba(242,242,244,0.08);display:flex;align-items:flex-end;padding:18px;box-sizing:border-box;" style-hover="outline-color:rgba(242,242,244,0.35);">
+              <span style="font-size:38px;font-weight:500;letter-spacing:-0.045em;line-height:0.9;">{{ mtCurtainWord }}</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;"><h3 style="margin:0;font-size:15.5px;font-weight:500;">Pixel Curtain</h3><span style="font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:#7d7f89;">DOM</span></div>
+              <p style="margin:0;color:#a4a6b0;font-size:13.5px;line-height:1.5;">A scene change through scattered cells that cover, swap and clear.</p>
+            </div>
+          </article>
+          <article onClick="{{ openReveal }}" style="cursor:pointer;display:{{ tileReveal }};flex-direction:column;gap:12px;">
+            <div onMouseMove="{{ tileRevealMove }}" style="position:relative;aspect-ratio:16/10;border-radius:12px;overflow:hidden;background:#0d0d10;outline:1px solid rgba(242,242,244,0.08);display:flex;align-items:center;padding:0 22px;box-sizing:border-box;" style-hover="outline-color:rgba(242,242,244,0.35);">
+              <p ref="{{ mtRevealRef }}" style="margin:0;font-size:19px;line-height:1.3;letter-spacing:-0.015em;">Words light up as the *story* moves through the page.</p>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;"><h3 style="margin:0;font-size:15.5px;font-weight:500;">Word Reveal</h3><span style="font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:#7d7f89;">DOM</span></div>
+              <p style="margin:0;color:#a4a6b0;font-size:13.5px;line-height:1.5;">Scroll-linked paragraph reveal, word by word, with accent words.</p>
+            </div>
+          </article>
+          <article onClick="{{ openSpring }}" style="cursor:pointer;display:{{ tileSpring }};flex-direction:column;gap:12px;">
+            <div ref="{{ mtSpringAreaRef }}" style="position:relative;aspect-ratio:16/10;border-radius:12px;overflow:hidden;background:#0d0d10;outline:1px solid rgba(242,242,244,0.08);cursor:none;display:flex;align-items:center;justify-content:center;" style-hover="outline-color:rgba(242,242,244,0.35);">
+              <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#5f616b;">Hover here</span>
+              <div ref="{{ mtSpringDotRef }}" style="padding:8px 14px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:12.5px;font-weight:500;white-space:nowrap;">Open</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;"><h3 style="margin:0;font-size:15.5px;font-weight:500;">Spring Cursor</h3><span style="font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:#7d7f89;">DOM</span></div>
+              <p style="margin:0;color:#a4a6b0;font-size:13.5px;line-height:1.5;">A cursor label on a damped spring that leans with its speed.</p>
+            </div>
+          </article>
+          <sc-for list="{{ demoTiles }}" as="d" hint-placeholder-count="0">
+            <article onClick="{{ d.open }}" onMouseEnter="{{ d.hover }}" style="cursor:pointer;display:{{ d.display }};flex-direction:column;gap:12px;">
+              <div ref="{{ d.ref }}" style="position:relative;aspect-ratio:16/10;border-radius:12px;overflow:hidden;background:#0d0d10;outline:1px solid rgba(242,242,244,0.08);" style-hover="outline-color:rgba(242,242,244,0.35);"></div>
+              <div style="display:flex;flex-direction:column;gap:5px;">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;"><h3 style="margin:0;font-size:15.5px;font-weight:500;">{{ d.name }}</h3><span style="font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:#7d7f89;">{{ d.cat }}</span></div>
+                <p style="margin:0;color:#a4a6b0;font-size:13.5px;line-height:1.5;text-wrap:pretty;">{{ d.desc }}</p>
+              </div>
+            </article>
+          </sc-for>
+        </div>
+        <p style="display:{{ emptyDisplay }};margin:40px 0 0;color:#a4a6b0;font-size:15px;">No components match “{{ query }}”.</p>
+      </div>
+
+      <div style="display:{{ showShader }};flex-direction:column;gap:22px;">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <span style="font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:0.08em;text-transform:uppercase;color:#7d7f89;">Components / Shaders / {{ labName }}</span>
+          <h2 style="margin:0;font-weight:400;font-size:clamp(34px,4vw,48px);letter-spacing:-0.035em;line-height:1;">{{ labName }}</h2>
+          <p style="margin:0;color:#a4a6b0;font-size:15.5px;line-height:1.55;max-width:640px;">{{ labDesc }}</p>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <sc-for list="{{ labTags }}" as="t" hint-placeholder-count="3">
+              <span style="padding:5px 10px;border-radius:999px;font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:#c9cad1;outline:1px solid rgba(242,242,244,0.14);">{{ t }}</span>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;">
+          <div style="flex:999 1 520px;min-width:0;position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000;outline:1px solid rgba(242,242,244,0.08);">
+            <div ref="{{ labRef }}" style="position:absolute;inset:0;cursor:crosshair;"></div>
+            <span style="position:absolute;right:14px;top:12px;padding:6px 10px;border-radius:6px;background:rgba(9,9,11,0.72);font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;color:#d4d5db;pointer-events:none;">{{ labHint }}</span>
+            <sc-if value="{{ recording }}" hint-placeholder-val="{{ false }}">
+              <div style="position:absolute;left:14px;bottom:12px;display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:6px;background:rgba(9,9,11,0.8);font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;">
+                <span style="width:8px;height:8px;border-radius:50%;background:#f43f5e;"></span>Recording {{ recLabel }}
+              </div>
+            </sc-if>
+          </div>
+          <div style="flex:1 1 260px;max-width:100%;display:flex;flex-direction:column;gap:20px;padding:18px;border-radius:12px;background:#111114;outline:1px solid rgba(242,242,244,0.08);box-sizing:border-box;">
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#a4a6b0;">Palette · {{ palette }}</span>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                <sc-for list="{{ palettes }}" as="p" hint-placeholder-count="8">
+                  <button onClick="{{ p.pick }}" title="{{ p.name }}" style="all:unset;cursor:pointer;width:30px;height:30px;border-radius:50%;background:{{ p.bg }};box-shadow:0 0 0 2px #111114, 0 0 0 3px {{ p.ring }};"></button>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:13px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#a4a6b0;">Parameters</span>
+                <div style="display:flex;gap:12px;font-size:12.5px;">
+                  <button onClick="{{ shuffle }}" style="all:unset;cursor:pointer;color:#a4a6b0;" style-hover="color:#ffffff;">Shuffle</button>
+                  <button onClick="{{ reset }}" style="all:unset;cursor:pointer;color:#a4a6b0;" style-hover="color:#ffffff;">Reset</button>
+                </div>
+              </div>
+              <sc-for list="{{ sliders }}" as="s" hint-placeholder-count="6">
+                <label style="display:flex;flex-direction:column;gap:5px;">
+                  <span style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:#d4d5db;">{{ s.label }}</span><span style="font-family:'Geist Mono',monospace;font-size:12px;color:#a4a6b0;">{{ s.display }}</span></span>
+                  <input type="range" min="{{ s.min }}" max="{{ s.max }}" step="{{ s.step }}" value="{{ s.value }}" onChange="{{ s.onChange }}" style="width:100%;margin:0;"></input>
+                </label>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="border-radius:12px;background:#111114;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 12px;border-bottom:1px solid rgba(242,242,244,0.08);">
+            <div style="display:flex;gap:4px;">
+              <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+                <button onClick="{{ t.pick }}" style="all:unset;cursor:pointer;padding:8px 14px;border-radius:7px;font-size:13px;background:{{ t.bg }};color:{{ t.color }};">{{ t.label }}</button>
+              </sc-for>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <sc-for list="{{ subTabs }}" as="s" hint-placeholder-count="0">
+                <button onClick="{{ s.pick }}" style="all:unset;cursor:pointer;padding:7px 12px;border-radius:999px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;border:1px solid {{ s.border }};color:{{ s.color }};">{{ s.label }}</button>
+              </sc-for>
+              <button onClick="{{ copy }}" style="all:unset;cursor:pointer;padding:7px 14px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:13px;font-weight:500;" style-hover="background:#ffffff;">{{ copyLabel }}</button>
+            </div>
+          </div>
+          <p style="margin:0;padding:14px 18px 0;color:#a4a6b0;font-size:14px;line-height:1.5;">{{ tabNote }}</p>
+          <sc-if value="{{ isVideo }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;gap:10px;flex-wrap:wrap;padding:14px 18px 0;">
+              <button onClick="{{ record }}" style="all:unset;cursor:pointer;padding:10px 16px;border-radius:8px;border:1px solid rgba(242,242,244,0.25);font-size:13px;" style-hover="border-color:#f2f2f4;">{{ recordLabel }}</button>
+              <button onClick="{{ record4 }}" style="all:unset;cursor:pointer;padding:10px 16px;border-radius:8px;border:1px solid rgba(242,242,244,0.25);font-size:13px;" style-hover="border-color:#f2f2f4;">Record 6 s · 4K</button>
+              <button onClick="{{ still }}" style="all:unset;cursor:pointer;padding:10px 16px;border-radius:8px;border:1px solid rgba(242,242,244,0.25);font-size:13px;" style-hover="border-color:#f2f2f4;">Save PNG frame</button>
+            </div>
+          </sc-if>
+          <pre style="margin:0;padding:16px 18px 20px;font-family:'Geist Mono',monospace;font-size:12.5px;line-height:1.65;color:#d4d5db;white-space:pre-wrap;word-break:break-word;max-height:380px;overflow:auto;">{{ code }}</pre>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <h3 style="margin:0;font-size:20px;font-weight:500;letter-spacing:-0.02em;">Props</h3>
+          <div style="border-radius:12px;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;">
+            <div style="display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.3fr) minmax(0,0.8fr);gap:12px;padding:11px 16px;background:#111114;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#7d7f89;"><span>Attribute</span><span>Range</span><span>Default</span></div>
+            <sc-for list="{{ propRows }}" as="r" hint-placeholder-count="6">
+              <div style="display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.3fr) minmax(0,0.8fr);gap:12px;padding:11px 16px;border-top:1px solid rgba(242,242,244,0.06);font-size:13.5px;">
+                <span style="display:flex;flex-direction:column;gap:2px;"><code style="font-family:'Geist Mono',monospace;font-size:12.5px;color:#f2f2f4;">{{ r.key }}</code><span style="color:#7d7f89;font-size:12.5px;">{{ r.label }}</span></span>
+                <span style="font-family:'Geist Mono',monospace;font-size:12.5px;color:#a4a6b0;">{{ r.range }}</span>
+                <span style="font-family:'Geist Mono',monospace;font-size:12.5px;color:#a4a6b0;">{{ r.def }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:{{ showType }};flex-direction:column;gap:22px;">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <span style="font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:0.08em;text-transform:uppercase;color:#7d7f89;">Components / Motion / Type Entrances</span>
+          <h2 style="margin:0;font-weight:400;font-size:clamp(34px,4vw,48px);letter-spacing:-0.035em;line-height:1;">Type Entrances</h2>
+          <p style="margin:0;color:#a4a6b0;font-size:15.5px;line-height:1.55;max-width:640px;">Letter-by-letter entrances from the Nodepath Launch film. Each mode has its own stagger, easing, blur and chromatic split.</p>
+        </div>
+        <div style="position:relative;aspect-ratio:16/7;min-height:220px;border-radius:12px;background:#0d0d10;outline:1px solid rgba(242,242,244,0.08);display:flex;align-items:center;justify-content:center;overflow:hidden;">
+          <div ref="{{ typeRef }}" style="font-size:clamp(44px,7vw,96px);font-weight:500;letter-spacing:-0.045em;white-space:nowrap;">Shaderfield</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <sc-for list="{{ typeModes }}" as="m" hint-placeholder-count="5">
+              <button onClick="{{ m.pick }}" style="all:unset;cursor:pointer;padding:8px 14px;border-radius:999px;font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:0.06em;text-transform:uppercase;border:1px solid {{ m.border }};color:{{ m.color }};">{{ m.name }}</button>
+            </sc-for>
+          </div>
+          <button onClick="{{ replayType }}" style="all:unset;cursor:pointer;padding:8px 14px;border-radius:999px;font-size:13px;border:1px solid rgba(242,242,244,0.25);" style-hover="border-color:#f2f2f4;">Replay</button>
+        </div>
+        <div style="border-radius:12px;background:#111114;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px 10px 18px;border-bottom:1px solid rgba(242,242,244,0.08);"><span style="font-size:13px;color:#a4a6b0;">Usage</span><button onClick="{{ copyMotion }}" style="all:unset;cursor:pointer;padding:7px 14px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:13px;font-weight:500;">{{ copyLabel }}</button></div>
+          <pre style="margin:0;padding:16px 18px 20px;font-family:'Geist Mono',monospace;font-size:12.5px;line-height:1.65;color:#d4d5db;white-space:pre-wrap;">{{ typeCode }}</pre>
+        </div>
+      </div>
+
+      <div style="display:{{ showCurtain }};flex-direction:column;gap:22px;">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <span style="font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:0.08em;text-transform:uppercase;color:#7d7f89;">Components / Motion / Pixel Curtain</span>
+          <h2 style="margin:0;font-weight:400;font-size:clamp(34px,4vw,48px);letter-spacing:-0.035em;line-height:1;">Pixel Curtain</h2>
+          <p style="margin:0;color:#a4a6b0;font-size:15.5px;line-height:1.55;max-width:640px;">The scene transition from Closebook Launch. Cells cover the frame in a seeded scatter, the content swaps underneath, then they clear in a new order. Click the stage.</p>
+        </div>
+        <div ref="{{ curtainRef }}" onClick="{{ runCurtain }}" style="position:relative;aspect-ratio:16/7;min-height:220px;border-radius:12px;cursor:pointer;overflow:hidden;background:{{ curtainBg }};color:{{ curtainInk }};display:flex;flex-direction:column;justify-content:space-between;padding:28px;box-sizing:border-box;">
+          <span style="font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;">{{ curtainLabel }}</span>
+          <span style="font-size:clamp(56px,8vw,112px);font-weight:500;letter-spacing:-0.05em;line-height:0.9;">{{ curtainWord }}</span>
+        </div>
+        <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:center;">
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#a4a6b0;margin-right:4px;">Color</span>
+            <sc-for list="{{ curtainColors }}" as="c" hint-placeholder-count="4">
+              <button onClick="{{ c.pick }}" style="all:unset;cursor:pointer;width:26px;height:26px;border-radius:50%;background:{{ c.color }};box-shadow:0 0 0 2px #09090b, 0 0 0 3px {{ c.ring }};"></button>
+            </sc-for>
+          </div>
+          <label style="display:flex;gap:12px;align-items:center;flex:1 1 220px;max-width:360px;">
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#a4a6b0;">Cells</span>
+            <input type="range" min="8" max="48" step="1" value="{{ curtainCols }}" onChange="{{ setCurtainCols }}" style="flex:1;margin:0;"></input>
+            <span style="font-family:'Geist Mono',monospace;font-size:12px;color:#a4a6b0;">{{ curtainCols }}</span>
+          </label>
+          <button onClick="{{ runCurtain }}" style="all:unset;cursor:pointer;padding:8px 14px;border-radius:999px;font-size:13px;border:1px solid rgba(242,242,244,0.25);" style-hover="border-color:#f2f2f4;">Run transition</button>
+        </div>
+        <div style="border-radius:12px;background:#111114;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px 10px 18px;border-bottom:1px solid rgba(242,242,244,0.08);"><span style="font-size:13px;color:#a4a6b0;">Usage</span><button onClick="{{ copyMotion }}" style="all:unset;cursor:pointer;padding:7px 14px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:13px;font-weight:500;">{{ copyLabel }}</button></div>
+          <pre style="margin:0;padding:16px 18px 20px;font-family:'Geist Mono',monospace;font-size:12.5px;line-height:1.65;color:#d4d5db;white-space:pre-wrap;">{{ curtainCode }}</pre>
+        </div>
+      </div>
+
+      <div style="display:{{ showReveal }};flex-direction:column;gap:22px;">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <span style="font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:0.08em;text-transform:uppercase;color:#7d7f89;">Components / Motion / Word Reveal</span>
+          <h2 style="margin:0;font-weight:400;font-size:clamp(34px,4vw,48px);letter-spacing:-0.035em;line-height:1;">Word Reveal</h2>
+          <p style="margin:0;color:#a4a6b0;font-size:15.5px;line-height:1.55;max-width:640px;">From Tended HR and Closebook Launch. On a page it follows scroll position; here you can drag the progress to preview it.</p>
+        </div>
+        <div style="position:relative;aspect-ratio:16/7;min-height:220px;border-radius:12px;background:#0d0d10;outline:1px solid rgba(242,242,244,0.08);display:flex;align-items:center;padding:0 clamp(24px,5vw,64px);box-sizing:border-box;">
+          <p ref="{{ revealRef }}" style="margin:0;font-size:clamp(22px,2.8vw,36px);line-height:1.25;letter-spacing:-0.02em;max-width:900px;">Each shader began as a frame in a launch film. Now it runs *live* in the browser, follows the *cursor* and renders straight to *video*.</p>
+        </div>
+        <label style="display:flex;gap:12px;align-items:center;max-width:520px;">
+          <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#a4a6b0;">Progress</span>
+          <input type="range" min="0" max="1" step="0.005" value="{{ revealP }}" onChange="{{ setRevealP }}" style="flex:1;margin:0;"></input>
+          <button onClick="{{ playReveal }}" style="all:unset;cursor:pointer;padding:7px 14px;border-radius:999px;font-size:13px;border:1px solid rgba(242,242,244,0.25);" style-hover="border-color:#f2f2f4;">Play</button>
+        </label>
+        <div style="border-radius:12px;background:#111114;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px 10px 18px;border-bottom:1px solid rgba(242,242,244,0.08);"><span style="font-size:13px;color:#a4a6b0;">Usage</span><button onClick="{{ copyMotion }}" style="all:unset;cursor:pointer;padding:7px 14px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:13px;font-weight:500;">{{ copyLabel }}</button></div>
+          <pre style="margin:0;padding:16px 18px 20px;font-family:'Geist Mono',monospace;font-size:12.5px;line-height:1.65;color:#d4d5db;white-space:pre-wrap;">{{ revealCode }}</pre>
+        </div>
+      </div>
+
+      <div style="display:{{ showSpring }};flex-direction:column;gap:22px;">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <span style="font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:0.08em;text-transform:uppercase;color:#7d7f89;">Components / Motion / Spring Cursor</span>
+          <h2 style="margin:0;font-weight:400;font-size:clamp(34px,4vw,48px);letter-spacing:-0.035em;line-height:1;">Spring Cursor</h2>
+          <p style="margin:0;color:#a4a6b0;font-size:15.5px;line-height:1.55;max-width:640px;">The gallery cursor from Cursor Gallery. A label chases the pointer on a damped spring, leaning and stretching with its speed.</p>
+        </div>
+        <div ref="{{ springAreaRef }}" style="position:relative;aspect-ratio:16/7;min-height:220px;border-radius:12px;background:#0d0d10;outline:1px solid rgba(242,242,244,0.08);cursor:none;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+          <span style="font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:#5f616b;">Move your cursor here</span>
+          <div ref="{{ springDotRef }}" style="padding:11px 18px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:14px;font-weight:500;white-space:nowrap;">View shader</div>
+        </div>
+        <div style="display:flex;gap:28px;flex-wrap:wrap;">
+          <label style="display:flex;gap:12px;align-items:center;flex:1 1 240px;max-width:380px;">
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#a4a6b0;">Stiffness</span>
+            <input type="range" min="0.04" max="0.4" step="0.01" value="{{ springK }}" onChange="{{ setSpringK }}" style="flex:1;margin:0;"></input>
+            <span style="font-family:'Geist Mono',monospace;font-size:12px;color:#a4a6b0;">{{ springK }}</span>
+          </label>
+          <label style="display:flex;gap:12px;align-items:center;flex:1 1 240px;max-width:380px;">
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#a4a6b0;">Damping</span>
+            <input type="range" min="0.4" max="0.95" step="0.01" value="{{ springD }}" onChange="{{ setSpringD }}" style="flex:1;margin:0;"></input>
+            <span style="font-family:'Geist Mono',monospace;font-size:12px;color:#a4a6b0;">{{ springD }}</span>
+          </label>
+        </div>
+        <div style="border-radius:12px;background:#111114;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px 10px 18px;border-bottom:1px solid rgba(242,242,244,0.08);"><span style="font-size:13px;color:#a4a6b0;">Usage</span><button onClick="{{ copyMotion }}" style="all:unset;cursor:pointer;padding:7px 14px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:13px;font-weight:500;">{{ copyLabel }}</button></div>
+          <pre style="margin:0;padding:16px 18px 20px;font-family:'Geist Mono',monospace;font-size:12.5px;line-height:1.65;color:#d4d5db;white-space:pre-wrap;">{{ springCode }}</pre>
+        </div>
+      </div>
+
+      <div style="display:{{ showDemo }};flex-direction:column;gap:22px;">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <span style="font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:0.08em;text-transform:uppercase;color:#7d7f89;">Components / {{ demoCat }} / {{ demoName }}</span>
+          <h2 style="margin:0;font-weight:400;font-size:clamp(34px,4vw,48px);letter-spacing:-0.035em;line-height:1;">{{ demoName }}</h2>
+          <p style="margin:0;color:#a4a6b0;font-size:15.5px;line-height:1.55;max-width:640px;">{{ demoDesc }}</p>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span style="padding:5px 10px;border-radius:999px;font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:#c9cad1;outline:1px solid rgba(242,242,244,0.14);">DOM</span>
+            <span style="padding:5px 10px;border-radius:999px;font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:#c9cad1;outline:1px solid rgba(242,242,244,0.14);">From {{ demoFrom }}</span>
+          </div>
+        </div>
+        <div ref="{{ demoRef }}" style="position:relative;aspect-ratio:16/8;min-height:240px;border-radius:12px;background:#0d0d10;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;"></div>
+        <div style="display:flex;justify-content:flex-end;">
+          <button onClick="{{ replayDemo }}" style="all:unset;cursor:pointer;padding:8px 14px;border-radius:999px;font-size:13px;border:1px solid rgba(242,242,244,0.25);" style-hover="border-color:#f2f2f4;">Replay</button>
+        </div>
+        <div style="border-radius:12px;background:#111114;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px 10px 18px;border-bottom:1px solid rgba(242,242,244,0.08);"><span style="font-size:13px;color:#a4a6b0;">Usage</span><button onClick="{{ copyMotion }}" style="all:unset;cursor:pointer;padding:7px 14px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:13px;font-weight:500;">{{ copyLabel }}</button></div>
+          <pre style="margin:0;padding:16px 18px 20px;font-family:'Geist Mono',monospace;font-size:12.5px;line-height:1.65;color:#d4d5db;white-space:pre-wrap;">{{ demoCode }}</pre>
+        </div>
+      </div>
+
+      <div style="display:{{ showInstall }};flex-direction:column;gap:28px;max-width:860px;">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <span style="font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:0.08em;text-transform:uppercase;color:#7d7f89;">Get started / Installation</span>
+          <h2 style="margin:0;font-weight:400;font-size:clamp(34px,4vw,48px);letter-spacing:-0.035em;line-height:1;">Installation</h2>
+          <p style="margin:0;color:#a4a6b0;font-size:15.5px;line-height:1.55;">Shaderfield is one file with no dependencies. Download it, add it to your project, then use it in any of three ways.</p>
+          <div><a href="./shaderfield.js" download="shaderfield.js" style="display:inline-flex;padding:11px 18px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:14px;font-weight:500;">Download shaderfield.js</a></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <h3 style="margin:0;font-size:20px;font-weight:500;letter-spacing:-0.02em;">1. Website</h3>
+          <p style="margin:0;color:#a4a6b0;font-size:15px;line-height:1.55;">Load the script and place the element. It fills its positioned parent, pauses off-screen and holds a still frame for reduced motion. Any parameter from a component's props table is an attribute.</p>
+          <pre style="margin:0;padding:16px 18px;border-radius:12px;background:#111114;outline:1px solid rgba(242,242,244,0.08);font-family:'Geist Mono',monospace;font-size:12.5px;line-height:1.65;color:#d4d5db;white-space:pre-wrap;">{{ useWebCode }}</pre>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <h3 style="margin:0;font-size:20px;font-weight:500;letter-spacing:-0.02em;">2. Motion video</h3>
+          <p style="margin:0;color:#a4a6b0;font-size:15px;line-height:1.55;">Record a plate from any shader's Video tab, or render frame by frame inside Remotion or any frame loop. The same time value always gives the same frame.</p>
+          <pre style="margin:0;padding:16px 18px;border-radius:12px;background:#111114;outline:1px solid rgba(242,242,244,0.08);font-family:'Geist Mono',monospace;font-size:12.5px;line-height:1.65;color:#d4d5db;white-space:pre-wrap;">const field = Shaderfield.mount(el, {
+  effect: "skein", palette: "aurora", autoplay: false
+});
+field.render(frame / fps);</pre>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <h3 style="margin:0;font-size:20px;font-weight:500;letter-spacing:-0.02em;">3. With AI</h3>
+          <p style="margin:0;color:#a4a6b0;font-size:15px;line-height:1.55;">Open a shader, tune it, then copy from the AI prompt tab. Paste it into your coding agent with shaderfield.js in the project. The prompt carries the effect, palette, every value and the placement rules, for a website or a video plate.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <h3 style="margin:0;font-size:20px;font-weight:500;letter-spacing:-0.02em;">API</h3>
+          <div style="border-radius:12px;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;">
+            <sc-for list="{{ apiRows }}" as="r" hint-placeholder-count="8">
+              <div style="display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px;padding:11px 16px;border-top:1px solid rgba(242,242,244,0.06);font-size:13.5px;">
+                <code style="font-family:'Geist Mono',monospace;font-size:12.5px;color:#f2f2f4;word-break:break-word;">{{ r.sig }}</code>
+                <span style="color:#a4a6b0;">{{ r.desc }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer style="padding:28px clamp(20px,4vw,48px) 40px;border-top:1px solid rgba(242,242,244,0.08);display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;font-size:13px;line-height:1.55;color:#7d7f89;">
+    <span style="max-width:720px;">Fret and Skein are adapted from shader.gallery (MIT, E. T. Carter). Halo and Thermal are native rewrites inspired by Paper Shaders. Current, Harmonia, Mesh and the motion helpers come from the Shaders Lab films.</span>
+    <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;">Shaderfield v1.1 · 2026</span>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const SCRIPT_TAG = "<" + "script src=\"shaderfield.js\"></" + "script>";
+const MOTION = [
+  { id: "type", name: "Type Entrances", cat: "Text", desc: "Five letter-by-letter entrances: soft, decode, flip, scatter and glitch." },
+  { id: "curtain", name: "Pixel Curtain", cat: "Transitions", desc: "A scene change through scattered cells that cover, swap and clear." },
+  { id: "reveal", name: "Word Reveal", cat: "Text", desc: "Scroll-linked paragraph reveal, word by word, with accent words." },
+  { id: "spring", name: "Spring Cursor", cat: "Interface", desc: "A cursor label on a damped spring that leans with its speed." },
+];
+const CATS = ["Text", "Interface", "Transitions"];
+const CURTAIN_COLORS = ["#3b82f6", "#ff7333", "#2edb9e", "#f2f2f4"];
+class Component extends DCLogic {
+  state = { ready: false, view: "all", filter: "all", query: "", effect: "current", palette: "plasma", params: {}, tab: "web", aiTarget: "web", heroId: "current", copied: false, rec: null, typeMode: "decode", face: 0, mtFace: 0, curtainColor: "#3b82f6", curtainCols: 22, revealP: 1, springK: 0.18, springD: 0.72 };
+  heroRef = React.createRef(); labRef = React.createRef(); shellRef = React.createRef(); searchRef = React.createRef();
+  typeRef = React.createRef(); curtainRef = React.createRef(); revealRef = React.createRef(); springAreaRef = React.createRef(); springDotRef = React.createRef();
+  mtTypeRef = React.createRef(); mtCurtainRef = React.createRef(); mtRevealRef = React.createRef(); mtSpringAreaRef = React.createRef(); mtSpringDotRef = React.createRef();
+  cards = {}; cardRefs = {}; mtModeI = 0; demoRef = React.createRef(); demoTileInst = {}; demoTileRefs = {};
+
+  demoById(id) { return (window.SFDemos || []).find(d => d.id === id); }
+  demoTileRef(d) {
+    return this.demoTileRefs[d.id] || (this.demoTileRefs[d.id] = (el) => {
+      if (!el || this.demoTileInst[d.id]) return;
+      const inst = this.demoTileInst[d.id] = d.build(el, false);
+      inst.play();
+      const io = new IntersectionObserver(es => { if (es[0].isIntersecting) { io.disconnect(); inst.play(); } }, { threshold: 0.5 });
+      io.observe(el); inst.io = io;
+    });
+  }
+  hoverTile(id) { const i = this.demoTileInst[id]; if (!i || i.busy) return; i.busy = true; Promise.resolve(i.play()).then(() => { i.busy = false; }); }
+  mountDemo(id) {
+    if (this.demoInst) { this.demoInst.stop && this.demoInst.stop(); this.demoInst = null; }
+    const d = this.demoById(id), el = this.demoRef.current; if (!d || !el) return;
+    el.innerHTML = "";
+    const box = document.createElement("div"); box.style.cssText = "position:absolute;inset:0;width:100%;height:100%;"; el.appendChild(box);
+    this.demoInst = d.build(box, true); this.demoInst.play();
+  }
+
+  componentDidMount() {
+    const wait = () => window.Shaderfield && window.SFDemos ? this.init() : (this.waitId = setTimeout(wait, 50));
+    wait();
+    this.onKey = (e) => { if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); this.scrollShell(); this.searchRef.current && this.searchRef.current.focus(); } };
+    window.addEventListener("keydown", this.onKey);
+  }
+  init() {
+    const SF = this.SF = window.Shaderfield, M = SF.motion;
+    this.hero = SF.mount(this.heroRef.current, { effect: "current", time: 4 });
+    this.lab = SF.mount(this.labRef.current, { effect: "current", time: 2 });
+    this.setState({ ready: true, params: { ...this.lab.params } });
+    this.heroTimer = setInterval(() => { if (!this.heroLocked) { const o = SF.ORDER; this.setHero(o[(o.indexOf(this.state.heroId) + 1) % o.length]); } }, 8000);
+    this.reveal = M.revealWords(this.revealRef.current, { accent: "#f2f2f4", dim: 0.18, manual: true, progress: 1 });
+    this.mtReveal = M.revealWords(this.mtRevealRef.current, { accent: "#f2f2f4", dim: 0.18, manual: true, progress: 0.35 });
+    this.spring = M.springFollow(this.springDotRef.current, this.springAreaRef.current);
+    this.mtSpring = M.springFollow(this.mtSpringDotRef.current, this.mtSpringAreaRef.current);
+    this.mtIO = new IntersectionObserver(es => { if (es[0].isIntersecting) { this.tileType(); this.mtIO.disconnect(); } }, { threshold: 0.6 });
+    this.mtIO.observe(this.mtTypeRef.current);
+  }
+  componentWillUnmount() {
+    clearTimeout(this.waitId); clearInterval(this.heroTimer); window.removeEventListener("keydown", this.onKey);
+    [this.reveal, this.mtReveal, this.spring, this.mtSpring].forEach(f => f && f());
+    this.mtIO && this.mtIO.disconnect();
+    [this.hero, this.lab, ...Object.values(this.cards)].forEach(f => f && f.destroy());
+  }
+  cardRef(id) {
+    return this.cardRefs[id] || (this.cardRefs[id] = (el) => {
+      if (el && !this.cards[id] && this.SF) this.cards[id] = this.SF.mount(el, { effect: id, time: 3 + Object.keys(this.cards).length * 2 });
+    });
+  }
+  setHero(id) { this.hero.setEffect(id); this.setState({ heroId: id }); }
+  scrollShell() {
+    const el = this.shellRef.current; if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    if (Math.abs(window.scrollY - top) > 4) window.scrollTo({ top, behavior: "smooth" });
+  }
+  setView(v) {
+    if (this.SF.EFFECTS[v]) { this.lab.setEffect(v); this.setState({ view: v, effect: v, palette: this.lab.palette, params: { ...this.lab.params } }); }
+    else this.setState({ view: v });
+    this.scrollShell();
+    if (this.demoById(v)) setTimeout(() => this.mountDemo(v), 40);
+    else if (this.demoInst) { this.demoInst.stop && this.demoInst.stop(); this.demoInst = null; }
+    if (v === "type") setTimeout(() => this.runType(), 60);
+    if (v === "reveal") setTimeout(() => this.playReveal(), 60);
+  }
+  setParam(k, v) { this.lab.set(k, v); this.setState(s => ({ params: { ...s.params, [k]: v } })); }
+  accent() { const p = this.SF.PALETTES[this.state.palette]; return [this.SF.css(p[2]), this.SF.css(p[3])]; }
+  runType(mode) {
+    const m = mode || this.state.typeMode; this.setState({ typeMode: m });
+    this.SF.motion.typeIn(this.typeRef.current, { mode: m, accent: this.accent() });
+  }
+  tileType() {
+    const modes = this.SF.motion.TYPE_MODES, m = modes[this.mtModeI++ % modes.length], el = this.mtTypeRef.current;
+    el.dataset.sfText = m.charAt(0).toUpperCase() + m.slice(1);
+    this.SF.motion.typeIn(el, { mode: m, accent: ["#22d3ee", "#f43f5e"] });
+  }
+  runCurtain() {
+    if (this.curtainBusy) return; this.curtainBusy = true;
+    this.SF.motion.curtain(this.curtainRef.current, { color: this.state.curtainColor, cols: this.state.curtainCols, onSwap: () => this.setState(s => ({ face: 1 - s.face })) }).then(() => { this.curtainBusy = false; });
+  }
+  tileCurtain() {
+    if (this.mtBusy) return; this.mtBusy = true;
+    this.SF.motion.curtain(this.mtCurtainRef.current, { color: this.state.curtainColor, cols: 16, onSwap: () => this.setState(s => ({ mtFace: 1 - s.mtFace })) }).then(() => { this.mtBusy = false; });
+  }
+  playReveal() {
+    cancelAnimationFrame(this.rvRaf); const t0 = performance.now();
+    const tick = () => { const p = Math.min(1, (performance.now() - t0) / 2600); this.reveal.set(p); this.setState({ revealP: p }); if (p < 1) this.rvRaf = requestAnimationFrame(tick); };
+    tick();
+  }
+  fmt(v, p) { const d = p.step >= 1 ? 0 : p.step >= 0.1 ? 1 : p.step >= 0.01 ? 2 : 3; return (+v).toFixed(d); }
+  paramList() {
+    const e = this.SF.EFFECTS[this.state.effect], P = this.state.params;
+    return [...e.params, { key: "speed", label: "Speed", min: 0, max: 3, step: 0.05, def: 1 }].map(p => [p, P[p.key] ?? p.def]);
+  }
+  code() {
+    const { effect, palette, tab, aiTarget } = this.state, e = this.SF.EFFECTS[effect];
+    const list = this.paramList();
+    const attrs = list.map(([p, v]) => `${p.key}="${this.fmt(v, p)}"`);
+    const lines = []; for (let i = 0; i < attrs.length; i += 4) lines.push("  " + attrs.slice(i, i + 4).join(" "));
+    const tag = `<shader-field\n  effect="${effect}" palette="${palette}" interactive\n${lines.join("\n")}\n  style="position:absolute; inset:0"></shader-field>`;
+    const obj = "{ " + list.map(([p, v]) => `${p.key}: ${this.fmt(v, p)}`).join(", ") + " }";
+    if (tab === "web") return `${SCRIPT_TAG}\n\n<section style="position:relative">\n${tag.replace(/^/gm, "  ")}\n  <!-- your content, layered above -->\n</section>`;
+    if (tab === "video") return `// Frame-accurate render for Remotion, Motion Canvas or any frame loop\nconst field = Shaderfield.mount(el, {\n  effect: "${effect}",\n  palette: "${palette}",\n  autoplay: false,\n  interactive: false,\n  params: ${obj}\n});\n\n// on every frame (same time in, same frame out)\nfield.render(frame / fps);`;
+    if (aiTarget === "web") return `Add an animated ${e.name} shader background to the hero section of this site using Shaderfield.\n\n1. shaderfield.js is in the project root. It is a single dependency-free file. Load it once with ${SCRIPT_TAG} before </body>.\n2. Make the hero position: relative and insert this element as its first child so it fills the hero behind the content:\n\n${tag}\n\n3. Keep all hero content above it (position: relative; z-index: 1). If any text over the shader falls below 4.5:1 contrast, add a dark gradient scrim between the shader and the text. Do not dim the shader itself.\n4. Keep these parameter values exactly. Do not add new libraries.\n5. The element already pauses when off-screen and shows a still frame for prefers-reduced-motion users, so no extra handling is needed.`;
+    return `Create a 1920×1080 background plate with the Shaderfield ${e.name} shader for a motion video.\n\nSetup: shaderfield.js is in the project. In a Remotion composition (or any frame-by-frame renderer), create a full-frame div, then:\n\nconst field = Shaderfield.mount(div, {\n  effect: "${effect}", palette: "${palette}", autoplay: false, interactive: false,\n  params: ${obj}\n});\n\nOn every frame call field.render(frame / fps) so renders are deterministic. Do not use requestAnimationFrame or wall-clock time.\n\nTo ramp energy over a scene, interpolate a param per frame before rendering, e.g. field.set("speed", value). Keep titles above the plate with enough contrast, and keep these values unless I ask for changes.`;
+  }
+  motionCode(id) {
+    const S = this.state;
+    if (id === "type") { const [A, B] = this.accent(); return `${SCRIPT_TAG}\n\n<h1 id="title">Shaderfield</h1>\n\nShaderfield.motion.typeIn(document.getElementById("title"), {\n  mode: "${S.typeMode}",          // soft · decode · flip · scatter · glitch\n  accent: ["${A}", "${B}"],\n  delay: 0\n});`; }
+    if (id === "curtain") return `Shaderfield.motion.curtain(stageEl, {\n  color: "${S.curtainColor}",\n  cols: ${S.curtainCols},\n  cover: 0.55, fade: 0.18, hold: 0.12,\n  onSwap: () => showNextScene()   // runs while fully covered\n});`;
+    if (id === "reveal") return `<p id="story">Each shader began as a frame. Now it runs *live*.</p>\n\n// Wrap words in *asterisks* to accent them\nconst stop = Shaderfield.motion.revealWords(document.getElementById("story"), {\n  dim: 0.18,\n  accent: "#f2f2f4"\n});`;
+    return `const stop = Shaderfield.motion.springFollow(labelEl, galleryEl, {\n  stiffness: ${S.springK},\n  damping: ${S.springD}\n});`;
+  }
+  copyText(t) {
+    const done = () => { this.setState({ copied: true }); clearTimeout(this.cpT); this.cpT = setTimeout(() => this.setState({ copied: false }), 1600); };
+    const fb = () => { const a = document.createElement("textarea"); a.value = t; document.body.appendChild(a); a.select(); try { document.execCommand("copy"); } catch (e) {} a.remove(); done(); };
+    if (navigator.clipboard) navigator.clipboard.writeText(t).then(done, fb); else fb();
+  }
+  download(href, name) { const a = document.createElement("a"); a.href = href; a.download = name; document.body.appendChild(a); a.click(); a.remove(); }
+  async record(w, h) {
+    if (this.state.rec != null) return;
+    this.setState({ rec: 0 });
+    try {
+      const blob = await this.lab.record({ seconds: 6, width: w, height: h, fps: 60, onProgress: p => this.setState({ rec: p }) });
+      const url = URL.createObjectURL(blob);
+      this.download(url, `shaderfield-${this.state.effect}-${this.state.palette}-${h}p.${blob.type.includes("mp4") ? "mp4" : "webm"}`);
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+    } catch (e) { console.error(e); alert(e.message); }
+    this.setState({ rec: null });
+  }
+
+  renderVals() {
+    const S = this.state, SF = this.SF, ready = S.ready && SF;
+    const ink = "#f2f2f4", mute = "#a4a6b0", on = (b, d) => b ? d : "none";
+    const base = {
+      heroRef: this.heroRef, labRef: this.labRef, shellRef: this.shellRef, searchRef: this.searchRef, typeRef: this.typeRef, curtainRef: this.curtainRef, revealRef: this.revealRef, springAreaRef: this.springAreaRef, springDotRef: this.springDotRef,
+      mtTypeRef: this.mtTypeRef, mtCurtainRef: this.mtCurtainRef, mtRevealRef: this.mtRevealRef, mtSpringAreaRef: this.mtSpringAreaRef, mtSpringDotRef: this.mtSpringDotRef,
+      useWebCode: `${SCRIPT_TAG}\n\n<div style="position:relative; height:480px">\n  <shader-field effect="halo" palette="aqua" interactive\n    style="position:absolute; inset:0"></shader-field>\n</div>`,
+      query: S.query, onSearch: (e) => this.setState({ query: e.target.value, view: "all" }),
+      showAll: on(S.view === "all", "block"), showInstall: on(S.view === "install", "flex"),
+      showType: on(S.view === "type", "flex"), showCurtain: on(S.view === "curtain", "flex"), showReveal: on(S.view === "reveal", "flex"), showSpring: on(S.view === "spring", "flex"),
+      mtCurtainBg: S.mtFace ? S.curtainColor : "#16161a", mtCurtainInk: S.mtFace ? "#09090b" : ink, mtCurtainWord: S.mtFace ? "After" : "Before",
+      curtainBg: S.face ? S.curtainColor : "#16161a", curtainInk: S.face ? "#09090b" : ink, curtainLabel: S.face ? "Scene 02" : "Scene 01", curtainWord: S.face ? "After" : "Before",
+    };
+    if (!ready) return { ...base, showShader: "none", heroList: [], startNav: [], shaderNav: [], textNav: [], uiNav: [], transNav: [], demoTiles: [], showDemo: "none", filters: [], shaderTiles: [], labTags: [], palettes: [], sliders: [], tabs: [], subTabs: [], typeModes: [], propRows: [], apiRows: [], curtainColors: [], code: "", tileType: "flex", tileCurtain: "flex", tileReveal: "flex", tileSpring: "flex", emptyDisplay: "none" };
+    const E = SF.EFFECTS, O = SF.ORDER, e = E[S.effect];
+    const num = (i) => String(i + 1).padStart(2, "0");
+    const q = S.query.trim().toLowerCase();
+    const match = (name, desc, cat) => (S.filter === "all" || S.filter === cat) && (!q || (name + " " + desc).toLowerCase().includes(q));
+    const navItem = (id, name, meta, show) => ({ name, meta, display: show ? "flex" : "none", pick: () => this.setView(id), bg: S.view === id ? "#1b1b20" : "transparent", color: S.view === id ? "#ffffff" : mute });
+    const DEMOS = window.SFDemos || [];
+    const ALLM = [...MOTION, ...DEMOS];
+    const shaderShown = O.filter(id => match(E[id].name, E[id].desc, "shaders"));
+    const motionShown = ALLM.filter(m => match(m.name, m.desc, m.cat));
+    const navQ = (name, desc) => !q || (name + " " + desc).toLowerCase().includes(q);
+    const catNav = (c) => ALLM.filter(m => m.cat === c).sort((a, b) => a.name.localeCompare(b.name)).map(m => navItem(m.id, m.name, MOTION.includes(m) ? "" : "", navQ(m.name, m.desc)));
+    const demo = this.demoById(S.view);
+    const grad = (c) => `conic-gradient(${SF.css(c[0])} 0 25%, ${SF.css(c[1])} 0 50%, ${SF.css(c[2])} 0 75%, ${SF.css(c[3])} 0)`;
+    const tabs = [["web", "Website"], ["ai", "AI prompt"], ["video", "Video"]];
+    const notes = {
+      web: "Paste into any page. The element fills its positioned parent and keeps rendering only while visible.",
+      ai: S.aiTarget === "web" ? "Paste into your coding agent with shaderfield.js in the project. It places the effect with these exact values." : "Paste into your coding agent to build a frame-accurate background plate for a video composition.",
+      video: "Record a plate straight from the stage, or render frame by frame in your own pipeline with the code below.",
+    };
+    const recP = S.rec, total = shaderShown.length + motionShown.length;
+    const isMotion = MOTION.some(m => m.id === S.view);
+    return {
+      ...base,
+      goAll: () => { this.setState({ filter: "all", query: "" }); this.setView("all"); },
+      goInstall: () => this.setView("install"),
+      heroList: O.map((id, i) => ({ num: num(i), name: E[id].name, mark: id === S.heroId ? "●" : "", color: id === S.heroId ? "#ffffff" : "#9a9ca6", pick: () => { this.heroLocked = true; this.setHero(id); } })),
+      startNav: [navItem("all", "Browse all", String(O.length + ALLM.length), true), navItem("install", "Installation", "", true)],
+      shaderNav: O.map(id => navItem(id, E[id].name, E[id].kind === "GLSL" ? "GL" : E[id].kind === "WebGL 3D" ? "3D" : "2D", navQ(E[id].name, E[id].desc))),
+      textNav: catNav("Text"), uiNav: catNav("Interface"), transNav: catNav("Transitions"),
+      shaderCount: String(O.length), textCount: String(ALLM.filter(m => m.cat === "Text").length), uiCount: String(ALLM.filter(m => m.cat === "Interface").length), transCount: String(ALLM.filter(m => m.cat === "Transitions").length),
+      filters: [["all", "All", O.length + ALLM.length], ["shaders", "Shaders", O.length], ...CATS.map(c => [c, c, ALLM.filter(m => m.cat === c).length])].map(([k, n, c]) => ({ name: n, count: String(c), pick: () => this.setState({ filter: k }), bg: S.filter === k ? ink : "transparent", color: S.filter === k ? "#09090b" : ink })),
+      demoTiles: DEMOS.map(d => ({ name: d.name, cat: d.cat, desc: d.desc, display: motionShown.includes(d) ? "flex" : "none", ref: this.demoTileRef(d), open: () => this.setView(d.id), hover: () => this.hoverTile(d.id) })),
+      demoRef: this.demoRef, showDemo: on(!!demo, "flex"), demoName: demo ? demo.name : "", demoCat: demo ? demo.cat : "", demoDesc: demo ? demo.desc : "", demoFrom: demo ? demo.from : "", demoCode: demo ? demo.code : "",
+      replayDemo: () => demo && this.mountDemo(demo.id),
+      resultLabel: `${total} component${total === 1 ? "" : "s"}`, emptyDisplay: total ? "none" : "block",
+      shaderTiles: O.map(id => ({ name: E[id].name, kind: E[id].kind, desc: E[id].desc, display: shaderShown.includes(id) ? "flex" : "none", ref: this.cardRef(id), open: () => this.setView(id) })),
+      tileType: motionShown.some(m => m.id === "type") ? "flex" : "none", tileCurtain: motionShown.some(m => m.id === "curtain") ? "flex" : "none",
+      tileReveal: motionShown.some(m => m.id === "reveal") ? "flex" : "none", tileSpring: motionShown.some(m => m.id === "spring") ? "flex" : "none",
+      openType: () => this.setView("type"), openCurtain: () => this.setView("curtain"), openReveal: () => this.setView("reveal"), openSpring: () => this.setView("spring"),
+      tileTypeHover: () => this.tileType(), tileCurtainHover: () => this.tileCurtain(),
+      tileRevealMove: (ev) => { const r = ev.currentTarget.getBoundingClientRect(); this.mtReveal && this.mtReveal.set((ev.clientX - r.left) / r.width * 1.15); },
+      showShader: on(!!E[S.view], "flex"),
+      labName: e.name, labDesc: e.desc, labHint: e.hint, palette: S.palette,
+      labTags: [e.kind, "Interactive", "From " + e.from],
+      palettes: (e.palettes || Object.keys(SF.PALETTES)).map(n => ({ name: n, bg: grad(SF.PALETTES[n]), ring: n === S.palette ? ink : "transparent", pick: () => { this.lab.setPalette(n); this.setState({ palette: n }); } })),
+      sliders: this.paramList().map(([p, v]) => ({ label: p.label, min: p.min, max: p.max, step: p.step, value: v, display: this.fmt(v, p) + (p.unit || ""), onChange: ev => this.setParam(p.key, parseFloat(ev.target.value)) })),
+      propRows: [{ key: "effect", label: "Effect id", range: `"${S.effect}"`, def: "—" }, { key: "palette", label: "Palette name", range: (e.palettes || Object.keys(SF.PALETTES)).join(" · "), def: e.palette }, { key: "interactive", label: "Cursor and click input", range: "boolean", def: "off" }]
+        .concat(this.paramList().map(([p]) => ({ key: p.key, label: p.label, range: `${p.min} – ${p.max}${p.unit || ""}`, def: this.fmt(p.def, p) }))),
+      shuffle: () => { const next = {}; e.params.forEach(p => { const r = p.min + Math.random() * (p.max - p.min); next[p.key] = Math.round(r / p.step) * p.step; }); this.lab.set(next); this.setState(s => ({ params: { ...s.params, ...next } })); },
+      reset: () => this.setView(S.effect),
+      tabs: tabs.map(([k, l]) => ({ label: l, pick: () => this.setState({ tab: k }), bg: S.tab === k ? "#26262c" : "transparent", color: S.tab === k ? ink : mute })),
+      subTabs: S.tab === "ai" ? [["web", "For a website"], ["video", "For a video"]].map(([k, l]) => ({ label: l, pick: () => this.setState({ aiTarget: k }), border: S.aiTarget === k ? ink : "rgba(242,242,244,0.2)", color: S.aiTarget === k ? ink : mute })) : [],
+      tabNote: notes[S.tab], isVideo: S.tab === "video", code: this.code(),
+      copy: () => this.copyText(this.code()), copyMotion: () => demo ? this.copyText(demo.code) : isMotion && this.copyText(this.motionCode(S.view)), copyLabel: S.copied ? "Copied" : "Copy",
+      recording: recP != null, recLabel: recP != null ? Math.round(recP * 100) + "%" : "",
+      recordLabel: recP != null ? "Recording…" : "Record 6 s · 1080p",
+      record: () => this.record(1920, 1080), record4: () => this.record(3840, 2160),
+      still: () => this.download(this.lab.png(), `shaderfield-${S.effect}-${S.palette}.png`),
+      typeModes: SF.motion.TYPE_MODES.map(m => ({ name: m, pick: () => this.runType(m), border: m === S.typeMode ? ink : "rgba(242,242,244,0.2)", color: m === S.typeMode ? ink : mute })),
+      replayType: () => this.runType(), typeCode: this.motionCode("type"),
+      runCurtain: () => this.runCurtain(), curtainCode: this.motionCode("curtain"),
+      curtainColors: CURTAIN_COLORS.map(c => ({ color: c, ring: c === S.curtainColor ? ink : "transparent", pick: () => this.setState({ curtainColor: c }) })),
+      curtainCols: S.curtainCols, setCurtainCols: (ev) => this.setState({ curtainCols: parseInt(ev.target.value, 10) }),
+      revealP: S.revealP, setRevealP: (ev) => { const p = parseFloat(ev.target.value); cancelAnimationFrame(this.rvRaf); this.reveal.set(p); this.setState({ revealP: p }); },
+      playReveal: () => this.playReveal(), revealCode: this.motionCode("reveal"),
+      springK: S.springK.toFixed(2), springD: S.springD.toFixed(2), springCode: this.motionCode("spring"),
+      setSpringK: (ev) => { const k = parseFloat(ev.target.value); this.spring.set({ stiffness: k }); this.setState({ springK: k }); },
+      setSpringD: (ev) => { const d = parseFloat(ev.target.value); this.spring.set({ damping: d }); this.setState({ springD: d }); },
+      apiRows: [
+        { sig: "<shader-field effect palette interactive …props>", desc: "Custom element. Fills its positioned parent. Attributes update live." },
+        { sig: "Shaderfield.mount(el, { effect, palette, params, interactive, autoplay, time })", desc: "Mounts a field into any element and returns it." },
+        { sig: "field.setEffect(id, palette?, params?)", desc: "Switch effect in place." },
+        { sig: "field.set(key, value) · field.set({ … })", desc: "Change one or many parameters." },
+        { sig: "field.setPalette(name)", desc: "ion, plasma, solar, ember, aurora, aqua, heat, mono." },
+        { sig: "field.render(seconds)", desc: "Draw one deterministic frame. Use with autoplay: false." },
+        { sig: "field.record({ seconds, width, height, fps })", desc: "Returns a video Blob (MP4 or WebM, by browser)." },
+        { sig: "field.png() · field.destroy()", desc: "Grab a PNG data URL; tear down and free the GPU context." },
+        { sig: "Shaderfield.motion.typeIn · rise · countUp · revealWords", desc: "Text motion. See each Text component for options." },
+        { sig: "Shaderfield.motion.tick · bars · springFollow", desc: "Interface motion." },
+        { sig: "Shaderfield.motion.curtain", desc: "Transitions." },
+        { sig: "Shaderfield.motion.ease · play(seconds, fn) · loop(fn)", desc: "The easing set and frame helpers the effects are built on." },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>
