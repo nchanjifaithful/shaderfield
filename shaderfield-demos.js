@@ -45,5 +45,10 @@
     build(el, big) { const q = stage(el, big, `<div style="display:flex;flex-direction:column;gap:0.6em;padding:0 2.4em"><div style="font-size:1.6em;font-weight:700;letter-spacing:-0.03em">We design</div><div data-t style="font-size:5em;font-weight:800;letter-spacing:-0.045em;line-height:1;height:1.1em"></div></div>`, "display:flex;align-items:center;");
       return loopDemo(() => M().typeSwap(q("[data-t]"), ["BRANDS", "APPS", "LOGOS", "IDENTITIES", "WEBSITES"], { caretColor: "#f59e0b" })); } });
 
+  add({ id: "pop", name: "Pop", cat: "Text", from: "Product Video", desc: "Letters rise, overshoot their scale and sharpen out of a blur. The exit flies them up and away.",
+    code: `Shaderfield.motion.pop(el, { by: "char", stagger: 0.04 });\nShaderfield.motion.pop(el, { out: true });`,
+    build(el, big) { const q = stage(el, big, `<div data-t style="font-size:5.4em;font-weight:600;letter-spacing:-0.04em">Antithesis</div>`, center);
+      return { play: async () => { await M().pop(q("[data-t]")); await wait(0.9); await M().pop(q("[data-t]"), { out: true }); return M().pop(q("[data-t]")); } }; } });
+
   window.SFDemos = D;
 })();
