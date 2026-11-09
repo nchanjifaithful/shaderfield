@@ -1,6 +1,6 @@
 # Shaderfield
 
-Live shaders and motion effects for websites and motion video. They come from the Shaders Lab launch films and ship as **one dependency-free JavaScript file**.
+Live shaders and motion effects for websites and motion video. They ship as **one dependency-free JavaScript file**.
 
 - **27 shaders**: GLSL fields (Current, Fret, Skein, Harmonia, Halo, Thermal), text and glyph shaders (Decrypt, Data Wall, Sweep, Rain, Asciify, Glyph Graph, Sand), particles (Assemble), Canvas 2D scenes (Mesh, Aurora, Horizon, Blink, Drift, Sparkle, Filings, Gather, Lattice, Orbits, Prism) and two 3D glass pieces in an optional add-on (Glass Icons, Glass Coins). Each has its own parameters, palettes, cursor interaction, PNG export and video recording.
 - **9 motion effects**: text entrances, interface micro-motion and scene transitions, all plain DOM.
@@ -719,4 +719,4 @@ MIT. See `LICENSE`.
 
 - **Fret** and **Skein** are adapted from *fret (Burnish)* and *skein (Filament)* by E. T. Carter (shader.gallery), MIT.
 - **Halo** and **Thermal** are native rewrites inspired by Paper Shaders' StaticRadialGradient and Heatmap. No Paper Shaders code is included.
-- **Current**, **Harmonia**, **Mesh** and all motion helpers come from the Shaders Lab films.
+- **Current**, **Harmonia**, **Mesh** and all motion helpers are original to Shaderfield.

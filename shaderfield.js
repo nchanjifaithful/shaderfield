@@ -1,6 +1,6 @@
 /*! Shaderfield v1.0 — live shaders + motion effects for websites and video. One file, no dependencies.
  * Fret and Skein adapted from shader.gallery (MIT, E. T. Carter). Halo and Thermal are native rewrites
- * inspired by Paper Shaders. Current, Harmonia, Mesh and motion helpers come from the Shaders Lab films.
+ * inspired by Paper Shaders. Current, Harmonia, Mesh and motion helpers are original to Shaderfield.
  */
 (function () {
   "use strict";
@@ -2018,7 +2018,7 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
     stop.set = (x) => { k = x.stiffness ?? k; d = x.damping ?? d; }; return stop;
   }
 
-  // ── More motion from the films ──
+  // ── More motion helpers ──
   const EZ = { out: oCubic, expo: oExpo, back: oBack, in: (p) => p * p * p, inOut: (p) => (p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2), smooth: (p) => p * p * (3 - 2 * p), pop: (p) => { p = clamp(p); const c = 1.9; return 1 + (c + 1) * Math.pow(p - 1, 3) + c * Math.pow(p - 1, 2); }, spring: (t) => (t <= 0 ? 0 : 1 - (1 + 18 * t) * Math.exp(-18 * t)) };
   const now = () => performance.now() / 1000;
   const rel = (el) => { if (getComputedStyle(el).position === "static") el.style.position = "relative"; };
