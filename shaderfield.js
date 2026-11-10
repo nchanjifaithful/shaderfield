@@ -2103,6 +2103,13 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
       else { const q = exIn((t - i * st * 0.6) / 0.35); op = 1 - q; dy = -q * lift * fs; sc = 1 + q * 0.2; }
       s.style.opacity = op; s.style.filter = op > 0.995 ? "none" : `blur(${((1 - op) * px).toFixed(2)}px)`; s.style.transform = `translateY(${dy.toFixed(1)}px) scale(${sc.toFixed(3)})`; }));
   }
+  // A diagonal glint sweeps across the element once (Product Video)
+  function shine(el, o = {}) {
+    rel(el); const d = o.duration ?? 0.6, wrap = document.createElement("div"), bar = document.createElement("div");
+    wrap.style.cssText = "position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none;z-index:5;";
+    bar.style.cssText = `position:absolute;top:-40%;bottom:-40%;width:${o.size || "30%"};transform:rotate(18deg);background:linear-gradient(90deg,rgba(255,255,255,0),${o.color || "rgba(255,255,255,0.85)"},rgba(255,255,255,0));`; wrap.appendChild(bar); el.appendChild(wrap);
+    return play(d, t => (bar.style.left = lerp(-30, 120, EZ.inOut(t / d)).toFixed(1) + "%")).then(() => wrap.remove());
+  }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, countUp, tick, bars, iris, typeSwap, pop, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, countUp, tick, bars, iris, typeSwap, pop, shine, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

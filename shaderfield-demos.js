@@ -55,5 +55,10 @@
     build(el, big) { const q = stage(el, big, `<div data-t style="font-size:5.4em;font-weight:600;letter-spacing:-0.04em">Antithesis</div>`, center);
       return { play: async () => { await M().pop(q("[data-t]")); await wait(0.9); await M().pop(q("[data-t]"), { out: true }); return M().pop(q("[data-t]")); } }; } });
 
+  add({ id: "shine", name: "Shine", cat: "Interface", from: "Product Video", desc: "A diagonal glint sweeps across a button or card once.",
+    code: `Shaderfield.motion.shine(button, { duration: 0.6 });`,
+    build(el, big) { const q = stage(el, big, `<div data-b style="padding:0.8em 1.6em;border-radius:999px;background:#f2f2f4;color:#0b0b0e;font-size:1.8em;font-weight:600">Try it free</div>`, center);
+      return { play: async () => { await wait(0.2); return M().shine(q("[data-b]")); } }; } });
+
   window.SFDemos = D;
 })();
