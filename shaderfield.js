@@ -2058,6 +2058,13 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
     const fills = v.map(() => { const tr = document.createElement("div"); tr.style.cssText = `height:${h}px;border-radius:${h / 2}px;background:${o.track || "rgba(242,242,244,0.1)"};overflow:hidden`; const f = document.createElement("div"); f.style.cssText = `height:100%;width:0;border-radius:${h / 2}px;background:${o.color || "#f2f2f4"}`; tr.appendChild(f); el.appendChild(tr); return f; });
     return play(v.length * st + 0.5, t => fills.forEach((f, j) => { f.style.width = oExpo(clamp((t - j * st) / 0.5)) * v[j] * 100 + "%"; }));
   }
+  // Iris close to a hairline, or a vertical shutter (Orfa Agents, Dev Agency)
+  function iris(el, o = {}) {
+    rel(el); const c = o.content || el.firstElementChild, acc = o.color || "#34d399", rev = !!o.open, sh = !!o.shutter, D = sh ? 0.7 : 1.05;
+    const ln = document.createElement("div"); ln.style.cssText = `position:absolute;top:50%;height:1px;background:${acc};pointer-events:none;z-index:5;opacity:0`; if (!sh) el.appendChild(ln);
+    return play(D, t => { const tt = rev ? D - t : t; const y = sh ? EZ.in(clamp(tt / D)) : EZ.inOut(clamp(tt / 0.55)), x = sh ? 0 : EZ.inOut(clamp((tt - 0.5) / 0.5));
+      c.style.clipPath = `inset(${y * 50}% ${x * 50}% ${y * 50}% ${x * 50}%)`; ln.style.left = ln.style.right = x * 50 + "%"; ln.style.opacity = EZ.smooth(clamp((y - 0.7) / 0.3)) * (x < 0.98 ? 1 : 0); }).then(() => ln.remove());
+  }
   const bez = (x1, y1, x2, y2) => { const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx, cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
     const X = (t) => ((ax * t + bx) * t + cx) * t, Y = (t) => ((ay * t + by) * t + cy) * t, dX = (t) => (3 * ax * t + 2 * bx) * t + cx;
     return (x) => { x = clamp(x); let t = x; for (let i = 0; i < 8; i++) { const d = dX(t); if (Math.abs(d) < 1e-6) break; t -= (X(t) - x) / d; } return Y(clamp(t)); }; };
@@ -2097,5 +2104,5 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
       s.style.opacity = op; s.style.filter = op > 0.995 ? "none" : `blur(${((1 - op) * px).toFixed(2)}px)`; s.style.transform = `translateY(${dy.toFixed(1)}px) scale(${sc.toFixed(3)})`; }));
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, countUp, tick, bars, typeSwap, pop, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, countUp, tick, bars, iris, typeSwap, pop, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

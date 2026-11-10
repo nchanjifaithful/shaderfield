@@ -5,7 +5,7 @@ Live shaders and motion effects for websites and motion video. They ship as **on
 **Live site: [shaderfield.pages.dev](https://shaderfield.pages.dev/)**
 
 - **27 shaders**: GLSL fields (Current, Fret, Skein, Harmonia, Halo, Thermal), text and glyph shaders (Decrypt, Data Wall, Sweep, Rain, Asciify, Glyph Graph, Sand), particles (Assemble), Canvas 2D scenes (Mesh, Aurora, Horizon, Blink, Drift, Sparkle, Filings, Gather, Lattice, Orbits, Prism) and two 3D glass pieces in an optional add-on (Glass Icons, Glass Coins). Each has its own parameters, palettes, cursor interaction, PNG export and video recording.
-- **11 motion effects**: text entrances, interface micro-motion and scene transitions, all plain DOM.
+- **12 motion effects**: text entrances, interface micro-motion and scene transitions, all plain DOM.
 - **3 ways to use it**: a `<shader-field>` HTML element for websites, a frame-accurate `render(t)` API for video tools, and a ready-made AI prompt generated in the lab.
 
 The repository also contains the **Shaderfield site**, a component browser where you can try every effect live, tune it, and copy the code, an AI prompt or a video render.
@@ -689,6 +689,7 @@ All helpers are in `Shaderfield.motion`. Helpers that run once return a **Promis
 | Helper | From | Usage |
 |---|---|---|
 | `curtain(el, { color, cols, cover, fade, hold, seed, onSwap })` | Closebook Launch | Pixel cells cover, `onSwap` runs, then they clear. |
+| `iris(el, { content, color, open, shutter })` | Orfa Agents, Dev Agency | Closes to a hairline, then pinches to the centre. Pass `open: true` to reverse it. |
 
 ### Building blocks
 

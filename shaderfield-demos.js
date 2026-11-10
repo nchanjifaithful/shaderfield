@@ -38,6 +38,11 @@
     build(el, big) { const q = stage(el, big, `<div style="display:flex;flex-direction:column;gap:1em;width:min(26em,80%)"><div style="display:flex;justify-content:space-between;font-size:1.1em;color:${MUTE}"><span>Amara · scorecard</span><span>4 interviewers</span></div><div data-t></div></div>`, center);
       return { play: () => M().bars(q("[data-t]"), { values: [1, 1, 1, 0.6], color: "#a78bfa", height: big ? 8 : 6 }) }; } });
 
+  add({ id: "iris", name: "Iris", cat: "Transitions", from: "Orfa Agents · Dev Agency", desc: "The frame closes top and bottom to a hairline, the line pinches to the centre, then everything reopens. A shutter variant closes vertically only.",
+    code: `await Shaderfield.motion.iris(stage, { content: scene, color: "#34d399" });\nawait Shaderfield.motion.iris(stage, { content: scene, open: true });\n// Shaderfield.motion.iris(stage, { shutter: true });`,
+    build(el, big) { const q = stage(el, big, `<div data-c style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:1px;background:rgba(242,242,244,0.1)">${["Triage inbox", "Refactor auth", "Write release notes", "Fix flaky test", "Update pricing", "Migrate DB"].map(t => `<div style="background:#0a0a0a;padding:1em;font-size:1.2em;display:flex;align-items:flex-end">${t}</div>`).join("")}</div>`);
+      return { play: async () => { await M().iris(el, { content: q("[data-c]"), color: ACC }); await wait(0.4); return M().iris(el, { content: q("[data-c]"), color: ACC, open: true }); } }; } });
+
   const loopDemo = (start) => { let s = null; return { play: () => { if (!s) s = start(); return wait(2.5); }, stop: () => { s && s(); s = null; } }; };
 
   add({ id: "type-swap", name: "Type Swap", cat: "Text", from: "Signpost Typewriter", desc: "The last word deletes letter by letter, a beat passes, the next one types in. The caret blinks only while idle.",
