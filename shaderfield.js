@@ -2058,6 +2058,14 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
     const fills = v.map(() => { const tr = document.createElement("div"); tr.style.cssText = `height:${h}px;border-radius:${h / 2}px;background:${o.track || "rgba(242,242,244,0.1)"};overflow:hidden`; const f = document.createElement("div"); f.style.cssText = `height:100%;width:0;border-radius:${h / 2}px;background:${o.color || "#f2f2f4"}`; tr.appendChild(f); el.appendChild(tr); return f; });
     return play(v.length * st + 0.5, t => fills.forEach((f, j) => { f.style.width = oExpo(clamp((t - j * st) / 0.5)) * v[j] * 100 + "%"; }));
   }
+  // Ping or blink status dot (Desktop Features, Orfa Agents)
+  function pulseDot(el, o = {}) {
+    const c = o.color || "#38bdf8", s = o.size || 8, per = o.period || 1, off = o.offset || 0;
+    Object.assign(el.style, { position: "relative", display: "inline-block", width: s + "px", height: s + "px", borderRadius: "50%", background: c, flexShrink: "0" });
+    const r = document.createElement("span"); r.style.cssText = `position:absolute;inset:0;border-radius:50%;background:${c}`; el.appendChild(r);
+    const stop = loopFx(t => { if (o.mode === "blink") { el.style.opacity = 0.4 + 0.6 * (0.5 + 0.5 * Math.sin((t + off) * 9)); r.style.opacity = 0; return; } const f = oCubic(Math.min(1, ((t + off) % per) / per / 0.75)); r.style.transform = `scale(${1 + f})`; r.style.opacity = 1 - f; });
+    return () => { stop(); r.remove(); };
+  }
   // Iris close to a hairline, or a vertical shutter (Orfa Agents, Dev Agency)
   function iris(el, o = {}) {
     rel(el); const c = o.content || el.firstElementChild, acc = o.color || "#34d399", rev = !!o.open, sh = !!o.shutter, D = sh ? 0.7 : 1.05;
@@ -2111,5 +2119,5 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
     return play(d, t => (bar.style.left = lerp(-30, 120, EZ.inOut(t / d)).toFixed(1) + "%")).then(() => wrap.remove());
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, countUp, tick, bars, iris, typeSwap, pop, shine, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, countUp, tick, bars, pulseDot, iris, typeSwap, pop, shine, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

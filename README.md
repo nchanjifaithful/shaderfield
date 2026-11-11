@@ -5,7 +5,7 @@ Live shaders and motion effects for websites and motion video. They ship as **on
 **Live site: [shaderfield.pages.dev](https://shaderfield.pages.dev/)**
 
 - **27 shaders**: GLSL fields (Current, Fret, Skein, Harmonia, Halo, Thermal), text and glyph shaders (Decrypt, Data Wall, Sweep, Rain, Asciify, Glyph Graph, Sand), particles (Assemble), Canvas 2D scenes (Mesh, Aurora, Horizon, Blink, Drift, Sparkle, Filings, Gather, Lattice, Orbits, Prism) and two 3D glass pieces in an optional add-on (Glass Icons, Glass Coins). Each has its own parameters, palettes, cursor interaction, PNG export and video recording.
-- **13 motion effects**: text entrances, interface micro-motion and scene transitions, all plain DOM.
+- **14 motion effects**: text entrances, interface micro-motion and scene transitions, all plain DOM.
 - **3 ways to use it**: a `<shader-field>` HTML element for websites, a frame-accurate `render(t)` API for video tools, and a ready-made AI prompt generated in the lab.
 
 The repository also contains the **Shaderfield site**, a component browser where you can try every effect live, tune it, and copy the code, an AI prompt or a video render.
@@ -682,6 +682,7 @@ All helpers are in `Shaderfield.motion`. Helpers that run once return a **Promis
 |---|---|---|
 | `tick(el, { color, size, delay })` | Tended HR, Closebook | A check pops in with overshoot. |
 | `bars(el, { values, color, height, stagger })` | Tended HR, Orfa Agents | Staggered progress bars. |
+| `pulseDot(el, { color, size, period, offset, mode })` → stop | Desktop Features, Orfa Agents | `mode: "ping"` (default) or `"blink"`. |
 | `springFollow(el, area, { stiffness, damping })` → stop | Cursor Gallery | A label follows the cursor on a spring. Use `stop.set({ stiffness, damping })`. |
 | `shine(el, { duration, size, color })` | Product Video | One diagonal glint across the element. |
 
