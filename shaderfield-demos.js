@@ -38,6 +38,13 @@
     build(el, big) { const q = stage(el, big, `<div style="display:flex;flex-direction:column;gap:1em;width:min(26em,80%)"><div style="display:flex;justify-content:space-between;font-size:1.1em;color:${MUTE}"><span>Amara · scorecard</span><span>4 interviewers</span></div><div data-t></div></div>`, center);
       return { play: () => M().bars(q("[data-t]"), { values: [1, 1, 1, 0.6], color: "#a78bfa", height: big ? 8 : 6 }) }; } });
 
+  add({ id: "pulse-dot", name: "Pulse Dot", cat: "Interface", from: "Desktop Features · Orfa Agents", desc: "Status dots that ping outward on a loop, or blink while something runs. Offsets keep a list from pulsing in sync.",
+    code: `const stop = Shaderfield.motion.pulseDot(dot, { color: "#38bdf8", period: 1, offset: 0.13 });\nShaderfield.motion.pulseDot(dot, { mode: "blink", color: "#34d399" });`,
+    build(el, big) { const rows = [["New sign-in from Lisbon", "2m", "#38bdf8"], ["Payout sent", "14m", "#38bdf8"], ["Agent 04 running", "now", ACC, "blink"], ["Build failed", "1h", "#fb923c"]];
+      stage(el, big, `<div style="display:flex;flex-direction:column;gap:0.2em;width:min(26em,84%)">${rows.map(r => `<div style="display:flex;justify-content:space-between;align-items:center;padding:0.75em 0.6em;border-radius:0.6em;font-size:1.2em"><span>${r[0]}</span><span style="display:flex;align-items:center;gap:0.8em;color:${MUTE};font-size:0.85em">${r[1]}<span data-d></span></span></div>`).join("")}</div>`, center);
+      const stops = [...el.querySelectorAll("[data-d]")].map((d, i) => M().pulseDot(d, { color: rows[i][2], offset: i * 0.13, mode: rows[i][3] }));
+      return { play: () => {}, stop: () => stops.forEach(s => s()) }; } });
+
   add({ id: "iris", name: "Iris", cat: "Transitions", from: "Orfa Agents · Dev Agency", desc: "The frame closes top and bottom to a hairline, the line pinches to the centre, then everything reopens. A shutter variant closes vertically only.",
     code: `await Shaderfield.motion.iris(stage, { content: scene, color: "#34d399" });\nawait Shaderfield.motion.iris(stage, { content: scene, open: true });\n// Shaderfield.motion.iris(stage, { shutter: true });`,
     build(el, big) { const q = stage(el, big, `<div data-c style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:1px;background:rgba(242,242,244,0.1)">${["Triage inbox", "Refactor auth", "Write release notes", "Fix flaky test", "Update pricing", "Migrate DB"].map(t => `<div style="background:#0a0a0a;padding:1em;font-size:1.2em;display:flex;align-items:flex-end">${t}</div>`).join("")}</div>`);
