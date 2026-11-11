@@ -67,5 +67,10 @@
     build(el, big) { const q = stage(el, big, `<div data-b style="padding:0.8em 1.6em;border-radius:999px;background:#f2f2f4;color:#0b0b0e;font-size:1.8em;font-weight:600">Try it free</div>`, center);
       return { play: async () => { await wait(0.2); return M().shine(q("[data-b]")); } }; } });
 
+  add({ id: "typing-dots", name: "Typing Dots", cat: "Interface", from: "Product Video", desc: "Three dots bounce in a wave while a reply is on its way.",
+    code: `const stop = Shaderfield.motion.typingDots(el, { size: 10, color: "#9a9a96" });`,
+    build(el, big) { const q = stage(el, big, `<div style="padding:1em 1.3em;border-radius:1.2em;background:#1b1b20"><span data-d></span></div>`, center);
+      return loopDemo(() => M().typingDots(q("[data-d]"), { size: big ? 12 : 8, color: "#9a9a96" })); } });
+
   window.SFDemos = D;
 })();
