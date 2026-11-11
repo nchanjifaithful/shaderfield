@@ -2118,6 +2118,13 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
     bar.style.cssText = `position:absolute;top:-40%;bottom:-40%;width:${o.size || "30%"};transform:rotate(18deg);background:linear-gradient(90deg,rgba(255,255,255,0),${o.color || "rgba(255,255,255,0.85)"},rgba(255,255,255,0));`; wrap.appendChild(bar); el.appendChild(wrap);
     return play(d, t => (bar.style.left = lerp(-30, 120, EZ.inOut(t / d)).toFixed(1) + "%")).then(() => wrap.remove());
   }
+  // Three bouncing dots: the assistant is typing (Product Video)
+  function typingDots(el, o = {}) {
+    el.textContent = ""; el.style.display = "inline-flex"; el.style.gap = (o.gap ?? 8) + "px"; const sz = o.size ?? 10;
+    const ds = [0, 1, 2].map(() => { const d = document.createElement("span"); d.style.cssText = `width:${sz}px;height:${sz}px;border-radius:50%;background:${o.color || "currentColor"};display:block;`; el.appendChild(d); return d; });
+    return loopFx(t => ds.forEach((d, i) => (d.style.transform = `translateY(${(-Math.max(0, Math.sin(t * 9 - i * 0.9)) * sz * 0.8).toFixed(1)}px)`)));
+  }
+
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, countUp, tick, bars, pulseDot, iris, typeSwap, pop, shine, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, countUp, tick, bars, pulseDot, iris, typeSwap, pop, shine, typingDots, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
