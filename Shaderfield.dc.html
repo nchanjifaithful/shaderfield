@@ -46,7 +46,7 @@ input::placeholder{color:#6f717b;}
     <div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:26px;text-align:center;max-width:760px;">
       <span style="display:flex;align-items:center;gap:10px;padding:6px 14px 6px 8px;border-radius:999px;background:#111114;outline:1px solid rgba(242,242,244,0.12);font-size:13px;color:#c9cad1;">
         <span style="padding:2px 8px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:12px;font-weight:500;">v1.1</span>
-        <span>27 shaders and 15 motion effects in one file</span>
+        <span>27 shaders and 16 motion effects in one file</span>
       </span>
       <h1 style="margin:0;font-weight:400;font-size:clamp(56px,9.5vw,136px);line-height:0.9;letter-spacing:-0.055em;"><span style="font-weight:600;">Shader</span><span style="font-weight:400;">field</span></h1>
       <p style="margin:0;font-size:clamp(16px,1.6vw,19px);line-height:1.55;color:#a4a6b0;max-width:560px;text-wrap:pretty;">Shaderfield adds live shaders and motion to your website and your video work. Put a shader behind a hero, animate a headline, or render a 4K background for a product video, all from one JavaScript file with no dependencies.</p>
@@ -414,7 +414,7 @@ input::placeholder{color:#6f717b;}
       <div style="position:absolute;inset:0;background:linear-gradient(to top right,rgba(9,9,11,0.9) 10%,rgba(9,9,11,0.2) 70%);pointer-events:none;"></div>
       <div style="position:relative;display:flex;flex-direction:column;gap:18px;padding:clamp(24px,5vw,56px);max-width:620px;">
         <h2 style="margin:0;font-weight:400;font-size:clamp(36px,5vw,64px);letter-spacing:-0.045em;line-height:0.98;text-wrap:balance;">Add motion to your next site or video.</h2>
-        <p style="margin:0;font-size:16px;line-height:1.55;color:#d4d5db;">Download one file and start with any of the 27 shaders and 15 motion effects. It is MIT licensed and free to use.</p>
+        <p style="margin:0;font-size:16px;line-height:1.55;color:#d4d5db;">Download one file and start with any of the 27 shaders and 16 motion effects. It is MIT licensed and free to use.</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
           <a href="./components.html" style="padding:12px 22px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:14px;font-weight:500;" style-hover="background:#ffffff;color:#09090b;">Browse components</a>
           <a href="./shaderfield.js" download="shaderfield.js" style="padding:12px 22px;border-radius:999px;background:rgba(9,9,11,0.6);outline:1px solid rgba(242,242,244,0.3);font-size:14px;" style-hover="outline-color:#f2f2f4;">Download shaderfield.js</a>
@@ -499,7 +499,7 @@ class Component extends DCLogic {
       ["Copy it out", "Copy the element for your site, record a clip for video, or copy the prompt for your agent.", "Seconds"],
     ];
     const FAQ = [
-      ["What is in the library?", "27 shaders and 15 motion effects. The shaders include GLSL fields, text and glyph shaders, particles and Canvas 2D scenes. The motion effects cover text, interface details and transitions. It all ships in one JavaScript file. Glass icons and coins are in a separate add-on that needs three.js."],
+      ["What is in the library?", "27 shaders and 16 motion effects. The shaders include GLSL fields, text and glyph shaders, particles and Canvas 2D scenes. The motion effects cover text, interface details and transitions. It all ships in one JavaScript file. Glass icons and coins are in a separate add-on that needs three.js."],
       ["Can I use it in commercial work?", "Yes. Shaderfield is MIT licensed, so you can use it in personal, client and commercial projects. Fret and Skein are adapted from MIT-licensed shaders by E. T. Carter."],
       ["Do I need React or a build step?", "No. Load the script and use the <shader-field> element. It works in static HTML, React, Vue, Svelte, or anything else that renders to the DOM."],
       ["How does it work with coding agents?", "Open a component, adjust it, then copy the text from its AI prompt tab into your agent. The prompt includes the effect, the palette and your values. There is one version for website sections and one for video backgrounds."],
@@ -561,7 +561,7 @@ class Component extends DCLogic {
   }
   renderVals() {
     const S = this.state, SF = this.SF;
-    if (!S.ready || !SF) return { ...this.staticVals(), heroDock: [], heroNum: "", heroTotal: "", heroName: "", heroDesc: "", heroKind: "", libItems: [], libTotal: "42", palChips: [], shaderLinks: [], tuneSliders: [] };
+    if (!S.ready || !SF) return { ...this.staticVals(), heroDock: [], heroNum: "", heroTotal: "", heroName: "", heroDesc: "", heroKind: "", libItems: [], libTotal: "43", palChips: [], shaderLinks: [], tuneSliders: [] };
     const E = SF.EFFECTS, O = SF.ORDER, i = O.indexOf(S.heroId), cur = E[S.heroId];
     const grad = (c) => `conic-gradient(${SF.css(c[0])} 0 25%, ${SF.css(c[1])} 0 50%, ${SF.css(c[2])} 0 75%, ${SF.css(c[3])} 0)`;
     const DEMOS = window.SFDemos || [], cats = { Text: 2, Interface: 1, Transitions: 1 };

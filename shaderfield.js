@@ -2039,6 +2039,13 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
     parts.forEach(p => (p.style.transform = `translateY(${out ? 0 : 115}%)`));
     return play(dl + parts.length * st + d, t => parts.forEach((p, i) => { const k = ez(clamp((t - dl - i * st) / d)); p.style.transform = `translateY(${out ? -k * 115 : (1 - k) * 115}%)`; }));
   }
+  // Line-by-line masked heading with exit (App Features, Desktop Features)
+  function lineRise(el, o = {}) {
+    const lines = el._sfLines || (el._sfLines = [...el.children]);
+    lines.forEach(k => { if (!k._sfMask) { const m = document.createElement("div"); m.style.cssText = "overflow:hidden;padding-bottom:0.08em;"; k.parentNode.insertBefore(m, k); m.appendChild(k); k._sfMask = m; } });
+    const out = !!o.out, st = out ? 0.04 : o.stagger ?? 0.08, d = out ? 0.45 : o.duration ?? 0.9;
+    return play(lines.length * st + d, t => lines.forEach((k, i) => { const p = clamp((t - i * st) / d); k.style.transform = `translateY(${out ? -Math.pow(p, 3) * 112 : (1 - oCubic(p)) * 112}%)`; }));
+  }
   // Number tween with tabular figures (Tended HR, Closebook)
   function countUp(el, o = {}) {
     const f = o.from ?? 0, to = o.to ?? 100, d = o.duration ?? 1.6, dec = o.decimals ?? 0; el.style.fontVariantNumeric = "tabular-nums";
@@ -2126,5 +2133,5 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
   }
 
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, countUp, tick, bars, pulseDot, iris, typeSwap, pop, shine, typingDots, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, countUp, tick, bars, pulseDot, iris, typeSwap, pop, shine, typingDots, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
