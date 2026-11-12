@@ -2103,6 +2103,20 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
       car.style.opacity = active || Math.floor((u - last + 0.53) / 0.53) % 2 === 0 ? 1 : 0;
     });
   }
+  // Each word replaces the last with a per-letter roll (Keep Marching)
+  function rollWords(el, words, o = {}) {
+    const d = o.duration ?? 0.5, st = o.stagger ?? 0.025, hold = o.hold ?? 0.75, per = d + hold; rel(el); el.textContent = "";
+    el.style.overflow = "hidden"; el.style.height = el.style.height || "0.86em"; el.style.lineHeight = "0.86em";
+    const mk = () => { const w = document.createElement("div"); w.style.cssText = "position:absolute;left:0;right:0;top:0;display:flex;justify-content:" + (o.align || "center") + ";"; el.appendChild(w); return w; };
+    const A = mk(), B = mk(); let last = -1;
+    const fill = (w, s) => { w.textContent = ""; [...s].forEach(ch => { const sp = document.createElement("span"); sp.style.cssText = "display:inline-block;white-space:pre;"; sp.textContent = ch; w.appendChild(sp); }); };
+    return loopFx(t => {
+      const i = Math.floor(t / per), u = t - i * per, cur = words[i % words.length], prev = i > 0 ? words[(i - 1) % words.length] : "";
+      if (i !== last) { fill(A, prev); fill(B, cur); last = i; }
+      [...A.children].forEach((s, j) => (s.style.transform = `translateY(${-ROLL((u - j * st) / d) * 100}%)`));
+      [...B.children].forEach((s, j) => (s.style.transform = `translateY(${(1 - ROLL((u - j * st) / d)) * 100}%)`));
+    });
+  }
   const HUES = ["#ff5f6d", "#ffb347", "#ffe66d", "#4ade80", "#38bdf8", "#818cf8", "#e879f9"];
   const conicG = (d, h) => `conic-gradient(from ${d.toFixed(1)}deg, ${(h || HUES).join(", ")}, ${(h || HUES)[0]})`;
   const exIn = (t) => (t <= 0 ? 0 : Math.pow(2, 10 * clamp(t) - 10));
@@ -2133,5 +2147,5 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
   }
 
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, countUp, tick, bars, pulseDot, iris, typeSwap, pop, shine, typingDots, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, countUp, tick, bars, pulseDot, iris, typeSwap, rollWords, pop, shine, typingDots, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
