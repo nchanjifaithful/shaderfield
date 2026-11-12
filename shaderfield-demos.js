@@ -62,6 +62,11 @@
     build(el, big) { const q = stage(el, big, `<div style="display:flex;flex-direction:column;gap:0.6em;padding:0 2.4em"><div style="font-size:1.6em;font-weight:700;letter-spacing:-0.03em">We design</div><div data-t style="font-size:5em;font-weight:800;letter-spacing:-0.045em;line-height:1;height:1.1em"></div></div>`, "display:flex;align-items:center;");
       return loopDemo(() => M().typeSwap(q("[data-t]"), ["BRANDS", "APPS", "LOGOS", "IDENTITIES", "WEBSITES"], { caretColor: "#f59e0b" })); } });
 
+  add({ id: "roll-words", name: "Roll Words", cat: "Text", from: "Keep Marching", desc: "Each word pushes the last one out with a per-letter roll on a steep in-out curve.",
+    code: `Shaderfield.motion.rollWords(el, ["Dont", "give", "up."], {\n  duration: 0.5, stagger: 0.025, hold: 0.75\n});`,
+    build(el, big) { const q = stage(el, big, `<div data-t style="width:100%;font-size:7em;font-weight:800;letter-spacing:-0.05em;text-transform:uppercase"></div>`, center);
+      return loopDemo(() => M().rollWords(q("[data-t]"), ["Dont", "give", "up.", "keep", "marching", "forward"])); } });
+
   add({ id: "pop", name: "Pop", cat: "Text", from: "Product Video", desc: "Letters rise, overshoot their scale and sharpen out of a blur. The exit flies them up and away.",
     code: `Shaderfield.motion.pop(el, { by: "char", stagger: 0.04 });\nShaderfield.motion.pop(el, { out: true });`,
     build(el, big) { const q = stage(el, big, `<div data-t style="font-size:5.4em;font-weight:600;letter-spacing:-0.04em">Antithesis</div>`, center);
