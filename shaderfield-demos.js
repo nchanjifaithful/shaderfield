@@ -55,6 +55,11 @@
     build(el, big) { const q = stage(el, big, `<div data-c style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:1px;background:rgba(242,242,244,0.1)">${["Triage inbox", "Refactor auth", "Write release notes", "Fix flaky test", "Update pricing", "Migrate DB"].map(t => `<div style="background:#0a0a0a;padding:1em;font-size:1.2em;display:flex;align-items:flex-end">${t}</div>`).join("")}</div>`);
       return { play: async () => { await M().iris(el, { content: q("[data-c]"), color: ACC }); await wait(0.4); return M().iris(el, { content: q("[data-c]"), color: ACC, open: true }); } }; } });
 
+  add({ id: "line-draw", name: "Line Draw", cat: "Transitions", from: "Dev Agency · Gloww · Shader Trials", desc: "Hairlines that draw themselves: a frame from opposite corners and an underline from the left.",
+    code: `Shaderfield.motion.drawFrame(box, { color: "rgba(242,242,244,0.45)" });\nShaderfield.motion.drawLine(rule, { delay: 0.4 });`,
+    build(el, big) { const q = stage(el, big, `<div data-f style="position:absolute;inset:12%;${center}flex-direction:column;gap:1.2em"><div style="font-size:4em;font-weight:500;letter-spacing:-0.05em">Gloww</div><div style="width:14em;display:flex;flex-direction:column;gap:0.8em"><div data-l style="height:1px;background:rgba(242,242,244,0.5);transform:scaleX(0)"></div><div style="font-family:'Geist Mono',monospace;font-size:1em;letter-spacing:0.14em;text-transform:uppercase;color:#00ffe1">Coming soon</div></div></div>`);
+      return { play: () => Promise.all([M().drawFrame(q("[data-f]")), M().drawLine(q("[data-l]"), { delay: 0.4 })]) }; } });
+
   const loopDemo = (start) => { let s = null; return { play: () => { if (!s) s = start(); return wait(2.5); }, stop: () => { s && s(); s = null; } }; };
 
   add({ id: "type-swap", name: "Type Swap", cat: "Text", from: "Signpost Typewriter", desc: "The last word deletes letter by letter, a beat passes, the next one types in. The caret blinks only while idle.",

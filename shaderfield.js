@@ -2080,6 +2080,13 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
     return play(D, t => { const tt = rev ? D - t : t; const y = sh ? EZ.in(clamp(tt / D)) : EZ.inOut(clamp(tt / 0.55)), x = sh ? 0 : EZ.inOut(clamp((tt - 0.5) / 0.5));
       c.style.clipPath = `inset(${y * 50}% ${x * 50}% ${y * 50}% ${x * 50}%)`; ln.style.left = ln.style.right = x * 50 + "%"; ln.style.opacity = EZ.smooth(clamp((y - 0.7) / 0.3)) * (x < 0.98 ? 1 : 0); }).then(() => ln.remove());
   }
+  // Hairline frame and underline that draw themselves (Dev Agency, Gloww, Shader Trials)
+  function drawFrame(el, o = {}) {
+    rel(el); const col = o.color || "rgba(242,242,244,0.45)"; el.querySelectorAll("[data-sf-edge]").forEach(n => n.remove());
+    const edges = [["left:0;top:0;right:0;height:1px", "scaleX", "0 0"], ["left:0;bottom:0;right:0;height:1px", "scaleX", "100% 0"], ["left:0;top:0;bottom:0;width:1px", "scaleY", "0 100%"], ["right:0;top:0;bottom:0;width:1px", "scaleY", "0 0"]].map(([p, ax, org]) => { const d = document.createElement("div"); d.dataset.sfEdge = ""; d.style.cssText = `position:absolute;${p};background:${col};transform-origin:${org};transform:${ax}(0);pointer-events:none`; d._ax = ax; el.appendChild(d); return d; });
+    const dur = o.duration || 1; return play(dur, t => { const e = EZ.inOut(t / dur); edges.forEach(d => (d.style.transform = `${d._ax}(${e})`)); });
+  }
+  function drawLine(el, o = {}) { el.style.transformOrigin = o.origin || "left center"; const d = o.duration || 1; return play((o.delay || 0) + d, t => { el.style.transform = `scaleX(${EZ.inOut(clamp((t - (o.delay || 0)) / d))})`; }); }
   const bez = (x1, y1, x2, y2) => { const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx, cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
     const X = (t) => ((ax * t + bx) * t + cx) * t, Y = (t) => ((ay * t + by) * t + cy) * t, dX = (t) => (3 * ax * t + 2 * bx) * t + cx;
     return (x) => { x = clamp(x); let t = x; for (let i = 0; i < 8; i++) { const d = dX(t); if (Math.abs(d) < 1e-6) break; t -= (X(t) - x) / d; } return Y(clamp(t)); }; };
@@ -2147,5 +2154,5 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
   }
 
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, countUp, tick, bars, pulseDot, iris, typeSwap, rollWords, pop, shine, typingDots, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, countUp, tick, bars, pulseDot, iris, drawFrame, drawLine, typeSwap, rollWords, pop, shine, typingDots, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
