@@ -77,6 +77,12 @@
     build(el, big) { const q = stage(el, big, `<div data-t style="font-size:5.4em;font-weight:600;letter-spacing:-0.04em">Antithesis</div>`, center);
       return { play: async () => { await M().pop(q("[data-t]")); await wait(0.9); await M().pop(q("[data-t]"), { out: true }); return M().pop(q("[data-t]")); } }; } });
 
+  add({ id: "bracket-hop", name: "Bracket Hop", cat: "Interface", from: "Clause Film", desc: "Corner brackets collapse to a spinning reticle between targets, then snap open around the next with a little overshoot.",
+    code: `Shaderfield.motion.bracketHop(stage, [...stage.querySelectorAll(".tile")], {\n  hold: 1.1, press: true\n});`,
+    build(el, big) { const tiles = ["Formation", "Fundraising", "Contracts", "Hiring"].map(n => `<div data-k style="border:2px dashed rgba(255,255,255,0.27);padding:1em 1.2em;font-size:1.5em;font-weight:540">${n}</div>`).join("");
+      const q = stage(el, big, `<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.6em">${tiles}</div>`, center + "background:#0a1210;");
+      return loopDemo(() => M().bracketHop(el, [...el.querySelectorAll("[data-k]")], { press: true })); } });
+
   add({ id: "shine", name: "Shine", cat: "Interface", from: "Product Video", desc: "A diagonal glint sweeps across a button or card once.",
     code: `Shaderfield.motion.shine(button, { duration: 0.6 });`,
     build(el, big) { const q = stage(el, big, `<div data-b style="padding:0.8em 1.6em;border-radius:999px;background:#f2f2f4;color:#0b0b0e;font-size:1.8em;font-weight:600">Try it free</div>`, center);

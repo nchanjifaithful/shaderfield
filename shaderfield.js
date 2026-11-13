@@ -2124,6 +2124,29 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
       [...B.children].forEach((s, j) => (s.style.transform = `translateY(${(1 - ROLL((u - j * st) / d)) * 100}%)`));
     });
   }
+  // Corner brackets hop between targets: they shrink to a spinning reticle in between, then snap open around the next one (Clause Film)
+  function bracketHop(stage, targets, o = {}) {
+    rel(stage); const ink = o.color || "currentColor", TR = o.travel ?? 0.5, hold = o.hold ?? 1.1, IDLE = o.idle ?? 44, PAD = o.pad ?? 10, lw = o.width ?? 3, arm = o.arm ?? 14;
+    const box = document.createElement("div"); box.style.cssText = "position:absolute;left:0;top:0;pointer-events:none;transform-origin:0 0;z-index:20;";
+    const bd = `${lw}px solid ${ink}`;
+    [["left", "top"], ["right", "top"], ["left", "bottom"], ["right", "bottom"]].forEach(([h, v]) => { const s = document.createElement("span"); s.style.cssText = `position:absolute;${h}:0;${v}:0;width:${arm}px;height:${arm}px;border-${v}:${bd};border-${h}:${bd};`; box.appendChild(s); });
+    const dot = document.createElement("div"); dot.style.cssText = `position:absolute;left:0;top:0;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:${ink};pointer-events:none;z-index:20;`; stage.append(box, dot);
+    const snap = (t) => { t = clamp(t); const c1 = 1.4, c3 = c1 + 1; return 1 + c3 * (t - 1) ** 3 + c1 * (t - 1) ** 2; };
+    const rect = (el) => { const a = el.getBoundingClientRect(), b = stage.getBoundingClientRect(); return { x: a.left - b.left - PAD, y: a.top - b.top - PAD, w: a.width + PAD * 2, h: a.height + PAD * 2 }; };
+    const idleAt = () => ({ x: stage.clientWidth / 2 - IDLE / 2, y: stage.clientHeight / 2 - IDLE / 2, w: IDLE, h: IDLE });
+    const per = TR + hold, n = targets.length, lerpR = (a, b, e) => ({ x: lerp(a.x, b.x, e), y: lerp(a.y, b.y, e), w: lerp(a.w, b.w, e), h: lerp(a.h, b.h, e) });
+    return loopFx(t => {
+      const i = Math.floor(t / per), u = t - i * per, cur = rect(targets[i % n]), prev = i > 0 ? rect(targets[(i - 1) % n]) : idleAt(), k = u / TR;
+      let r, rot;
+      if (k < 1) { const e = snap(k), m = Math.sin(Math.PI * clamp(k)) * 0.55, mid = lerpR(prev, cur, e), w = lerp(mid.w, IDLE, m), h = lerp(mid.h, IDLE, m);
+        r = { x: lerp(prev.x + prev.w / 2, cur.x + cur.w / 2, e) - w / 2, y: lerp(prev.y + prev.h / 2, cur.y + cur.h / 2, e) - h / 2, w, h }; rot = (i * 180) + 180 * oCubic(k); }
+      else { r = { x: cur.x + 3 * Math.sin(t * 1.7), y: cur.y + 2 * Math.cos(t * 1.3), w: cur.w, h: cur.h }; rot = (i + 1) * 180; }
+      const q = (u - TR - 0.1) / 0.4, sc = o.press && q > 0 && q < 1 ? 1 - 0.1 * Math.sin(Math.PI * q) : 1;
+      box.style.width = r.w + "px"; box.style.height = r.h + "px";
+      box.style.transform = `translate(${r.x + r.w / 2}px,${r.y + r.h / 2}px) rotate(${rot}deg) scale(${sc}) translate(${-r.w / 2}px,${-r.h / 2}px)`;
+      dot.style.transform = `translate(${r.x + r.w / 2}px,${r.y + r.h / 2}px) scale(${sc < 1 ? 0.6 : 1})`;
+    });
+  }
   const HUES = ["#ff5f6d", "#ffb347", "#ffe66d", "#4ade80", "#38bdf8", "#818cf8", "#e879f9"];
   const conicG = (d, h) => `conic-gradient(from ${d.toFixed(1)}deg, ${(h || HUES).join(", ")}, ${(h || HUES)[0]})`;
   const exIn = (t) => (t <= 0 ? 0 : Math.pow(2, 10 * clamp(t) - 10));
@@ -2154,5 +2177,5 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
   }
 
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, countUp, tick, bars, pulseDot, iris, drawFrame, drawLine, typeSwap, rollWords, pop, shine, typingDots, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, countUp, tick, bars, pulseDot, iris, drawFrame, drawLine, typeSwap, rollWords, bracketHop, pop, shine, typingDots, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
