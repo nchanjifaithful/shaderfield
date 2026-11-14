@@ -2073,6 +2073,20 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
     const stop = loopFx(t => { if (o.mode === "blink") { el.style.opacity = 0.4 + 0.6 * (0.5 + 0.5 * Math.sin((t + off) * 9)); r.style.opacity = 0; return; } const f = oCubic(Math.min(1, ((t + off) % per) / per / 0.75)); r.style.transform = `scale(${1 + f})`; r.style.opacity = 1 - f; });
     return () => { stop(); r.remove(); };
   }
+  // Hover focus: back-eased corner brackets, masked dot grid, cursor spotlight (Orfa Agents)
+  function focusCard(el, o = {}) {
+    rel(el); const acc = o.color || "#34d399", layer = document.createElement("div");
+    layer.style.cssText = "position:absolute;inset:0;pointer-events:none;opacity:0;";
+    layer.innerHTML = `<div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.12) 1px,transparent 1px);background-size:14px 14px;-webkit-mask-image:radial-gradient(ellipse at center,black 30%,transparent 75%);mask-image:radial-gradient(ellipse at center,black 30%,transparent 75%)"></div><div style="position:absolute;inset:0"></div>`;
+    el.appendChild(layer); const spot = layer.lastChild;
+    const corners = [["left", "top", 0], ["right", "top", 90], ["right", "bottom", 180], ["left", "bottom", 270]].map(([a, b, r]) => { const c = document.createElement("span"); c.style.cssText = `position:absolute;${a}:10px;${b}:10px;width:14px;height:14px;border-left:1.5px solid ${acc};border-top:1.5px solid ${acc};pointer-events:none;opacity:0`; c._r = r; el.appendChild(c); return c; });
+    let target = 0, h = 0, mx = el.clientWidth / 2, my = el.clientHeight / 2;
+    const enter = () => (target = 1), leave = () => (target = 0), move = e => { const r = el.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; };
+    el.addEventListener("pointerenter", enter); el.addEventListener("pointerleave", leave); el.addEventListener("pointermove", move);
+    const stopL = loopFx(() => { h += (target - h) * 0.14; layer.style.opacity = h; spot.style.background = `radial-gradient(260px circle at ${mx}px ${my}px, rgba(255,255,255,0.09), transparent 70%)`; const e = oBack(clamp(h)); corners.forEach(c => { c.style.opacity = clamp(h * 1.5); c.style.transform = `rotate(${c._r}deg) scale(${0.6 + 0.4 * e})`; }); });
+    const stop = () => { stopL(); el.removeEventListener("pointerenter", enter); el.removeEventListener("pointerleave", leave); el.removeEventListener("pointermove", move); layer.remove(); corners.forEach(c => c.remove()); };
+    stop.set = v => (target = v); return stop;
+  }
   // Iris close to a hairline, or a vertical shutter (Orfa Agents, Dev Agency)
   function iris(el, o = {}) {
     rel(el); const c = o.content || el.firstElementChild, acc = o.color || "#34d399", rev = !!o.open, sh = !!o.shutter, D = sh ? 0.7 : 1.05;
@@ -2177,5 +2191,5 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
   }
 
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, countUp, tick, bars, pulseDot, iris, drawFrame, drawLine, typeSwap, rollWords, bracketHop, pop, shine, typingDots, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, countUp, tick, bars, pulseDot, focusCard, iris, drawFrame, drawLine, typeSwap, rollWords, bracketHop, pop, shine, typingDots, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
