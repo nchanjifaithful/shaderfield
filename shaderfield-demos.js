@@ -50,6 +50,11 @@
       const stops = [...el.querySelectorAll("[data-d]")].map((d, i) => M().pulseDot(d, { color: rows[i][2], offset: i * 0.13, mode: rows[i][3] }));
       return { play: () => {}, stop: () => stops.forEach(s => s()) }; } });
 
+  add({ id: "focus-card", name: "Focus Card", cat: "Interface", from: "Orfa Agents Launch", desc: "On hover, corner brackets snap in with a back ease, a masked dot grid fades up and a soft spotlight follows the cursor.",
+    code: `const stop = Shaderfield.motion.focusCard(card, { color: "#34d399" });`,
+    build(el, big) { const q = stage(el, big, `<div data-c style="position:relative;width:min(24em,78%);aspect-ratio:16/10;background:#0a0a0a;outline:1px solid rgba(242,242,244,0.1);padding:1.6em;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between"><div style="display:flex;justify-content:space-between;font-size:1em;color:${MUTE};text-transform:uppercase;letter-spacing:0.05em"><span>12 min</span><span style="font-family:'Geist Mono',monospace">agt_03</span></div><div style="font-size:1.9em;font-weight:500;letter-spacing:-0.02em">Refactor auth module</div></div>`, center);
+      const stop = M().focusCard(q("[data-c]"), { color: ACC }); return { play: async () => { stop.set(1); await wait(1.6); stop.set(0); }, stop }; } });
+
   add({ id: "iris", name: "Iris", cat: "Transitions", from: "Orfa Agents · Dev Agency", desc: "The frame closes top and bottom to a hairline, the line pinches to the centre, then everything reopens. A shutter variant closes vertically only.",
     code: `await Shaderfield.motion.iris(stage, { content: scene, color: "#34d399" });\nawait Shaderfield.motion.iris(stage, { content: scene, open: true });\n// Shaderfield.motion.iris(stage, { shutter: true });`,
     build(el, big) { const q = stage(el, big, `<div data-c style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:1px;background:rgba(242,242,244,0.1)">${["Triage inbox", "Refactor auth", "Write release notes", "Fix flaky test", "Update pricing", "Migrate DB"].map(t => `<div style="background:#0a0a0a;padding:1em;font-size:1.2em;display:flex;align-items:flex-end">${t}</div>`).join("")}</div>`);
