@@ -88,6 +88,11 @@
       const q = stage(el, big, `<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.6em">${tiles}</div>`, center + "background:#0a1210;");
       return loopDemo(() => M().bracketHop(el, [...el.querySelectorAll("[data-k]")], { press: true })); } });
 
+  add({ id: "spectrum-ring", name: "Spectrum Ring", cat: "Interface", from: "Product Video", desc: "A spinning conic rainbow border with a soft glow, for the one card that matters.",
+    code: `const stop = Shaderfield.motion.spectrumRing(card, { width: 2.5, speed: 60 });`,
+    build(el, big) { const q = stage(el, big, `<div data-c style="width:58%;padding:1.4em;border-radius:1.4em;background:#111113;font-size:1.5em;color:#c9cad1">Ask anything<span style="float:right;color:#f2f2f4">↑</span></div>`, center);
+      return loopDemo(() => M().spectrumRing(q("[data-c]"), { radius: big ? 22 : 14 })); } });
+
   add({ id: "shine", name: "Shine", cat: "Interface", from: "Product Video", desc: "A diagonal glint sweeps across a button or card once.",
     code: `Shaderfield.motion.shine(button, { duration: 0.6 });`,
     build(el, big) { const q = stage(el, big, `<div data-b style="padding:0.8em 1.6em;border-radius:999px;background:#f2f2f4;color:#0b0b0e;font-size:1.8em;font-weight:600">Try it free</div>`, center);

@@ -2176,6 +2176,16 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
       else { const q = exIn((t - i * st * 0.6) / 0.35); op = 1 - q; dy = -q * lift * fs; sc = 1 + q * 0.2; }
       s.style.opacity = op; s.style.filter = op > 0.995 ? "none" : `blur(${((1 - op) * px).toFixed(2)}px)`; s.style.transform = `translateY(${dy.toFixed(1)}px) scale(${sc.toFixed(3)})`; }));
   }
+  // Spinning spectrum border with a soft glow around any box (Product Video)
+  function spectrumRing(el, o = {}) {
+    rel(el); const r = o.radius ?? (parseFloat(getComputedStyle(el).borderRadius) || 24), pad = o.width ?? 2.5, glow = o.glow ?? 0.85, spd = o.speed ?? 60;
+    const g = document.createElement("div"), b = document.createElement("div");
+    g.style.cssText = `position:absolute;inset:-6px;border-radius:${r + 6}px;filter:blur(26px);opacity:${glow};pointer-events:none;z-index:-1;`;
+    b.style.cssText = `position:absolute;inset:${-pad}px;border-radius:${r + pad}px;pointer-events:none;z-index:-1;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;padding:${pad}px;`;
+    if (getComputedStyle(el).zIndex === "auto") el.style.zIndex = 0; el.style.isolation = "isolate"; el.prepend(g, b);
+    const stop = loopFx(t => { const c = conicG(t * spd, o.hues); g.style.background = c; b.style.background = c; });
+    return () => { stop(); g.remove(); b.remove(); };
+  }
   // A diagonal glint sweeps across the element once (Product Video)
   function shine(el, o = {}) {
     rel(el); const d = o.duration ?? 0.6, wrap = document.createElement("div"), bar = document.createElement("div");
@@ -2191,5 +2201,5 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
   }
 
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, countUp, tick, bars, pulseDot, focusCard, iris, drawFrame, drawLine, typeSwap, rollWords, bracketHop, pop, shine, typingDots, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, countUp, tick, bars, pulseDot, focusCard, iris, drawFrame, drawLine, typeSwap, rollWords, bracketHop, pop, spectrumRing, shine, typingDots, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
