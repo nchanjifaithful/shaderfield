@@ -27,6 +27,11 @@
     build(el, big) { const q = stage(el, big, `<div data-t style="display:flex;flex-direction:column;padding:0 2.4em"><div style="font-size:1.1em;color:${MUTE};margin-bottom:0.6em">02 / Settings</div><div style="font-size:3.6em;font-weight:600;letter-spacing:-0.045em;line-height:1.02">Every setting,</div><div style="font-size:3.6em;font-weight:600;letter-spacing:-0.045em;line-height:1.02">one tap away.</div></div>`, "display:flex;align-items:center;");
       return { play: async () => { await M().lineRise(q("[data-t]")); await wait(1.1); await M().lineRise(q("[data-t]"), { out: true }); return M().lineRise(q("[data-t]")); } }; } });
 
+  add({ id: "cut-reveal", name: "Cut Reveal", cat: "Text", from: "Dev Agency Services", desc: "A solid block in the page colour wipes open over a striped field, then its words roll up. Reads like a hole punched through the pattern.",
+    code: `Shaderfield.motion.stripes(section);\nShaderfield.motion.cut(label, { color: "#09090b" });\nShaderfield.motion.cut(title, { color: "#09090b", delay: 0.25 });`,
+    build(el, big) { const q = stage(el, big, `<div style="position:absolute;inset:0;${center}flex-direction:column;gap:1em"><div data-a style="font-family:'Geist Mono',monospace;font-size:1em;text-transform:uppercase;letter-spacing:0.15em;color:#38bdf8;padding:0.4em 0.7em">Development studio</div><div data-b style="font-size:3.8em;font-weight:600;letter-spacing:-0.05em;padding:0.15em 0.4em 0.25em">We build software.</div></div>`); const stop = M().stripes(el);
+      return { play: () => Promise.all([M().cut(q("[data-a]"), { color: "#0b0b0e" }), M().cut(q("[data-b]"), { color: "#0b0b0e", delay: 0.25 })]), stop }; } });
+
   add({ id: "count-up", name: "Count Up", cat: "Text", from: "Tended HR · Closebook", desc: "Figures tween on an expo ease with tabular numerals so the width never jitters.",
     code: `Shaderfield.motion.countUp(el, { to: 4212.5, decimals: 2, prefix: "€", duration: 1.6 });`,
     build(el, big) { const q = stage(el, big, `<div style="display:flex;flex-direction:column;align-items:center;gap:0.6em"><div style="font-size:1.1em;color:${MUTE}">Net pay · March</div><div data-t style="font-size:5em;font-weight:500;letter-spacing:-0.04em">€0.00</div></div>`, center);

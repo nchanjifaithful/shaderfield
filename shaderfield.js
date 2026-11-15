@@ -2046,6 +2046,12 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
     const out = !!o.out, st = out ? 0.04 : o.stagger ?? 0.08, d = out ? 0.45 : o.duration ?? 0.9;
     return play(lines.length * st + d, t => lines.forEach((k, i) => { const p = clamp((t - i * st) / d); k.style.transform = `translateY(${out ? -Math.pow(p, 3) * 112 : (1 - oCubic(p)) * 112}%)`; }));
   }
+  // Solid block wipes open, then its words roll up (Dev Agency Services)
+  function cut(el, o = {}) {
+    const parts = masked(el, "word"), d = o.duration ?? 0.45, dl = o.delay || 0; el.style.display = "inline-flex"; el.style.background = o.color || "#09090b"; el.style.clipPath = "inset(-2px 100% -2px 0)";
+    return play(dl + d + 0.18 + parts.length * 0.06 + 0.55, t => { t -= dl; const w = EZ.inOut(clamp(t / d)); el.style.clipPath = `inset(-2px ${(1 - w) * 100}% -2px 0)`;
+      parts.forEach((p, i) => { const k = oCubic(clamp((t - 0.18 - i * 0.06) / 0.55)); p.style.transform = `translateY(${(1 - k) * 115}%)`; }); });
+  }
   // Number tween with tabular figures (Tended HR, Closebook)
   function countUp(el, o = {}) {
     const f = o.from ?? 0, to = o.to ?? 100, d = o.duration ?? 1.6, dec = o.decimals ?? 0; el.style.fontVariantNumeric = "tabular-nums";
@@ -2209,5 +2215,5 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
   }
 
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, countUp, tick, bars, pulseDot, focusCard, iris, drawFrame, drawLine, stripes, typeSwap, rollWords, bracketHop, pop, spectrumRing, shine, typingDots, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cut, countUp, tick, bars, pulseDot, focusCard, iris, drawFrame, drawLine, stripes, typeSwap, rollWords, bracketHop, pop, spectrumRing, shine, typingDots, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
