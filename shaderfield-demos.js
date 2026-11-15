@@ -65,6 +65,11 @@
     build(el, big) { const q = stage(el, big, `<div data-f style="position:absolute;inset:12%;${center}flex-direction:column;gap:1.2em"><div style="font-size:4em;font-weight:500;letter-spacing:-0.05em">Gloww</div><div style="width:14em;display:flex;flex-direction:column;gap:0.8em"><div data-l style="height:1px;background:rgba(242,242,244,0.5);transform:scaleX(0)"></div><div style="font-family:'Geist Mono',monospace;font-size:1em;letter-spacing:0.14em;text-transform:uppercase;color:#00ffe1">Coming soon</div></div></div>`);
       return { play: () => Promise.all([M().drawFrame(q("[data-f]")), M().drawLine(q("[data-l]"), { delay: 0.4 })]) }; } });
 
+  add({ id: "stripe-wipe", name: "Stripe Wipe", cat: "Transitions", from: "Dev Agency Services", desc: "Diagonal hairline stripes wipe in from the left and keep drifting slowly.",
+    code: `const stop = Shaderfield.motion.stripes(section, { angle: -60, gap: 13, drift: 10 });`,
+    build(el, big) { stage(el, big, `<div style="position:absolute;inset:0;${center}"><div style="font-family:'Geist Mono',monospace;font-size:1.3em;letter-spacing:0.04em;color:${MUTE};background:#0b0b0e;padding:0.5em 0.8em">Software for teams that ship</div></div>`); let stop = M().stripes(el);
+      return { play: () => { stop(); stop = M().stripes(el); }, stop: () => stop() }; } });
+
   const loopDemo = (start) => { let s = null; return { play: () => { if (!s) s = start(); return wait(2.5); }, stop: () => { s && s(); s = null; } }; };
 
   add({ id: "type-swap", name: "Type Swap", cat: "Text", from: "Signpost Typewriter", desc: "The last word deletes letter by letter, a beat passes, the next one types in. The caret blinks only while idle.",
