@@ -1,33 +1,48 @@
-# Shaderfield
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-horizontal.svg">
+    <img src="assets/logo-horizontal-dark.svg" alt="Shaderfield" width="380">
+  </picture>
+</p>
 
-Live shaders and motion effects for websites and motion video. They ship as **one dependency-free JavaScript file**.
+<p align="center">
+  Live shaders and motion effects for websites and motion video.<br>
+  One dependency-free JavaScript file.
+</p>
 
-**Live site: [shaderfield.pages.dev](https://shaderfield.pages.dev/)**
+<p align="center">
+  <a href="https://shaderfield.pages.dev">Website</a> &nbsp;·&nbsp;
+  <a href="https://shaderfield.pages.dev/components.html">Component library</a> &nbsp;·&nbsp;
+  <a href="docs/README.md">Documentation</a> &nbsp;·&nbsp;
+  <a href="LICENSE">MIT License</a>
+</p>
 
-- **27 shaders**: GLSL fields (Current, Fret, Skein, Harmonia, Halo, Thermal), text and glyph shaders (Decrypt, Data Wall, Sweep, Rain, Asciify, Glyph Graph, Sand), particles (Assemble), Canvas 2D scenes (Mesh, Aurora, Horizon, Blink, Drift, Sparkle, Filings, Gather, Lattice, Orbits, Prism) and two 3D glass pieces in an optional add-on (Glass Icons, Glass Coins). Each has its own parameters, palettes, cursor interaction, PNG export and video recording.
-- **23 motion effects**: text entrances, interface micro-motion and scene transitions, all plain DOM.
-- **3 ways to use it**: a `<shader-field>` HTML element for websites, a frame-accurate `render(t)` API for video tools, and a ready-made AI prompt generated in the lab.
+<p align="center">
+  <img src="assets/og-image.png" alt="Shaderfield" width="760">
+</p>
 
-The repository also contains the **Shaderfield site**, a component browser where you can try every effect live, tune it, and copy the code, an AI prompt or a video render.
+## Overview
 
----
+- **31 shaders.** GLSL fields, text and glyph shaders, particles, Canvas 2D scenes and an optional 3D glass add-on. Each has its own parameters, palettes, cursor interaction, PNG export and video recording.
+- **21 motion effects.** Text entrances, interface micro-motion, scene transitions and light, all on plain DOM elements.
+- **Three ways to use it.** A `<shader-field>` HTML element for websites, a frame-accurate `render(t)` API for video tools, and a ready-made prompt for AI coding agents.
+
+The repository also contains the Shaderfield site: a component browser where you can try every effect live, tune it, and copy the code, a prompt or a video render.
 
 ## Contents
 
 - [Quick start](#quick-start)
-- [Repository layout](#repository-layout)
 - [Using the shaders on a website](#using-the-shaders-on-a-website)
 - [Using the shaders in motion video](#using-the-shaders-in-motion-video)
 - [Using it with AI coding agents](#using-it-with-ai-coding-agents)
-- [Shader reference](#shader-reference)
+- [Components](#components)
 - [Palettes](#palettes)
 - [JavaScript API](#javascript-api)
-- [Motion effects reference](#motion-effects-reference)
+- [Motion effects](#motion-effects)
 - [Performance and accessibility](#performance-and-accessibility)
 - [Browser support](#browser-support)
-- [Credits and license](#credits-and-license)
-
----
+- [Repository layout](#repository-layout)
+- [Author and license](#author-and-license)
 
 ## Quick start
 
@@ -45,30 +60,6 @@ The repository also contains the **Shaderfield site**, a component browser where
 That's all there is to it. The element fills its positioned parent, renders only while it is on screen, and holds a still frame for visitors who prefer reduced motion.
 
 To see it working, open `examples/hero.html`.
-
----
-
-## Repository layout
-
-```
-shaderfield/
-├── index.html              The Shaderfield site (component browser + lab)
-├── Shaderfield.dc.html     Editable source of the site. index.html is a copy of it.
-├── support.js              Runtime the site needs. Not needed for the library.
-├── shaderfield-demos.js    Demo stages for the site. Not needed for the library.
-├── shaderfield.js          ← THE LIBRARY. This is the only file most projects need.
-├── shaderfield-glass.js    Optional add-on for the two 3D glass shaders (loads three.js).
-├── assets/thinker.jpg      Default image for the Assemble shader.
-├── examples/
-│   ├── hero.html           Shader background behind a hero, with an effect switcher
-│   ├── motion.html         typeIn, countUp, tick, bars, curtain, revealWords
-│   └── video-frames.html   Frame-accurate render with a scrubber, plus recording
-├── LICENSE                 MIT, plus third-party notices
-├── .nojekyll               Stops GitHub Pages from processing the files
-└── README.md
-```
-
----
 
 ## Using the shaders on a website
 
@@ -94,11 +85,11 @@ Copy `shaderfield.js` into your project and load it once:
 
 | Attribute     | Meaning |
 |---------------|---------|
-| `effect`      | Shader id: `current`, `fret`, `skein`, `harmonia`, `halo`, `thermal`, `mesh` |
+| `effect`      | Shader id. See the [shader catalog](docs/README.md#shaders). |
 | `palette`     | Palette name (see [Palettes](#palettes)). If omitted, the effect's default is used. |
 | `interactive` | Turns on cursor and click input |
 | `speed`       | Time multiplier. `0` freezes, `1` is normal, `3` is fast. |
-| *any parameter* | Every parameter in the [Shader reference](#shader-reference) is an attribute |
+| *any parameter* | Every parameter in the [shader catalog](docs/README.md#shaders) is an attribute |
 
 Attributes are **live**: change them from JavaScript and the shader updates right away.
 
@@ -130,8 +121,6 @@ Or mount it imperatively:
 const field = Shaderfield.mount(ref.current, { effect: "skein", palette: "aurora" });
 return () => field.destroy();
 ```
-
----
 
 ## Using the shaders in motion video
 
@@ -202,8 +191,6 @@ field.render(frame / fps);
 
 See `examples/video-frames.html` for a scrubber with recording.
 
----
-
 ## Using it with AI coding agents
 
 Every shader page in the site has an **AI prompt** tab with two variants:
@@ -219,111 +206,15 @@ Workflow:
 
 Because the prompt includes every value, the agent reproduces the exact look you tuned instead of guessing.
 
----
+## Components
 
-## Shader reference
+Each component has its own page with usage, parameters or options, and a link to its live demo. Browse them all in the [component catalog](docs/README.md).
+
+### Shaders
+
+[Flow Streaks](docs/shaders/current.md) · [Circuit Arcs](docs/shaders/fret.md) · [Woven Lines](docs/shaders/skein.md) · [Chord Circle](docs/shaders/harmonia.md) · [Radial Bloom](docs/shaders/halo.md) · [Heat Map](docs/shaders/thermal.md) · [Spring Net](docs/shaders/mesh.md) · [Decode Lens](docs/shaders/decrypt.md) · [Cipher Wall](docs/shaders/datawall.md) · [Sand Text](docs/shaders/sand.md) · [Particle Portrait](docs/shaders/assemble.md) · [Aurora](docs/shaders/aurora.md) · [Synth Valley](docs/shaders/horizon.md) · [Square Text](docs/shaders/blink.md) · [Square Field](docs/shaders/blinkfield.md) · [Sparkle](docs/shaders/sparkle.md) · [Iron Filings](docs/shaders/filings.md) · [Magnet Snap](docs/shaders/gather.md) · [Cube Tunnel](docs/shaders/lattice.md) · [Orbit Rings](docs/shaders/orbits.md) · [Glow Bed](docs/shaders/hearth.md) · [Light Surge](docs/shaders/lightsurge.md) · [Silk Swirl](docs/shaders/swirl.md) · [Wave Bands](docs/shaders/waves.md) · [Stage Light](docs/shaders/stage.md) · [Dot Globe](docs/shaders/globe.md) · [Glyph Sweep](docs/shaders/sweep.md) · [Matrix](docs/shaders/matrix.md) · [ASCII Text](docs/shaders/asciify.md) · [Glyph Graph](docs/shaders/graph.md) · [Glass Icons](docs/shaders/glassicons.md)
 
 Every shader also accepts `speed` (0–3, default 1).
-
-### Current, from *Blastlabs Flow*
-Line-integral flow streaks that speed up, heat up and bend around the cursor. Renders at half resolution because it is heavy per pixel.
-Interaction: the cursor bends the flow. Default palette: `plasma`.
-
-| Param | Range | Default |
-|---|---|---|
-| `scale` | 0.4 – 3 | 1.2 |
-| `current` | 0 – 2 | 0.7 |
-| `length` (trail) | 6 – 80 | 32 |
-| `density` | 0 – 1 | 0.55 |
-
-### Fret, from *Nodepath Launch*
-Truchet arcs that join into endless circuits, with light pulses running along every path.
-Interaction: the cursor swirls the grid, and a click sends a shockwave. Default palette: `ion`.
-
-| Param | Range | Default |
-|---|---|---|
-| `cell` | 10 – 60 | 24 |
-| `line` | 0.5 – 4 | 1.3 |
-| `glow` | 0 – 1 | 0.6 |
-| `pulse` | 0 – 1.5 | 1 |
-| `weld` | 0 – 1 | 0.2 |
-| `warp` (swirl) | 0 – 1 | 0.15 |
-| `split` (chroma split) | 0 – 4 | 0.6 |
-
-### Skein, from *Weftline Launch*
-Woven filaments that ripple at their own pace, drift sideways and draw in from the left.
-Interaction: a click sends a shockwave. Default palette: `aurora`.
-
-| Param | Range | Default |
-|---|---|---|
-| `cell` (spacing) | 10 – 60 | 22 |
-| `line` | 0.5 – 4 | 1.3 |
-| `wave` | 0 – 1.5 | 0.55 |
-| `vary` (variety) | 0 – 1 | 0.7 |
-| `tilt` | −45 – 45° | −8 |
-| `scatter` | 0 – 1 | 0.5 |
-| `depth` | 0 – 1 | 0.6 |
-| `glow` | 0 – 1 | 0.6 |
-| `draw` (draw-in) | 0 – 1 | 1 |
-| `split` (chroma split) | 0 – 4 | 0.4 |
-
-Tip: animate `draw` from 0 to 1 for an entrance.
-
-### Harmonia, from *Harmonia Launch*
-Times-table chords on a circle. As the multiplier drifts, cardioids, nephroids and roses appear.
-Interaction: horizontal cursor position shifts the multiplier. Default palette: `ion`.
-
-| Param | Range | Default |
-|---|---|---|
-| `points` | 20 – 150 | 120 |
-| `mult` (multiplier) | 2 – 40 | 2 |
-| `drift` | 0 – 0.5 | 0.06 |
-| `radius` | 0.2 – 0.48 | 0.38 |
-| `line` | 0.3 – 2 | 0.7 |
-| `glow` | 0 – 1.5 | 0.8 |
-| `dots` | 0 – 1 | 0.5 |
-| `field` | 0 – 1 | 0.35 |
-| `ring` | 0 – 1 | 0.5 |
-
-### Halo, from *Gloww Announcement* and *Coming Soon*
-A soft radial bloom with a slowly orbiting focal point. Made for hero backgrounds.
-Interaction: the cursor pulls the focal point. Default palette: `aqua`.
-
-| Param | Range | Default |
-|---|---|---|
-| `radius` | 0.1 – 1.4 | 0.8 |
-| `falloff` | 0.05 – 0.6 | 0.24 |
-| `focal` | 0 – 1 | 0.7 |
-| `spin` (orbit, °/s) | 0 – 60 | 14 |
-| `core` | 0 – 1 | 0.8 |
-| `grain` | 0 – 0.15 | 0.03 |
-
-### Thermal, from *Shader Trials Announcement*
-Drifting heat sources merge into a banded thermal map.
-Interaction: the cursor adds heat. Default palette: `heat`.
-
-| Param | Range | Default |
-|---|---|---|
-| `blobs` (sources) | 1 – 6 | 5 |
-| `size` | 0.4 – 2 | 1 |
-| `bands` | 2 – 24 | 9 |
-| `contour` | 0 – 1 | 0.5 |
-| `glow` | 0 – 1 | 0.6 |
-| `grain` | 0 – 0.15 | 0.03 |
-
-### Mesh, from *Kinetic Opening* (Canvas 2D)
-A spring lattice that glows by tension. Every kick travels across it like a struck net.
-Interaction: moving the cursor pushes the lattice, and a click strikes it. Palettes: `ember`, `ion`, `aurora`, `mono`.
-
-| Param | Range | Default |
-|---|---|---|
-| `energy` | 0 – 2 | 1 |
-| `stiffness` | 0.04 – 0.3 | 0.12 |
-| `damping` | 0.95 – 0.995 | 0.978 |
-| `kicks` (per second) | 0 – 3 | 0.8 |
-
----
-
 
 ### Text, images and switches
 Shaders marked with a default text draw that text themselves. Set your own with the `text` attribute (or `Shaderfield.mount(el, { text })`, or `field.setText()`). Separate lines with `|`; effects that cycle (Sweep, Sand, Blink) step through them.
@@ -338,262 +229,21 @@ Shaders marked with a default text draw that text themselves. Set your own with 
 WebGL2 shaders fall back to a blank canvas where WebGL2 is unavailable.
 
 ### 3D glass add-on
-Glass Icons and Glass Coins use three.js, so they live in a separate file that loads three.js from esm.sh the first time one is shown. The core file stays dependency-free.
+Glass Icons uses three.js, so it lives in a separate file that loads three.js from esm.sh the first time one is shown. The core file stays dependency-free.
 
 ```html
 <script src="shaderfield.js"></script>
 <script src="shaderfield-glass.js"></script>
-<shader-field effect="coins" paper="1"></shader-field>
+<shader-field effect="glassicons"></shader-field>
 ```
 
-### Decrypt, from *Meridian Launch* (WebGL2)
-Text is rebuilt from best-fit glyphs and kept scrambled. A lens with a glowing, aberrated rim decodes it as it passes.
-Interaction: move to decode. Default palette: `aqua` (works with `aqua`, `ion`, `phosphor`, `ember`). Default text: “Something is thinking.”.
+### Motion effects
 
-| Param | Range | Default |
-|---|---|---|
-| `radius` (lens) | 0.05 – 1 | 0.34 |
-| `softness` | 0.02 – 1 | 0.5 |
-| `cell` | 8 – 32 | 15 |
-| `scramble` | 0 – 1 | 0.1 |
-| `edge` (edge glow) | 0 – 4 | 2 |
-| `split` (chroma split) | 0 – 30 | 10 |
-| `pass` (pass-through) | 0 – 1 | 0.15 |
-| `size` (text size) | 0.04 – 0.25 | 0.12 |
+**Text.** [Type in](docs/motion/type-in.md) · [Letter Rise](docs/motion/rise.md) · [Line Rise](docs/motion/line-rise.md) · [Block Reveal](docs/motion/cut.md) · [Count Up](docs/motion/count-up.md) · [Reveal words](docs/motion/reveal-words.md) · [Type Swap](docs/motion/type-swap.md) · [Roll Words](docs/motion/roll-words.md) · [Letter Pop](docs/motion/pop.md)
 
-### Data Wall, from *Meridian Launch* (WebGL2)
-A wall of backlog items held in cipher. Two lenses hunt across it and decode what they cross.
-Interaction: move to steer the first lens. Default palette: `aqua` (works with `aqua`, `ion`, `phosphor`, `ember`).
+**Interface.** [Tick Pop](docs/motion/tick.md) · [Progress Bars](docs/motion/bars.md) · [Focus Card](docs/motion/focus-card.md) · [Spring follow](docs/motion/spring-follow.md) · [Bracket Hop](docs/motion/bracket-hop.md) · [Shine](docs/motion/shine.md) · [Typing Dots](docs/motion/typing-dots.md)
 
-| Param | Range | Default |
-|---|---|---|
-| `radius` (lens) | 0.05 – 0.6 | 0.22 |
-| `softness` | 0.02 – 1 | 0.5 |
-| `cell` | 8 – 32 | 15 |
-| `scramble` | 0 – 1 | 0.1 |
-| `edge` (edge glow) | 0 – 4 | 2 |
-| `split` (chroma split) | 0 – 30 | 10 |
-| `pass` (pass-through) | 0 – 1 | 0.15 |
-
-### Sand, from *Launch Film* (WebGL2)
-Each line forms out of drifting grains as a formation line sweeps down, holds, then blows back to dust.
-Interaction: move up and down to gather and scatter. Default palette: `mono` (works with `mono`). Default text: “Money still moves slowly. | Forms. Fees. Waiting. | Transactions, made effortless.”.
-
-| Param | Range | Default |
-|---|---|---|
-| `grain` | 1.5 – 8 | 3 |
-| `spread` | 20 – 600 | 220 |
-| `band` | 60 – 600 | 260 |
-| `swirl` | 0 – 200 | 60 |
-| `drift` | 0 – 2 | 0.7 |
-| `gravity` | -1 – 1 | 0.35 |
-| `cycle` | 2.5 – 12s | 5 |
-| `size` (text size) | 0.03 – 0.2 | 0.07 |
-
-### Assemble, from *No Peace*
-Thousands of particles orbit in a tilted ring, then swirl in to rebuild an image, catch a sweep of light and unravel again.
-Interaction: move to turn it · set src for your own image. Default palette: `solar` (works with `solar`, `mono`, `ember`).
-
-| Param | Range | Default |
-|---|---|---|
-| `grain` (density) | 2 – 6 | 3 |
-| `scale` | 0.4 – 1.6 | 1 |
-| `offset` | -0.4 – 0.4 | 0 |
-| `cycle` | 5 – 20s | 10 |
-| `bloom` | 0 – 1.5 | 0.9 |
-
-### Aurora, from *Going to Be Alright* (Canvas 2D)
-Aurora curtains sweep in from the left over a ridge and a rippling lake, flare, then fade to start again.
-Interaction: move to lead the sweep. Default palette: `aurora` (works with `aurora`, `ember`, `aqua`).
-
-| Param | Range | Default |
-|---|---|---|
-| `intensity` | 0.2 – 2 | 1 |
-| `cycle` | 5 – 20s | 9 |
-| `reflection` | 0 – 1 | 1 |
-| `stars` | 0 – 1 | 1 |
-| `grain` | 0 – 0.2 | 0.07 |
-
-### Horizon, from *Anticipating the Future* (Canvas 2D)
-A striped sun rises behind a wireframe valley that flies toward the camera.
-Interaction: move to steer. Default palette: `synth` (works with `synth`, `aqua`, `aurora`, `ember`).
-
-| Param | Range | Default |
-|---|---|---|
-| `rate` (flight) | 0 – 6 | 2 |
-| `peaks` | 0 – 2.5 | 1 |
-| `sun` | 0.4 – 1.6 | 1 |
-
-### Blink, from *Supreme Effort Squares* (Canvas 2D)
-A field of squares blinks up from the floor. Each line dissolves in square by square, holds, then blinks out.
-Interaction: move to stir the squares. Default palette: `ledger` (works with `ledger`, `phosphor`, `cobalt`, `ember`). Default text: “A supreme goal needs supreme effort. | Good enough never wins. | Supreme effort. Supreme results.”.
-
-| Param | Range | Default |
-|---|---|---|
-| `square` | 4 – 40 | 12 |
-| `gap` | 0 – 16 | 4 |
-| `field` | 0 – 1.02 | 0.4 |
-| `edges` (edge fade) | 0 – 3 | 0 |
-| `hold` | 1.2 – 6s | 2.6 |
-| `paper` | 0 – 1 | 1 |
-| `size` (text size) | 0.02 – 0.12 | 0.06 |
-
-### Drift, from *Idea Reveal* (Canvas 2D)
-Four soft colour pools drift and overlap on deep navy. Built as something for glass to refract.
-Interaction: move to part the colour. Default palette: `idea` (works with `idea`, `ion`, `aurora`, `ember`).
-
-| Param | Range | Default |
-|---|---|---|
-| `flow` | 0 – 4 | 1 |
-| `glow` | 0.2 – 1.6 | 1 |
-
-### Sparkle, from *Idea Reveal* (Canvas 2D)
-A four-point sparkle spins in, inhales, then punches toward the camera and becomes the window onto a colour field.
-Interaction: move to place the sparkle. Default palette: `idea` (works with `idea`, `ion`, `aurora`, `ember`).
-
-| Param | Range | Default |
-|---|---|---|
-| `size` | 0.4 – 3 | 1.4 |
-| `cycle` | 4 – 14s | 6 |
-| `flow` | 0 – 4 | 1 |
-| `glow` | 0.2 – 1.6 | 1 |
-
-### Filings, from *Magnetic Filings* (Canvas 2D)
-A grid of iron filings turns to face a magnet as it sweeps, arcs and orbits. Far filings answer a beat late; a second pole repels.
-Interaction: move to become the magnet. Default palette: `mono` (works with `mono`).
-
-| Param | Range | Default |
-|---|---|---|
-| `cell` | 24 – 120 | 54 |
-| `lag` | 0 – 3 | 1 |
-| `cycle` | 6 – 30s | 12 |
-| `magnet` (show magnet) | 0 – 1 | 1 |
-| `paper` | 0 – 1 | 1 |
-
-### Gather, from *Magnett Promo* (Canvas 2D)
-Filings at rest catch a passing magnet, then collapse inward and lock into a 5×5 mark around it before letting go.
-Interaction: move to pull the filings. Default palette: `mono` (works with `mono`).
-
-| Param | Range | Default |
-|---|---|---|
-| `cell` | 24 – 120 | 54 |
-| `cycle` | 6 – 24s | 10 |
-| `paper` | 0 – 1 | 1 |
-
-### Lattice, from *Ideas to Reality Promo* (Canvas 2D)
-An endless lattice of slowly turning wireframe cubes flows toward the camera and fades into the dark.
-Interaction: move to steer the camera. Default palette: `mono` (works with `mono`, `aqua`, `ember`, `aurora`).
-
-| Param | Range | Default |
-|---|---|---|
-| `rate` (flight) | 0 – 4 | 0.8 |
-| `spin` | 0 – 3 | 1 |
-| `size` (cube) | 0.3 – 2 | 1 |
-
-### Orbits, from *Ideas to Reality Promo* (Canvas 2D)
-Three rings tilt and sway around a glowing core, each carrying comets that stretch along their path.
-Interaction: move to tilt the rings. Default palette: `mono` (works with `mono`, `aqua`, `ember`, `aurora`).
-
-| Param | Range | Default |
-|---|---|---|
-| `scale` | 0.3 – 1.6 | 0.9 |
-| `rate` (orbit) | 0 – 3 | 1 |
-| `sway` | 0 – 3 | 1 |
-
-### Prism, from *Product Video* (Canvas 2D)
-Six spectrum blobs orbit on black and screen-blend into a soft, breathing rainbow wash.
-Interaction: move to draw the colour in. Default palette: `plasma` (works with `plasma`).
-
-| Param | Range | Default |
-|---|---|---|
-| `flow` | 0 – 3 | 1 |
-| `size` | 0.4 – 2 | 1 |
-| `glow` | 0.1 – 1 | 0.62 |
-| `pulse` | 0 – 2 | 1 |
-
-### Sweep, from *AI Revolution Sweep* (WebGL2)
-A band of glyphs sweeps across the frame, tears the scanlines and swaps one line of text for the next.
-Interaction: move across to scrub the sweep. Default palette: `phosphor` (works with `phosphor`, `cobalt`, `ledger`, `ember`). Default text: “Every few centuries, the ground shifts. | AI is turning thought into infrastructure. | This is our industrial revolution.”.
-
-| Param | Range | Default |
-|---|---|---|
-| `glyph` | 0.5 – 4 | 2 |
-| `band` | 0.05 – 0.6 | 0.28 |
-| `trail` | 0 – 2 | 0.75 |
-| `turbulence` | 0 – 1 | 0.5 |
-| `glow` | 0 – 2 | 2 |
-| `split` (chroma split) | 0 – 12 | 5 |
-| `tear` | 0 – 40 | 14 |
-| `flicker` | 0 – 1 | 0.35 |
-| `hold` | 0.4 – 6s | 1.6 |
-| `charset` | 0 – 2 | 0 |
-| `size` (text size) | 0.02 – 0.12 | 0.045 |
-
-### Rain, from *Living in the Matrix* (WebGL2)
-Columns of glyph rain fall over a line of text. Each falling head lights the words it passes.
-No cursor interaction. Default palette: `cobalt` (works with `cobalt`, `phosphor`, `ember`, `mono`). Default text: “Are we living in the matrix?”.
-
-| Param | Range | Default |
-|---|---|---|
-| `cell` | 8 – 40 | 15 |
-| `rate` (fall) | 0.05 – 1 | 0.2 |
-| `density` | 0.02 – 0.8 | 0.32 |
-| `trail` | 0.2 – 3 | 1.4 |
-| `glow` | 0 – 3 | 1.75 |
-| `light` | 0 – 3 | 1.2 |
-| `layers` | 1 – 3 | 2 |
-| `mutate` | 0 – 3 | 0 |
-| `show` (text) | 0 – 1 | 1 |
-| `size` (text size) | 0.02 – 0.14 | 0.056 |
-
-### Asciify, from *It Pays Off* (WebGL2)
-A soft lens turns whatever sits under it into 5×5 glyphs or halftone dots. It reads text along the line on its own.
-Interaction: move to steer the lens. Default palette: `ledger` (works with `ledger`, `phosphor`, `cobalt`). Default text: “Effort compounds quietly.”.
-
-| Param | Range | Default |
-|---|---|---|
-| `radius` (lens) | 0.05 – 0.45 | 0.16 |
-| `softness` | 0 – 1 | 1 |
-| `glyph` | 0.5 – 4 | 2 |
-| `dots` | 0 – 1 | 0 |
-| `charset` | 0 – 2 | 0 |
-| `glow` | 0 – 1 | 0.75 |
-| `split` (chroma split) | 0 – 1 | 0.75 |
-| `invert` | 0 – 1 | 0 |
-| `paper` | 0 – 1 | 1 |
-| `size` (text size) | 0.03 – 0.2 | 0.11 |
-
-### Glyph Graph, from *It Pays Off* (WebGL2)
-Columns of glyphs rise from the floor like a chart, keep moving, then climb to fill the frame and loop.
-No cursor interaction. Default palette: `ledger` (works with `ledger`, `phosphor`, `cobalt`).
-
-| Param | Range | Default |
-|---|---|---|
-| `height` | 0.1 – 0.9 | 0.4 |
-| `cycle` | 4 – 30s | 12 |
-| `glyph` | 0.5 – 4 | 2 |
-| `charset` | 0 – 2 | 0 |
-| `paper` | 0 – 1 | 1 |
-| `size` (text size) | 0.03 – 0.2 | 0.07 |
-
-### Glass Icons, from *Glass Icons* (WebGL 3D)
-Flat icons traced into dispersive glass. Each spins in from edge-on, settles, and whips out into a match cut to the next.
-Interaction: move to tilt the glass. Default palette: `cobalt` (works with `cobalt`, `ion`, `aurora`, `ember`). Needs `shaderfield-glass.js`.
-
-| Param | Range | Default |
-|---|---|---|
-| `hold` | 1.5 – 6s | 3 |
-| `dispersion` | 0 – 4 | 1.5 |
-| `depth` | 0.05 – 0.4 | 0.14 |
-
-### Glass Coins, from *Cryptar Glass Coins* (WebGL 3D)
-Two clear glass coins, rim to rim, roll against each other on a tilted axis under studio strip lights.
-Interaction: move to turn the axis. Default palette: `mono` (works with `mono`). Needs `shaderfield-glass.js`.
-
-| Param | Range | Default |
-|---|---|---|
-| `loop` | 3 – 16s | 7.25 |
-| `paper` | 0 – 1 | 1 |
+**Transitions.** [Curtain](docs/motion/curtain.md) · [Iris Close](docs/motion/iris.md) · [Line Draw](docs/motion/draw-frame.md) · [Line Draw](docs/motion/draw-line.md) · [Block Reveal](docs/motion/stripes.md)
 
 ## Palettes
 
@@ -601,19 +251,23 @@ Each palette has four colours. The shaders blend between them.
 
 | Name | Look | Default for |
 |---|---|---|
-| `ion` | blue, violet, cyan, rose | Fret, Harmonia |
-| `plasma` | indigo, orange, magenta, deep violet | Current |
-| `solar` | rust, cream, orange, oxblood | |
+| `ion` | blue, violet, cyan, rose | Circuit Arcs |
+| `plasma` | indigo, orange, magenta, deep violet | Flow Streaks |
+| `solar` | rust, cream, orange, oxblood | Chord Circle |
 | `ember` | orange, gold, pink, purple | Mesh |
-| `aurora` | mint, azure, lime, teal | Skein |
+| `aurora` | mint, azure, lime, teal | Skein, Hearth |
 | `aqua` | sky, aqua, white, navy | Halo |
 | `heat` | blue, red-orange, yellow, deep navy | Thermal |
-| `mono` | cool greys | Sand, Filings, Gather, Lattice, Orbits, Glass Coins |
-| `phosphor` | terminal greens | Sweep |
-| `cobalt` | electric blues | Rain, Glass Icons |
+| `mono` | cool greys | Sand Text, Iron Filings, Magnet Snap, Cube Tunnel, Orbit Rings, Glass Icons |
+| `phosphor` | terminal greens | Sweep, Matrix |
+| `cobalt` | electric blues | Stage Light, Dot Globe |
+| `sky` | sky blue, pale blue, ice, deep navy | Glyph Graph, Square Field |
+| `dusk` | deep cobalt, muted violet, deep teal, clay | |
+| `mint` | the site green, mint, pale mint, deep green | Square Text, Square Field, ASCII Text |
 | `ledger` | green ink on paper | Asciify, Glyph Graph, Blink |
-| `idea` | indigo, cyan, lilac, sky | Drift, Sparkle |
+| `idea` | indigo, cyan, lilac, sky | Sparkle |
 | `synth` | magenta, gold, pink, night | Horizon |
+| `silk` | blush, coral, oxblood, maroon | Silk Swirl, Wave Bands |
 
 You can add your own at runtime. Use RGB values from 0 to 1:
 
@@ -621,8 +275,6 @@ You can add your own at runtime. Use RGB values from 0 to 1:
 Shaderfield.PALETTES.brand = [[0.98, 0.36, 0.2], [1, 0.8, 0.4], [0.2, 0.5, 1], [0.08, 0.06, 0.2]];
 field.setPalette("brand");
 ```
-
----
 
 ## JavaScript API
 
@@ -659,49 +311,9 @@ Globals:
 | `Shaderfield.css(rgb)` | `[r,g,b]` (0–1) → `"rgb(…)"` |
 | `Shaderfield.motion` | Motion helpers, below |
 
----
+## Motion effects
 
-## Motion effects reference
-
-All helpers are in `Shaderfield.motion`. Helpers that run once return a **Promise** that resolves when they finish. Helpers that run continuously return a **stop function**.
-
-### Text
-
-| Helper | From | Usage |
-|---|---|---|
-| `typeIn(el, { mode, accent, delay })` | Nodepath Launch | Letter entrances. `mode`: `soft`, `decode`, `flip`, `scatter`, `glitch`. `accent`: two colours used for the chromatic split. |
-| `rise(el, { by, stagger, duration, ease, out, delay })` | Gloww, Blastlabs, Closebook, Orfa Agents | Masked rise per `"char"` or `"word"`. `out: true` runs the exit. |
-| `lineRise(el, { out, stagger, duration })` | App Features, Desktop Features | Each child element rises as one line. |
-| `cut(el, { color, delay, duration })` | Dev Agency Services | A block wipes open, then its words roll up. |
-| `countUp(el, { from, to, decimals, prefix, suffix, duration, delay })` | Tended HR, Closebook | Expo number tween with tabular figures. |
-| `revealWords(el, { dim, accent })` → stop | Tended HR, Closebook | Scroll-linked word reveal. Wrap words in `*asterisks*` to accent them. |
-| `typeSwap(el, words, { caret, caretColor, type, del, gap, hold })` → stop | Signpost Typewriter | Deletes the last word, pauses, types the next. `caret`: `"bar"` or `"block"`. |
-| `rollWords(el, words, { duration, stagger, hold, align })` → stop | Keep Marching | Each word pushes the last out with a per-letter roll. |
-| `pop(el, { by, stagger, duration, lift, blur, from, out })` | Product Video | Rise, overshoot scale and de-blur per letter or word. |
-
-### Interface
-
-| Helper | From | Usage |
-|---|---|---|
-| `tick(el, { color, size, delay })` | Tended HR, Closebook | A check pops in with overshoot. |
-| `bars(el, { values, color, height, stagger })` | Tended HR, Orfa Agents | Staggered progress bars. |
-| `pulseDot(el, { color, size, period, offset, mode })` → stop | Desktop Features, Orfa Agents | `mode: "ping"` (default) or `"blink"`. |
-| `focusCard(el, { color })` → stop | Orfa Agents Launch | Corner brackets, dot grid and spotlight on hover. `stop.set(1)` forces it on. |
-| `springFollow(el, area, { stiffness, damping })` → stop | Cursor Gallery | A label follows the cursor on a spring. Use `stop.set({ stiffness, damping })`. |
-| `bracketHop(stage, targets, { hold, travel, idle, pad, press, color })` → stop | Clause Film | Corner brackets collapse to a spinning reticle between targets and snap open around each. |
-| `spectrumRing(el, { width, glow, speed, radius, hues })` → stop | Product Video | Spinning conic rainbow border with glow. |
-| `shine(el, { duration, size, color })` | Product Video | One diagonal glint across the element. |
-| `typingDots(el, { size, gap, color })` → stop | Product Video | Three bouncing dots. |
-
-### Transitions
-
-| Helper | From | Usage |
-|---|---|---|
-| `curtain(el, { color, cols, cover, fade, hold, seed, onSwap })` | Closebook Launch | Pixel cells cover, `onSwap` runs, then they clear. |
-| `iris(el, { content, color, open, shutter })` | Orfa Agents, Dev Agency | Closes to a hairline, then pinches to the centre. Pass `open: true` to reverse it. |
-| `drawFrame(el, { color, duration })` | Dev Agency, Gloww | A hairline frame draws from opposite corners. |
-| `drawLine(el, { delay, duration, origin })` | Gloww, Shader Trials | An underline draws in with `scaleX`. |
-| `stripes(el, { angle, gap, color, drift, duration })` → stop | Dev Agency Services | Diagonal stripes wipe in and drift. |
+All helpers are in `Shaderfield.motion`. Helpers that run once return a **Promise** that resolves when they finish. Helpers that run continuously return a **stop function**. Each helper is documented on its own page in the [component catalog](docs/README.md#motion-effects).
 
 ### Building blocks
 
@@ -721,18 +333,39 @@ All helpers are in `Shaderfield.motion`. Helpers that run once return a **Promis
 - **Reduced motion.** When `prefers-reduced-motion: reduce` is set, fields hold a still frame. Pass `respectReducedMotion: false` to `mount` to override this.
 - **Text effects stay readable.** `typeIn` and `rise` put the full text in `aria-label` and mark their animated spans `aria-hidden`.
 
----
-
 ## Browser support
 
 Current Chrome, Edge, Safari and Firefox on desktop and mobile. Requires WebGL 1. Video recording uses `MediaRecorder`: Safari records MP4, while Chrome and Firefox record WebM.
 
----
+## Repository layout
 
-## Credits and license
+```
+shaderfield/
+├── shaderfield.js          The library. The only file most projects need.
+├── shaderfield-glass.js    Optional add-on for the 3D glass shader (loads three.js).
+├── docs/
+│   ├── README.md           Component catalog
+│   ├── shaders/            One page per shader
+│   └── motion/             One page per motion effect
+├── index.html              Landing page
+├── components.html         Component library, lab and installation guide
+├── Shaderfield.dc.html     Editable source of index.html
+├── Components.dc.html      Editable source of components.html
+├── support.js              Runtime for the site. Not needed for the library.
+├── shaderfield-demos.js    Demo stages for the site. Not needed for the library.
+├── assets/                 Logos, icons, social image and shader thumbnails
+├── examples/               Hero background, motion and frame-by-frame examples
+├── robots.txt, sitemap.xml, site.webmanifest
+├── LICENSE
+└── README.md
+```
 
-MIT. See `LICENSE`.
+## Author and license
 
-- **Fret** and **Skein** are adapted from *fret (Burnish)* and *skein (Filament)* by E. T. Carter (shader.gallery), MIT.
-- **Halo** and **Thermal** are native rewrites inspired by Paper Shaders' StaticRadialGradient and Heatmap. No Paper Shaders code is included.
-- **Current**, **Harmonia**, **Mesh** and all motion helpers are original to Shaderfield.
+Shaderfield is designed and built by **Nchanji Faithful** ([GitHub](https://github.com/nchanjifaithful)).
+
+Released under the [MIT License](LICENSE). You can use it in personal and commercial projects, modify it and redistribute it, as long as the copyright and license notice stay with the code.
+
+- **Issues and ideas.** Open an issue on GitHub with the effect id, your browser and a short description or screen recording.
+- **Contributing.** New shaders go in `shaderfield.js` with a 160 × 100 thumbnail in `assets/thumbs/` and a page in `docs/shaders/`. New motion helpers go in the `motion` export, with a demo in `shaderfield-demos.js` and a page in `docs/motion/`.
+- **Versioning.** The site loads the library with a `?v=` cache key. Bump it on every release so visitors get the new file.

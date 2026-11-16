@@ -1,0 +1,143 @@
+<sub><a href="../README.md">Shaderfield</a> / Components</sub>
+
+# Components
+
+Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
+
+- [Shaders](#shaders) · 31
+- [Motion effects](#motion-effects) · 21
+  - [Text](#text) · 9
+  - [Interface](#interface) · 7
+  - [Transitions](#transitions) · 5
+
+## Shaders
+
+<table>
+<tr>
+<td width="33%" valign="top"><a href="shaders/current.md"><img src="../assets/thumbs/current.png" width="100%" alt="Flow Streaks"></a><br><b><a href="shaders/current.md">Flow Streaks</a></b><br><sub><code>current</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/fret.md"><img src="../assets/thumbs/fret.png" width="100%" alt="Circuit Arcs"></a><br><b><a href="shaders/fret.md">Circuit Arcs</a></b><br><sub><code>fret</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/skein.md"><img src="../assets/thumbs/skein.png" width="100%" alt="Woven Lines"></a><br><b><a href="shaders/skein.md">Woven Lines</a></b><br><sub><code>skein</code></sub></td>
+</tr>
+<tr>
+<td width="33%" valign="top"><a href="shaders/harmonia.md"><img src="../assets/thumbs/harmonia.png" width="100%" alt="Chord Circle"></a><br><b><a href="shaders/harmonia.md">Chord Circle</a></b><br><sub><code>harmonia</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/halo.md"><img src="../assets/thumbs/halo.png" width="100%" alt="Radial Bloom"></a><br><b><a href="shaders/halo.md">Radial Bloom</a></b><br><sub><code>halo</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/thermal.md"><img src="../assets/thumbs/thermal.png" width="100%" alt="Heat Map"></a><br><b><a href="shaders/thermal.md">Heat Map</a></b><br><sub><code>thermal</code></sub></td>
+</tr>
+<tr>
+<td width="33%" valign="top"><a href="shaders/mesh.md"><img src="../assets/thumbs/mesh.png" width="100%" alt="Spring Net"></a><br><b><a href="shaders/mesh.md">Spring Net</a></b><br><sub><code>mesh</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/decrypt.md"><img src="../assets/thumbs/decrypt.png" width="100%" alt="Decode Lens"></a><br><b><a href="shaders/decrypt.md">Decode Lens</a></b><br><sub><code>decrypt</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/datawall.md"><img src="../assets/thumbs/datawall.png" width="100%" alt="Cipher Wall"></a><br><b><a href="shaders/datawall.md">Cipher Wall</a></b><br><sub><code>datawall</code></sub></td>
+</tr>
+<tr>
+<td width="33%" valign="top"><a href="shaders/sand.md"><img src="../assets/thumbs/sand.png" width="100%" alt="Sand Text"></a><br><b><a href="shaders/sand.md">Sand Text</a></b><br><sub><code>sand</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/assemble.md"><img src="../assets/thumbs/assemble.png" width="100%" alt="Particle Portrait"></a><br><b><a href="shaders/assemble.md">Particle Portrait</a></b><br><sub><code>assemble</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/aurora.md"><img src="../assets/thumbs/aurora.png" width="100%" alt="Aurora"></a><br><b><a href="shaders/aurora.md">Aurora</a></b><br><sub><code>aurora</code></sub></td>
+</tr>
+<tr>
+<td width="33%" valign="top"><a href="shaders/horizon.md"><img src="../assets/thumbs/horizon.png" width="100%" alt="Synth Valley"></a><br><b><a href="shaders/horizon.md">Synth Valley</a></b><br><sub><code>horizon</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/blink.md"><img src="../assets/thumbs/blink.png" width="100%" alt="Square Text"></a><br><b><a href="shaders/blink.md">Square Text</a></b><br><sub><code>blink</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/blinkfield.md"><img src="../assets/thumbs/blinkfield.png" width="100%" alt="Square Field"></a><br><b><a href="shaders/blinkfield.md">Square Field</a></b><br><sub><code>blinkfield</code></sub></td>
+</tr>
+<tr>
+<td width="33%" valign="top"><a href="shaders/sparkle.md"><img src="../assets/thumbs/sparkle.png" width="100%" alt="Sparkle"></a><br><b><a href="shaders/sparkle.md">Sparkle</a></b><br><sub><code>sparkle</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/filings.md"><img src="../assets/thumbs/filings.png" width="100%" alt="Iron Filings"></a><br><b><a href="shaders/filings.md">Iron Filings</a></b><br><sub><code>filings</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/gather.md"><img src="../assets/thumbs/gather.png" width="100%" alt="Magnet Snap"></a><br><b><a href="shaders/gather.md">Magnet Snap</a></b><br><sub><code>gather</code></sub></td>
+</tr>
+<tr>
+<td width="33%" valign="top"><a href="shaders/lattice.md"><img src="../assets/thumbs/lattice.png" width="100%" alt="Cube Tunnel"></a><br><b><a href="shaders/lattice.md">Cube Tunnel</a></b><br><sub><code>lattice</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/orbits.md"><img src="../assets/thumbs/orbits.png" width="100%" alt="Orbit Rings"></a><br><b><a href="shaders/orbits.md">Orbit Rings</a></b><br><sub><code>orbits</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/hearth.md"><img src="../assets/thumbs/hearth.png" width="100%" alt="Glow Bed"></a><br><b><a href="shaders/hearth.md">Glow Bed</a></b><br><sub><code>hearth</code></sub></td>
+</tr>
+<tr>
+<td width="33%" valign="top"><a href="shaders/lightsurge.md"><img src="../assets/thumbs/lightsurge.png" width="100%" alt="Light Surge"></a><br><b><a href="shaders/lightsurge.md">Light Surge</a></b><br><sub><code>lightsurge</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/swirl.md"><img src="../assets/thumbs/swirl.png" width="100%" alt="Silk Swirl"></a><br><b><a href="shaders/swirl.md">Silk Swirl</a></b><br><sub><code>swirl</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/waves.md"><img src="../assets/thumbs/waves.png" width="100%" alt="Wave Bands"></a><br><b><a href="shaders/waves.md">Wave Bands</a></b><br><sub><code>waves</code></sub></td>
+</tr>
+<tr>
+<td width="33%" valign="top"><a href="shaders/stage.md"><img src="../assets/thumbs/stage.png" width="100%" alt="Stage Light"></a><br><b><a href="shaders/stage.md">Stage Light</a></b><br><sub><code>stage</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/globe.md"><img src="../assets/thumbs/globe.png" width="100%" alt="Dot Globe"></a><br><b><a href="shaders/globe.md">Dot Globe</a></b><br><sub><code>globe</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/sweep.md"><img src="../assets/thumbs/sweep.png" width="100%" alt="Glyph Sweep"></a><br><b><a href="shaders/sweep.md">Glyph Sweep</a></b><br><sub><code>sweep</code></sub></td>
+</tr>
+<tr>
+<td width="33%" valign="top"><a href="shaders/matrix.md"><img src="../assets/thumbs/matrix.png" width="100%" alt="Matrix"></a><br><b><a href="shaders/matrix.md">Matrix</a></b><br><sub><code>matrix</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/asciify.md"><img src="../assets/thumbs/asciify.png" width="100%" alt="ASCII Text"></a><br><b><a href="shaders/asciify.md">ASCII Text</a></b><br><sub><code>asciify</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/graph.md"><img src="../assets/thumbs/graph.png" width="100%" alt="Glyph Graph"></a><br><b><a href="shaders/graph.md">Glyph Graph</a></b><br><sub><code>graph</code></sub></td>
+</tr>
+<tr>
+<td width="33%" valign="top"><a href="shaders/glassicons.md"><img src="../assets/thumbs/glassicons.png" width="100%" alt="Glass Icons"></a><br><b><a href="shaders/glassicons.md">Glass Icons</a></b><br><sub><code>glassicons</code></sub></td>
+</tr>
+</table>
+
+| Shader | ID | Renderer | Description |
+|---|---|---|---|
+| [Flow Streaks](shaders/current.md) | `current` | GLSL · WebGL | Line-integral flow streaks that speed up, heat up and bend around the cursor. Renders at half resolution because it is heavy per pixel. |
+| [Circuit Arcs](shaders/fret.md) | `fret` | GLSL · WebGL | Truchet arcs that join into endless circuits, with light pulses running along every path. |
+| [Woven Lines](shaders/skein.md) | `skein` | GLSL · WebGL | Woven filaments that ripple at their own pace, drift sideways and draw in from the left. |
+| [Chord Circle](shaders/harmonia.md) | `harmonia` | GLSL · WebGL | Times-table chords on a circle. As the multiplier drifts, cardioids, nephroids and roses appear. |
+| [Radial Bloom](shaders/halo.md) | `halo` | GLSL · WebGL | A soft radial bloom with a slowly orbiting focal point. Made for hero backgrounds. |
+| [Heat Map](shaders/thermal.md) | `thermal` | GLSL · WebGL | Drifting heat sources merge into a banded thermal map. |
+| [Spring Net](shaders/mesh.md) | `mesh` | Canvas 2D | A spring lattice that glows by tension. Every kick travels across it like a struck net. |
+| [Decode Lens](shaders/decrypt.md) | `decrypt` | GLSL · WebGL 2 | Text is rebuilt from best-fit glyphs and kept scrambled. A lens with a glowing, aberrated rim decodes it as it passes. |
+| [Cipher Wall](shaders/datawall.md) | `datawall` | GLSL · WebGL 2 | A wall of backlog items held in cipher. Two lenses hunt across it and decode what they cross. |
+| [Sand Text](shaders/sand.md) | `sand` | GLSL · WebGL 2 | Lines gather from fine drifting grains into crisp text, hold, then blow back to dust. |
+| [Particle Portrait](shaders/assemble.md) | `assemble` | GLSL · WebGL | Thousands of particles orbit in a tilted ring, then swirl in to rebuild an image, catch a sweep of light and unravel again. |
+| [Aurora](shaders/aurora.md) | `aurora` | Canvas 2D | Aurora curtains sweep in from the left over a ridge and a rippling lake, flare, then fade to start again. |
+| [Synth Valley](shaders/horizon.md) | `horizon` | Canvas 2D | A striped sun rises behind a wireframe valley that flies toward the camera. |
+| [Square Text](shaders/blink.md) | `blink` | Canvas 2D | Each line dissolves in square by square, holds, then blinks out. |
+| [Square Field](shaders/blinkfield.md) | `blinkfield` | Canvas 2D | A floor of blinking squares rises and falls on a slow tide with a bright crest. |
+| [Sparkle](shaders/sparkle.md) | `sparkle` | Canvas 2D | A sparkle spins in and punches through to colour, then the field closes back into a star and bursts into a twinkle of glints and sparks. |
+| [Iron Filings](shaders/filings.md) | `filings` | Canvas 2D | A grid of iron filings turns to face a magnet as it sweeps, arcs and orbits. Far filings answer a beat late; a second pole repels. |
+| [Magnet Snap](shaders/gather.md) | `gather` | Canvas 2D | Filings at rest catch a passing magnet, then collapse inward and lock into a 5×5 mark around it before letting go. |
+| [Cube Tunnel](shaders/lattice.md) | `lattice` | Canvas 2D | An endless lattice of slowly turning wireframe cubes flows toward the camera and fades into the dark. |
+| [Orbit Rings](shaders/orbits.md) | `orbits` | Canvas 2D | Tilted rings with tick marks sway round a haloed core over a faint starfield. Comets with fading tails pass behind and in front of the core. |
+| [Glow Bed](shaders/hearth.md) | `hearth` | Canvas 2D | A bed of soft light breathes and sways along the bottom edge. |
+| [Light Surge](shaders/lightsurge.md) | `lightsurge` | Canvas 2D | Columns of light rise from the floor over a colour wash, sway, then lift away on a cycle. Time a cut to the peak. |
+| [Silk Swirl](shaders/swirl.md) | `swirl` | GLSL · WebGL | Silk bands spiral in toward the centre and keep turning. A native rewrite; no third-party shader code. |
+| [Wave Bands](shaders/waves.md) | `waves` | Canvas 2D | Rows of soft waves drift across a second colour and breathe. |
+| [Stage Light](shaders/stage.md) | `stage` | Canvas 2D | Light pours up from a glowing base, with soft shafts, a mirrored floor and drifting motes. |
+| [Dot Globe](shaders/globe.md) | `globe` | Canvas 2D | A globe of dots turns slowly. Land on the near side lights up and pings. |
+| [Glyph Sweep](shaders/sweep.md) | `sweep` | GLSL · WebGL 2 | A band of glyphs sweeps across the frame, tears the scanlines and swaps one line of text for the next. |
+| [Matrix](shaders/matrix.md) | `matrix` | GLSL · WebGL 2 | Columns of green glyph rain fall over a line of text. Each falling head lights the words it passes. |
+| [ASCII Text](shaders/asciify.md) | `asciify` | Canvas 2D | Crisp text wipes into ASCII glyphs, a scan band lights and densifies the characters it crosses, then the text wipes back. |
+| [Glyph Graph](shaders/graph.md) | `graph` | GLSL · WebGL 2 | Columns of glyphs rise from the floor like a chart, keep moving, then climb to fill the frame and loop. |
+| [Glass Icons](shaders/glassicons.md) | `glassicons` | three.js · WebGL | Clear prismatic glass icons with rainbow edges spin in, settle, and match-cut to the next. |
+
+## Motion effects
+
+All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; continuous helpers return a stop function.
+
+### Text
+
+| Effect | Helper | Description |
+|---|---|---|
+| [Type in](motion/type-in.md) | `typeIn` | Letter entrances. `mode`: `soft`, `decode`, `flip`, `scatter`, `glitch`. `accent`: two colours used for the chromatic split. |
+| [Letter Rise](motion/rise.md) | `rise` | Each letter rises through its own mask on an expo ease. |
+| [Line Rise](motion/line-rise.md) | `lineRise` | Each line rises from below its mask, then leaves upward. |
+| [Block Reveal](motion/cut.md) | `cut` | A solid block wipes open, then its words roll up. |
+| [Count Up](motion/count-up.md) | `countUp` | Numbers count up on an expo ease with steady-width digits. |
+| [Reveal words](motion/reveal-words.md) | `revealWords` | Scroll-linked word reveal. Wrap words in `*asterisks*` to accent them. |
+| [Type Swap](motion/type-swap.md) | `typeSwap` | The last word deletes, then the next one types in. |
+| [Roll Words](motion/roll-words.md) | `rollWords` | Each word pushes the last out with a per-letter roll. |
+| [Letter Pop](motion/pop.md) | `pop` | Letters rise, overshoot and sharpen out of a blur. |
+
+### Interface
+
+| Effect | Helper | Description |
+|---|---|---|
+| [Tick Pop](motion/tick.md) | `tick` | A check pops out of an empty ring with a little overshoot. |
+| [Progress Bars](motion/bars.md) | `bars` | Bars fill one after another on an expo ease. |
+| [Focus Card](motion/focus-card.md) | `focusCard` | On hover, corner brackets snap in over a dot grid and spotlight. |
+| [Spring follow](motion/spring-follow.md) | `springFollow` | A label follows the cursor on a spring. Use `stop.set({ stiffness, damping })`. |
+| [Bracket Hop](motion/bracket-hop.md) | `bracketHop` | Corner brackets spin between targets and snap open around each. |
+| [Shine](motion/shine.md) | `shine` | A crisp glint sweeps across a button once. |
+| [Typing Dots](motion/typing-dots.md) | `typingDots` | Three dots bounce in a wave while a reply is coming. |
+
+### Transitions
+
+| Effect | Helper | Description |
+|---|---|---|
+| [Curtain](motion/curtain.md) | `curtain` | Pixel cells cover, `onSwap` runs, then they clear. |
+| [Iris Close](motion/iris.md) | `iris` | A card closes to a hairline, pinches to the centre, then reopens. |
+| [Line Draw](motion/draw-frame.md) | `drawFrame` | A hairline frame and an underline draw themselves in. |
+| [Line Draw](motion/draw-line.md) | `drawLine` | A hairline frame and an underline draw themselves in. |
+| [Block Reveal](motion/stripes.md) | `stripes` | A solid block wipes open, then its words roll up. |

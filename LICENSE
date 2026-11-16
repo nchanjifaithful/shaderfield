@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2026 Shaderfield
+Copyright (c) 2026 Nchanji Faithful
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,3 @@ MIT License:
 
   SPDX-License-Identifier: MIT
   SPDX-FileCopyrightText: 2026 E. T. Carter <support@shader.gallery>
-
-The Halo and Thermal shaders are original implementations inspired by the
-StaticRadialGradient and Heatmap effects in Paper Shaders
-(@paper-design/shaders). No Paper Shaders source code is included.
