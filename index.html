@@ -1,17 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shaderfield: live shaders and motion effects for websites and video</title>
+<meta name="description" content="Live WebGL and Canvas shaders plus 21 motion effects in one dependency-free JavaScript file. Drop them into a website or render them frame by frame for video.">
+<link rel="canonical" href="https://shaderfield.pages.dev/">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#09090b">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="./assets/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+<link rel="manifest" href="./site.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Shaderfield">
+<meta property="og:title" content="Shaderfield: live shaders and motion effects for websites and video">
+<meta property="og:description" content="Live WebGL and Canvas shaders plus 21 motion effects in one dependency-free JavaScript file. Drop them into a website or render them frame by frame for video.">
+<meta property="og:url" content="https://shaderfield.pages.dev/">
+<meta property="og:image" content="https://shaderfield.pages.dev/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Shaderfield: live shaders and motion effects for websites and video">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Shaderfield: live shaders and motion effects for websites and video">
+<meta name="twitter:description" content="Live WebGL and Canvas shaders plus 21 motion effects in one dependency-free JavaScript file. Drop them into a website or render them frame by frame for video.">
+<meta name="twitter:image" content="https://shaderfield.pages.dev/assets/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"Shaderfield","url":"https://shaderfield.pages.dev/"},{"@type":"SoftwareSourceCode","name":"Shaderfield","description":"Live shaders and motion effects for websites and motion video in one dependency-free JavaScript file.","programmingLanguage":"JavaScript","license":"https://opensource.org/licenses/MIT","url":"https://shaderfield.pages.dev/","codeRepository":"https://shaderfield.pages.dev/"}]}</script>
 <script src="./support.js"></script>
 </head>
 <body>
+<noscript>
+  <main style="max-width:720px;margin:0 auto;padding:48px 24px;font-family:Helvetica,Arial,sans-serif;color:#f2f2f4;background:#09090b">
+    <h1>Shaderfield</h1>
+    <p>Live WebGL and Canvas shaders plus 21 motion effects in one dependency-free JavaScript file. Drop them into a website or render them frame by frame for video.</p>
+    <ul>
+      <li><a href="./index.html">Home</a></li>
+      <li><a href="./components.html">Components: shaders, text, interface, transitions and light</a></li>
+      <li><a href="./components.html#install">Installation</a></li>
+      <li><a href="./shaderfield.js" download>Download shaderfield.js</a></li>
+    </ul>
+    <p>The interactive component browser needs JavaScript. The library itself is a single dependency-free file.</p>
+  </main>
+</noscript>
 <x-dc>
 <helmet>
-<title>Shaderfield — live shaders for websites and motion video</title>
-<link rel="icon" type="image/svg+xml" href="./assets/logo-mark.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 @keyframes sfRing{from{stroke-dashoffset:94.25}to{stroke-dashoffset:0}}
 @keyframes sfStepIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -21,13 +56,16 @@
 *{scrollbar-width:thin;scrollbar-color:#2a2a30 transparent;}
 html,body{margin:0;background:#09090b;color:#f2f2f4;-webkit-font-smoothing:antialiased;}
 a{color:#f2f2f4;text-decoration:none;}a:hover{color:#ffffff;}
-::selection{background:#f2f2f4;color:#09090b;}
-input[type=range]{accent-color:#f2f2f4;}
+::selection{background:rgba(14,165,233,0.4);color:#ffffff;}
+input[type=range]{accent-color:#0ea5e9;}
+a,button,label,code{transition:color .2s ease,background-color .2s ease,box-shadow .25s ease,transform .2s ease,outline-color .2s ease,border-color .2s ease,text-decoration-color .2s ease;}
+:focus-visible{outline:2px solid #0ea5e9 !important;outline-offset:2px;}
+
 input::placeholder{color:#6f717b;}
 </style>
-<script src="./shaderfield.js?v=2.0.0"></script>
-<script src="./shaderfield-glass.js?v=2.0.0"></script>
-<script src="./shaderfield-demos.js?v=2.0.0"></script>
+<script src="./shaderfield.js?v=3.1.1"></script>
+<script src="./shaderfield-glass.js?v=3.1.0"></script>
+<script src="./shaderfield-demos.js?v=3.1.0"></script>
 </helmet>
 <div style="font-family:'Geist',Helvetica,Arial,sans-serif;background:#09090b;color:#f2f2f4;min-height:100vh;overflow-x:clip;">
 
@@ -35,24 +73,25 @@ input::placeholder{color:#6f717b;}
   <nav style="display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding:16px clamp(16px,3vw,28px);border-bottom:1px solid rgba(242,242,244,0.08);font-size:14px;">
     <img src="./assets/logo-horizontal.svg" alt="Shaderfield" style="display:block;height:22px;width:auto;">
     <div style="display:flex;gap:4px;flex-wrap:wrap;align-items:center;">
-      <a href="./components.html" style="padding:7px 12px;border-radius:8px;color:#a4a6b0;" style-hover="color:#ffffff;background:#16161a;">Components</a>
-      <a href="./components.html#install" style="padding:7px 12px;border-radius:8px;color:#a4a6b0;" style-hover="color:#ffffff;background:#16161a;">Installation</a>
-      <a href="./shaderfield.js" download="shaderfield.js" style="margin-left:8px;padding:8px 14px;border-radius:999px;background:#f2f2f4;color:#09090b;font-weight:500;" style-hover="background:#ffffff;color:#09090b;">Download</a>
+      <a href="./components.html" style="padding:7px 12px;border-radius:8px;color:#a4a6b0;" style-hover="color:#ffffff;background:rgba(14,165,233,0.14);">Components</a>
+      <a href="./components.html#install" style="padding:7px 12px;border-radius:8px;color:#a4a6b0;" style-hover="color:#ffffff;background:rgba(14,165,233,0.14);">Installation</a>
+      <a href="https://github.com/nchanjifaithful" target="_blank" rel="noopener me" aria-label="Nchanji Faithful on GitHub" style="display:flex;align-items:center;gap:7px;padding:7px 12px;border-radius:8px;color:#a4a6b0;" style-hover="color:#ffffff;background:rgba(14,165,233,0.14);"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>GitHub</a>
+      <a href="./shaderfield.js" download="shaderfield.js" style="margin-left:8px;padding:8px 14px;border-radius:999px;background:#f2f2f4;color:#09090b;font-weight:500;" style-hover="background:#0ea5e9;color:#ffffff;transform:translateY(-1px);box-shadow:0 8px 24px -8px rgba(14,165,233,0.75);">Download</a>
     </div>
   </nav>
 
   <header data-screen-label="Hero" style="position:relative;padding:clamp(56px,9vw,112px) clamp(16px,3vw,28px) clamp(20px,3vw,28px);display:flex;flex-direction:column;align-items:center;gap:clamp(40px,6vw,64px);overflow:hidden;">
-    <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(242,242,244,0.09) 1px,transparent 1px);background-size:22px 22px;-webkit-mask-image:radial-gradient(ellipse 60% 55% at 50% 0%,#000 30%,transparent 100%);mask-image:radial-gradient(ellipse 60% 55% at 50% 0%,#000 30%,transparent 100%);pointer-events:none;"></div>
+    <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(242,242,244,0.17) 1.1px,transparent 1.2px);background-size:22px 22px;-webkit-mask-image:radial-gradient(ellipse 60% 55% at 50% 0%,#000 30%,transparent 100%);mask-image:radial-gradient(ellipse 60% 55% at 50% 0%,#000 30%,transparent 100%);pointer-events:none;"></div>
     <div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:26px;text-align:center;max-width:760px;">
       <span style="display:flex;align-items:center;gap:10px;padding:6px 14px 6px 8px;border-radius:999px;background:#111114;outline:1px solid rgba(242,242,244,0.12);font-size:13px;color:#c9cad1;">
-        <span style="padding:2px 8px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:12px;font-weight:500;">v1.1</span>
-        <span>27 shaders and 23 motion effects in one file</span>
+        <span style="padding:2px 8px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:12px;font-weight:500;">v2.0</span>
+        <span>31 shaders and 21 motion effects in one file</span>
       </span>
       <h1 style="margin:0;font-weight:400;font-size:clamp(56px,9.5vw,136px);line-height:0.9;letter-spacing:-0.055em;"><span style="font-weight:600;">Shader</span><span style="font-weight:400;">field</span></h1>
       <p style="margin:0;font-size:clamp(16px,1.6vw,19px);line-height:1.55;color:#a4a6b0;max-width:560px;text-wrap:pretty;">Shaderfield adds live shaders and motion to your website and your video work. Put a shader behind a hero, animate a headline, or render a 4K background for a product video, all from one JavaScript file with no dependencies.</p>
       <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
-        <a href="./components.html" style="padding:12px 22px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:14px;font-weight:500;" style-hover="background:#ffffff;color:#09090b;">Browse components</a>
-        <a href="./shaderfield.js" download="shaderfield.js" style="padding:12px 22px;border-radius:999px;background:#111114;outline:1px solid rgba(242,242,244,0.14);font-size:14px;" style-hover="outline-color:rgba(242,242,244,0.4);">Download shaderfield.js</a>
+        <a href="./components.html" style="padding:12px 22px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:14px;font-weight:500;" style-hover="background:#0ea5e9;color:#ffffff;transform:translateY(-1px);box-shadow:0 8px 24px -8px rgba(14,165,233,0.75);">Browse components</a>
+        <a href="./shaderfield.js" download="shaderfield.js" style="padding:12px 22px;border-radius:999px;background:#111114;outline:1px solid rgba(242,242,244,0.14);font-size:14px;" style-hover="outline-color:#0ea5e9;box-shadow:0 0 0 4px rgba(14,165,233,0.12);">Download shaderfield.js</a>
       </div>
     </div>
 
@@ -67,14 +106,14 @@ input::placeholder{color:#6f717b;}
             <span style="font-size:14px;line-height:1.5;color:#d4d5db;text-wrap:pretty;">{{ heroDesc }}</span>
           </div>
           <div style="display:flex;gap:8px;align-items:center;pointer-events:auto;">
-            <button onClick="{{ heroPrev }}" aria-label="Previous shader" style="all:unset;cursor:pointer;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(9,9,11,0.6);outline:1px solid rgba(242,242,244,0.18);font-size:15px;" style-hover="outline-color:#f2f2f4;">←</button>
-            <button onClick="{{ heroNext }}" aria-label="Next shader" style="all:unset;cursor:pointer;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(9,9,11,0.6);outline:1px solid rgba(242,242,244,0.18);font-size:15px;" style-hover="outline-color:#f2f2f4;">→</button>
-            <button onClick="{{ heroOpen }}" style="all:unset;cursor:pointer;padding:11px 18px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:13.5px;font-weight:500;" style-hover="background:#ffffff;">Open in lab</button>
+            <button onClick="{{ heroPrev }}" aria-label="Previous shader" style="all:unset;cursor:pointer;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(9,9,11,0.6);outline:1px solid rgba(242,242,244,0.18);font-size:15px;" style-hover="outline-color:#0ea5e9;box-shadow:0 0 0 4px rgba(14,165,233,0.12);">←</button>
+            <button onClick="{{ heroNext }}" aria-label="Next shader" style="all:unset;cursor:pointer;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(9,9,11,0.6);outline:1px solid rgba(242,242,244,0.18);font-size:15px;" style-hover="outline-color:#0ea5e9;box-shadow:0 0 0 4px rgba(14,165,233,0.12);">→</button>
+            <button onClick="{{ heroOpen }}" style="all:unset;cursor:pointer;padding:11px 18px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:13.5px;font-weight:500;" style-hover="background:#0ea5e9;color:#ffffff;transform:translateY(-1px);box-shadow:0 8px 24px -8px rgba(14,165,233,0.75);">Open in lab</button>
           </div>
         </div>
       </div>
       <div style="display:flex;justify-content:center;padding:14px 0 4px;">
-        <div style="display:flex;align-items:center;gap:4px;width:min(100%,1080px);box-sizing:border-box;padding:5px;border-radius:14px;background:#0e0e11;outline:1px solid rgba(242,242,244,0.08);">
+        <div style="display:flex;align-items:center;gap:4px;width:min(100%,1080px);box-sizing:border-box;padding:5px;border-radius:14px;background:#0e0e11;outline:1px solid rgba(242,242,244,0.08);overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;">
           <sc-for list="{{ heroDock }}" as="d" hint-placeholder-count="27">
             <sc-if value="{{ d.active }}" hint-placeholder-val="{{ false }}">
               <button onClick="{{ d.pick }}" style="all:unset;cursor:pointer;position:relative;flex:none;display:flex;align-items:center;gap:10px;height:36px;padding:0 14px 0 4px;border-radius:10px;overflow:hidden;background:#17171c;outline:1px solid rgba(242,242,244,0.16);">
@@ -84,7 +123,7 @@ input::placeholder{color:#6f717b;}
               </button>
             </sc-if>
             <sc-if value="{{ d.idle }}" hint-placeholder-val="{{ true }}">
-              <button onClick="{{ d.pick }}" title="{{ d.name }}" aria-label="{{ d.name }}" style="all:unset;cursor:pointer;flex:1 1 0;min-width:10px;max-width:40px;height:28px;border-radius:7px;background-color:#1b1b20;background-image:{{ d.img }};background-size:cover;background-position:center;outline:1px solid rgba(242,242,244,0.1);opacity:0.6;transition:transform .2s, opacity .2s, outline-color .2s;" style-hover="opacity:1;transform:translateY(-2px);outline-color:rgba(242,242,244,0.4);"></button>
+              <button onClick="{{ d.pick }}" title="{{ d.name }}" aria-label="{{ d.name }}" style="all:unset;cursor:pointer;flex:1 0 32px;min-width:32px;max-width:40px;height:32px;border-radius:7px;background-color:#1b1b20;background-image:{{ d.img }};background-size:cover;background-position:center;outline:1px solid rgba(242,242,244,0.1);opacity:0.6;transition:transform .2s, opacity .2s, outline-color .2s;" style-hover="opacity:1;transform:translateY(-2px);outline-color:#0ea5e9;box-shadow:0 10px 30px -10px rgba(14,165,233,0.6);"></button>
             </sc-if>
           </sc-for>
         </div>
@@ -95,14 +134,14 @@ input::placeholder{color:#6f717b;}
   <section aria-label="Library contents" style="position:relative;border-top:1px solid rgba(242,242,244,0.08);overflow:hidden;">
     <span style="position:absolute;left:-5px;top:-7px;font-family:'Geist Mono',monospace;font-size:13px;line-height:1;color:#5f616b;pointer-events:none;">+</span><span style="position:absolute;right:-5px;top:-7px;font-family:'Geist Mono',monospace;font-size:13px;line-height:1;color:#5f616b;pointer-events:none;">+</span>
     <div style="display:flex;align-items:center;">
-      <a href="./components.html" style="flex:none;display:flex;flex-direction:column;gap:2px;padding:18px clamp(16px,3vw,28px);border-right:1px solid rgba(242,242,244,0.08);background:#09090b;position:relative;z-index:1;" style-hover="background:#0e0e11;">
+      <a href="./components.html" style="flex:none;display:flex;flex-direction:column;gap:2px;padding:18px clamp(16px,3vw,28px);border-right:1px solid rgba(242,242,244,0.08);background:#09090b;position:relative;z-index:1;" style-hover="background:rgba(14,165,233,0.05);">
         <span style="font-size:14px;font-weight:500;">{{ libTotal }} components</span>
         <span style="font-size:12.5px;color:#7d7f89;">Browse the library</span>
       </a>
       <div style="flex:1;min-width:0;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);">
         <div style="display:flex;width:max-content;animation:sfMarquee 48s linear infinite;" style-hover="animation-play-state:paused;">
           <sc-for list="{{ libItems }}" as="m" hint-placeholder-count="12">
-            <a href="./components.html" style="flex:none;display:flex;align-items:baseline;gap:10px;padding:0 26px;border-right:1px solid rgba(242,242,244,0.08);color:#c9cad1;" style-hover="color:#ffffff;">
+            <a href="./components.html" style="flex:none;display:flex;align-items:baseline;gap:10px;padding:0 26px;border-right:1px solid rgba(242,242,244,0.08);color:#c9cad1;" style-hover="color:#7dd3fc;">
               <span style="font-size:14px;white-space:nowrap;">{{ m.name }}</span>
               <span style="font-family:'Geist Mono',monospace;font-size:12px;color:#7d7f89;">{{ m.count }}</span>
             </a>
@@ -116,95 +155,91 @@ input::placeholder{color:#6f717b;}
     <span style="position:absolute;left:-5px;top:-7px;font-family:'Geist Mono',monospace;font-size:13px;line-height:1;color:#5f616b;pointer-events:none;">+</span><span style="position:absolute;right:-5px;top:-7px;font-family:'Geist Mono',monospace;font-size:13px;line-height:1;color:#5f616b;pointer-events:none;">+</span>
     <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;padding:clamp(40px,6vw,64px) clamp(16px,3vw,28px) 28px;">
       <h2 style="margin:0;font-weight:400;font-size:clamp(30px,3.6vw,44px);letter-spacing:-0.035em;line-height:1.05;max-width:560px;">What you can make</h2>
-      <p style="margin:0;font-size:15px;line-height:1.55;color:#a4a6b0;max-width:440px;text-wrap:pretty;">Six common jobs, each built with one shader and a few lines of code. Pick one to see the result and the code that makes it.</p>
+      <p style="margin:0;font-size:15px;line-height:1.55;color:#a4a6b0;max-width:440px;text-wrap:pretty;">Nine common jobs, each built with one shader and a few lines of code. Pick one to see it running and the code that makes it.</p>
     </div>
-    <div style="margin:0 clamp(16px,3vw,28px) clamp(40px,6vw,64px);border-radius:16px;background:#0e0e11;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;">
-      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 20px;padding:10px 12px;border-bottom:1px solid rgba(242,242,244,0.08);">
-        <div style="display:flex;align-items:center;gap:2px;flex-wrap:wrap;"><span style="padding:0 8px 0 4px;font-size:12.5px;color:#7d7f89;">Web</span><sc-for list="{{ ucWeb }}" as="u" hint-placeholder-count="3"><button onClick="{{ u.pick }}" style="all:unset;cursor:pointer;position:relative;overflow:hidden;padding:7px 13px;border-radius:8px;font-size:13.5px;white-space:nowrap;background:{{ u.bg }};color:{{ u.color }};" style-hover="color:#ffffff;">{{ u.fill }}<span style="position:relative;">{{ u.name }}</span></button></sc-for></div>
-        <span style="width:1px;height:20px;background:rgba(242,242,244,0.1);"></span>
-        <div style="display:flex;align-items:center;gap:2px;flex-wrap:wrap;"><span style="padding:0 8px 0 4px;font-size:12.5px;color:#7d7f89;">Video</span><sc-for list="{{ ucVideo }}" as="u" hint-placeholder-count="3"><button onClick="{{ u.pick }}" style="all:unset;cursor:pointer;position:relative;overflow:hidden;padding:7px 13px;border-radius:8px;font-size:13.5px;white-space:nowrap;background:{{ u.bg }};color:{{ u.color }};" style-hover="color:#ffffff;">{{ u.fill }}<span style="position:relative;">{{ u.name }}</span></button></sc-for></div>
-        <div style="margin-left:auto;display:flex;align-items:center;gap:10px;">
-          <span style="font-family:'Geist Mono',monospace;font-size:12px;color:#7d7f89;">{{ ucIdx }} / {{ ucTotal }}</span>
-          <button onClick="{{ ucPrev }}" aria-label="Previous" style="all:unset;cursor:pointer;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;color:#c9cad1;outline:1px solid rgba(242,242,244,0.14);" style-hover="color:#ffffff;outline-color:rgba(242,242,244,0.4);">←</button>
-          <button onClick="{{ ucToggle }}" aria-label="{{ ucPlayLabel }}" style="all:unset;cursor:pointer;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#f2f2f4;color:#09090b;font-size:10px;letter-spacing:-1px;" style-hover="background:#ffffff;">{{ ucPlayIcon }}</button>
-          <button onClick="{{ ucNext }}" aria-label="Next" style="all:unset;cursor:pointer;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;color:#c9cad1;outline:1px solid rgba(242,242,244,0.14);" style-hover="color:#ffffff;outline-color:rgba(242,242,244,0.4);">→</button>
-        </div>
+    <div style="margin:0 clamp(16px,3vw,28px) clamp(40px,6vw,64px);border-radius:16px;background:#0e0e11;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;display:flex;flex-wrap:wrap;">
+      <div role="tablist" aria-label="Use cases" aria-orientation="vertical" style="flex:0 0 210px;min-width:0;display:flex;flex-direction:column;gap:20px;padding:18px 10px;background:#0b0b0d;box-shadow:1px 0 0 rgba(242,242,244,0.08);">
+        <div style="display:flex;flex-direction:column;gap:2px;"><span style="padding:0 12px 8px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#5f616b;">Web</span><sc-for list="{{ ucWeb }}" as="u" hint-placeholder-count="4"><button onClick="{{ u.pick }}" role="tab" aria-selected="{{ u.sel }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;font-size:14px;background:{{ u.bg }};color:{{ u.color }};" style-hover="color:#7dd3fc;"><span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ u.name }}</span><span style="font-family:'Geist Mono',monospace;font-size:10.5px;color:#5f616b;">{{ u.meta }}</span></button></sc-for></div>
+        <div style="display:flex;flex-direction:column;gap:2px;"><span style="padding:0 12px 8px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#5f616b;">Video and stills</span><sc-for list="{{ ucVideo }}" as="u" hint-placeholder-count="5"><button onClick="{{ u.pick }}" role="tab" aria-selected="{{ u.sel }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;font-size:14px;background:{{ u.bg }};color:{{ u.color }};" style-hover="color:#7dd3fc;"><span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ u.name }}</span><span style="font-family:'Geist Mono',monospace;font-size:10.5px;color:#5f616b;">{{ u.meta }}</span></button></sc-for></div>
       </div>
-      <div style="display:flex;flex-wrap:wrap;">
-        <div style="flex:2 1 520px;min-width:0;padding:clamp(14px,2.4vw,24px);">
-          <div style="position:relative;aspect-ratio:16/10;min-height:280px;border-radius:12px;overflow:hidden;background:#050506;outline:1px solid rgba(242,242,244,0.1);">
-            <div style="display:{{ ucWebChrome }};position:absolute;left:0;right:0;top:0;height:34px;align-items:center;gap:12px;padding:0 12px;background:#141418;border-bottom:1px solid rgba(242,242,244,0.08);">
-              <span style="display:flex;gap:6px;"><span style="width:9px;height:9px;border-radius:50%;background:#3a3a42;"></span><span style="width:9px;height:9px;border-radius:50%;background:#3a3a42;"></span><span style="width:9px;height:9px;border-radius:50%;background:#3a3a42;"></span></span>
-              <span style="flex:1;max-width:320px;margin:0 auto;padding:4px 12px;border-radius:6px;background:#0b0b0e;font-family:'Geist Mono',monospace;font-size:11px;color:#7d7f89;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ ucUrl }}</span>
-              <span style="width:45px;"></span>
-            </div>
-            <div style="position:absolute;left:0;right:0;bottom:0;top:{{ ucTop }};display:flex;align-items:center;justify-content:center;">
-              <div style="position:relative;overflow:hidden;height:{{ ucH }};width:{{ ucW }};aspect-ratio:{{ ucAR }};border-radius:{{ ucR }};background:#000;">
-                <div ref="{{ ucRef }}" style="position:absolute;inset:0;"></div>
-                <div style="display:{{ uc0 }};position:absolute;inset:0;pointer-events:none;"><div style="position:absolute;inset:0;background:linear-gradient(to top right,rgba(9,9,11,0.85) 15%,rgba(9,9,11,0.1) 65%);"></div>
-                  <div style="position:absolute;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;"><span style="display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;letter-spacing:-0.01em;"><span style="width:14px;height:14px;border-radius:4px;background:#f2f2f4;"></span>Kite</span><span style="display:flex;gap:16px;font-size:12px;color:#d4d5db;"><span>Product</span><span>Pricing</span><span>Docs</span></span></div>
-                  <div style="position:absolute;left:clamp(18px,3.5vw,36px);bottom:clamp(18px,3.5vw,36px);display:flex;flex-direction:column;align-items:flex-start;gap:12px;max-width:62%;">
-                    <span style="padding:4px 10px;border-radius:999px;background:rgba(9,9,11,0.6);outline:1px solid rgba(242,242,244,0.18);font-size:11.5px;color:#d4d5db;">Version 2.0 is out</span>
-                    <span style="font-size:clamp(22px,3.4vw,40px);font-weight:500;letter-spacing:-0.04em;line-height:1;">Analytics your whole team can read</span>
-                    <span style="display:flex;gap:8px;"><span style="padding:8px 14px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:12.5px;font-weight:500;white-space:nowrap;">Start free</span><span style="padding:8px 14px;border-radius:999px;outline:1px solid rgba(242,242,244,0.4);font-size:12.5px;white-space:nowrap;">Book a demo</span></span>
-                  </div></div>
-                <div style="display:{{ uc1 }};position:absolute;inset:0;pointer-events:none;"><div style="position:absolute;inset:0;background:rgba(9,9,11,0.5);"></div>
-                  <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center;">
-                    <span style="display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;letter-spacing:-0.01em;"><span style="width:14px;height:14px;border-radius:4px;background:#f2f2f4;"></span>Lumen</span>
-                    <span style="font-size:clamp(22px,3.4vw,40px);font-weight:500;letter-spacing:-0.04em;line-height:1.02;max-width:420px;">A calmer inbox is coming</span>
-                    <span style="font-size:13px;color:#c9cad1;">Join the waitlist for early access.</span>
-                    <span style="display:flex;align-items:center;gap:4px;width:min(320px,90%);padding:4px 4px 4px 14px;border-radius:999px;background:rgba(9,9,11,0.75);outline:1px solid rgba(242,242,244,0.2);"><span style="flex:1;text-align:left;font-size:12.5px;color:#7d7f89;">you@company.com</span><span style="padding:8px 14px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:12.5px;font-weight:500;white-space:nowrap;">Join</span></span>
-                  </div></div>
-                <div style="display:{{ uc2 }};position:absolute;inset:0;pointer-events:none;"><div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(9,9,11,0.88) 25%,rgba(9,9,11,0.15) 75%);"></div>
-                  <div style="position:absolute;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;"><span style="display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;letter-spacing:-0.01em;"><span style="width:14px;height:14px;border-radius:4px;background:#f2f2f4;"></span>Summit</span><span style="display:flex;gap:16px;font-size:12px;color:#d4d5db;"><span>Schedule</span><span>Speakers</span><span>Venue</span></span></div>
-                  <div style="position:absolute;left:clamp(18px,3.5vw,36px);top:50%;transform:translateY(-42%);display:flex;flex-direction:column;align-items:flex-start;gap:12px;max-width:60%;">
-                    <span style="font-family:'Geist Mono',monospace;font-size:11.5px;color:#d4d5db;">Sept 18–19 · Lisbon</span>
-                    <span style="font-size:clamp(24px,3.8vw,46px);font-weight:500;letter-spacing:-0.045em;line-height:0.95;">Summit 2026</span>
-                    <span style="font-size:13px;line-height:1.5;color:#c9cad1;">Two days of talks on design and engineering.</span>
-                    <span style="padding:8px 14px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:12.5px;font-weight:500;white-space:nowrap;">Get tickets</span>
-                  </div></div>
-                <div style="display:{{ uc3 }};position:absolute;inset:0;pointer-events:none;"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.75),rgba(0,0,0,0) 55%);"></div>
-                  <div style="position:absolute;left:clamp(18px,3.5vw,36px);bottom:62px;display:flex;flex-direction:column;gap:6px;">
-                    <span style="font-family:'Geist Mono',monospace;font-size:11.5px;color:#d4d5db;">Chapter 02</span>
-                    <span style="font-size:clamp(22px,3.4vw,40px);font-weight:500;letter-spacing:-0.04em;line-height:1;">Built for teams</span>
-                  </div>
-                  <div style="position:absolute;left:12px;right:12px;bottom:12px;display:flex;align-items:center;gap:12px;padding:8px 12px;border-radius:10px;background:rgba(9,9,11,0.7);backdrop-filter:blur(8px);">
-                    <span style="font-size:11px;">▶</span>
-                    <span style="position:relative;flex:1;height:3px;border-radius:2px;background:rgba(242,242,244,0.2);"><span style="position:absolute;left:0;top:0;bottom:0;width:62%;border-radius:2px;background:#f2f2f4;"></span></span>
-                    <span style="font-family:'Geist Mono',monospace;font-size:11px;color:#d4d5db;white-space:nowrap;">00:03.7 / 00:06.0</span>
-                    <span style="padding:2px 6px;border-radius:4px;outline:1px solid rgba(242,242,244,0.35);font-family:'Geist Mono',monospace;font-size:10px;">4K</span>
-                  </div></div>
-                <div style="display:{{ uc4 }};position:absolute;inset:0;pointer-events:none;"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.7),rgba(0,0,0,0) 50%);"></div>
-                  <div style="position:absolute;left:12px;right:12px;top:12px;display:flex;align-items:center;gap:7px;font-size:11px;"><span style="width:20px;height:20px;border-radius:50%;background:#f2f2f4;"></span><span style="font-weight:500;">kite</span><span style="color:#c9cad1;">· Sponsored</span></div>
-                  <div style="position:absolute;left:14px;right:14px;bottom:16px;display:flex;flex-direction:column;gap:8px;">
-                    <span style="font-size:clamp(16px,2vw,22px);font-weight:500;letter-spacing:-0.03em;line-height:1.05;">Version 2.0 lands Friday</span>
-                    <span style="align-self:flex-start;padding:6px 11px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:11px;font-weight:500;">Learn more</span>
-                  </div></div>
-                <div style="display:{{ uc5 }};position:absolute;inset:0;pointer-events:none;"><div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(9,9,11,0.9) 30%,rgba(9,9,11,0.05) 80%);"></div>
-                  <div style="position:absolute;inset:clamp(18px,3.5vw,36px);display:flex;flex-direction:column;justify-content:space-between;">
-                    <span style="font-family:'Geist Mono',monospace;font-size:11.5px;color:#a4a6b0;">Q3 2026</span>
-                    <span style="display:flex;flex-direction:column;gap:8px;max-width:55%;"><span style="font-size:clamp(24px,3.8vw,46px);font-weight:500;letter-spacing:-0.045em;line-height:0.95;">Quarterly review</span><span style="font-size:13px;color:#a4a6b0;">Revenue, product and hiring</span></span>
-                    <span style="display:flex;justify-content:space-between;font-size:11.5px;color:#7d7f89;"><span>Kite</span><span style="font-family:'Geist Mono',monospace;">01 / 18</span></span>
-                  </div></div>
-              </div>
-            </div>
-          </div>
+      <div style="flex:1 1 560px;min-width:0;display:flex;flex-wrap:wrap;align-items:flex-start;gap:20px;padding:clamp(14px,2vw,20px);">
+        <div style="flex:2 1 400px;min-width:0;position:relative;aspect-ratio:4/3;max-height:460px;border-radius:12px;overflow:hidden;background:#050506;outline:1px solid rgba(242,242,244,0.08);">
+          <div style="position:absolute;inset:0;visibility:{{ ucVis0 }};"><div style="position:absolute;left:0;right:0;top:0;height:28px;z-index:2;display:flex;align-items:center;gap:10px;padding:0 10px;background:#141418;border-bottom:1px solid rgba(242,242,244,0.08);"><span style="display:flex;gap:5px;"><span style="width:8px;height:8px;border-radius:50%;background:#3a3a42;"></span><span style="width:8px;height:8px;border-radius:50%;background:#3a3a42;"></span><span style="width:8px;height:8px;border-radius:50%;background:#3a3a42;"></span></span><span style="flex:1;max-width:240px;margin:0 auto;padding:3px 10px;border-radius:5px;background:#0b0b0e;font-family:'Geist Mono',monospace;font-size:10.5px;color:#7d7f89;text-align:center;">kite.app</span><span style="width:34px;"></span></div><div style="position:absolute;left:0;right:0;bottom:0;top:28px;"><div ref="{{ ucRef0 }}" style="position:absolute;inset:0;"></div><div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top right,rgba(9,9,11,0.88) 18%,rgba(9,9,11,0.1) 68%);"></div><div style="position:absolute;inset:0;pointer-events:none;"><div style="position:absolute;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:center;padding:12px 16px;"><span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;letter-spacing:-0.01em;"><span style="width:12px;height:12px;border-radius:3px;background:#f2f2f4;"></span>Kite</span><span style="display:flex;gap:14px;font-size:11px;color:#d4d5db;"><span>Product</span><span>Pricing</span><span>Docs</span></span></div><div style="position:absolute;left:20px;bottom:22px;right:20px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;max-width:340px;"><span style="padding:3px 9px;border-radius:999px;background:rgba(9,9,11,0.6);outline:1px solid rgba(242,242,244,0.18);font-size:10.5px;color:#d4d5db;">Version 2.0 is out</span><span style="font-size:clamp(22px,2.6vw,30px);font-weight:500;letter-spacing:-0.04em;line-height:1.02;">Analytics your whole team can read</span><span style="display:flex;gap:6px;"><span style="padding:6px 11px;border-radius:999px;background:#f2f2f4;color:#09090b;font-weight:500;font-size:11px;white-space:nowrap;">Start free</span><span style="padding:6px 11px;border-radius:999px;outline:1px solid rgba(242,242,244,0.4);font-size:11px;white-space:nowrap;">Book a demo</span></span></div></div></div></div>
+          <div style="position:absolute;inset:0;visibility:{{ ucVis1 }};"><div ref="{{ ucRef1 }}" style="position:absolute;inset:0;"></div><div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(70% 70% at 50% 50%,rgba(9,9,11,0.7),rgba(9,9,11,0.3));"></div><div style="position:absolute;inset:0;pointer-events:none;"><div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;text-align:center;"><span style="display:flex;align-items:center;gap:7.5px;font-size:15px;font-weight:600;letter-spacing:-0.01em;"><span style="width:15px;height:15px;border-radius:3.75px;background:#f2f2f4;"></span>Lumen</span><span style="font-size:clamp(28px,3.4vw,40px);font-weight:500;letter-spacing:-0.045em;line-height:1;max-width:380px;">A calmer inbox is coming</span><span style="font-size:14px;color:#c9cad1;max-width:300px;line-height:1.45;">Join the waitlist and be first in line when early access opens.</span><span style="display:flex;align-items:center;gap:6px;width:min(340px,92%);padding:5px 5px 5px 16px;border-radius:999px;background:rgba(9,9,11,0.75);outline:1px solid rgba(242,242,244,0.22);"><span style="flex:1;text-align:left;font-size:13px;color:#7d7f89;">you@company.com</span><span style="padding:7.8px 13px;border-radius:999px;background:#f2f2f4;color:#09090b;font-weight:500;font-size:13px;white-space:nowrap;">Join waitlist</span></span><span style="font-family:'Geist Mono',monospace;font-size:11px;color:#a4a6b0;">2,418 people ahead of you</span></div></div></div>
+          <div style="position:absolute;inset:0;visibility:{{ ucVis2 }};"><div ref="{{ ucRef2 }}" style="position:absolute;inset:0;"></div><div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(9,9,11,0.94) 0%,rgba(9,9,11,0.78) 45%,rgba(9,9,11,0.2) 100%);"></div><div style="position:absolute;inset:0;pointer-events:none;"><div style="position:absolute;inset:0;display:flex;flex-direction:column;">
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid rgba(242,242,244,0.1);"><span style="display:flex;align-items:center;gap:6.5px;font-size:13px;font-weight:600;letter-spacing:-0.01em;"><span style="width:13px;height:13px;border-radius:3.25px;background:#f2f2f4;"></span>Summit</span><span style="display:flex;align-items:center;gap:16px;font-size:11px;color:#c9cad1;"><span>Schedule</span><span>Speakers</span><span>Venue</span><span style="padding:6.3px 10.5px;border-radius:999px;background:#f2f2f4;color:#09090b;font-weight:500;font-size:10.5px;white-space:nowrap;">Register</span></span></div>
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:0 22px;max-width:70%;">
+    <span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#a4a6b0;">Design and engineering conference</span>
+    <span style="font-size:clamp(34px,4.6vw,52px);font-weight:500;letter-spacing:-0.05em;line-height:0.92;">Summit<br>2026</span>
+    <span style="display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:#d4d5db;"><span>18–19 September</span><span style="color:#5f616b;">/</span><span>Lisbon, Portugal</span></span>
+    <span style="display:flex;gap:8px;margin-top:4px;"><span style="padding:6.8999999999999995px 11.5px;border-radius:999px;background:#f2f2f4;color:#09090b;font-weight:500;font-size:11.5px;white-space:nowrap;">Get tickets</span><span style="padding:6.8999999999999995px 11.5px;border-radius:999px;outline:1px solid rgba(242,242,244,0.4);font-size:11.5px;white-space:nowrap;">View schedule</span></span>
+  </div>
+  <div style="display:flex;gap:28px;padding:14px 22px;border-top:1px solid rgba(242,242,244,0.1);background:rgba(9,9,11,0.45);"><span style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:17px;font-weight:500;letter-spacing:-0.03em;">40</span><span style="font-family:'Geist Mono',monospace;font-size:9.5px;letter-spacing:0.04em;text-transform:uppercase;color:#a4a6b0;">Speakers</span></span><span style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:17px;font-weight:500;letter-spacing:-0.03em;">2</span><span style="font-family:'Geist Mono',monospace;font-size:9.5px;letter-spacing:0.04em;text-transform:uppercase;color:#a4a6b0;">Days</span></span><span style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:17px;font-weight:500;letter-spacing:-0.03em;">1,200</span><span style="font-family:'Geist Mono',monospace;font-size:9.5px;letter-spacing:0.04em;text-transform:uppercase;color:#a4a6b0;">Attendees</span></span></div>
+</div></div></div>
+          <div style="position:absolute;inset:0;visibility:{{ ucVis3 }};"><div ref="{{ ucRef3 }}" style="position:absolute;inset:0;"></div><div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(to bottom,rgba(0,0,0,0.55),rgba(0,0,0,0) 22%,rgba(0,0,0,0) 55%,rgba(0,0,0,0.85));"></div>
+<div style="position:absolute;inset:0;pointer-events:none;">
+  <span style="position:absolute;left:14px;right:14px;top:12px;display:flex;justify-content:space-between;align-items:center;"><span style="display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:500;"><span style="width:12px;height:12px;border-radius:3px;background:#f2f2f4;"></span>Kite · Product tour</span><span style="display:flex;gap:5px;font-family:'Geist Mono',monospace;font-size:9px;"><span style="padding:2px 6px;border-radius:4px;outline:1px solid rgba(242,242,244,0.35);">4K</span><span style="padding:2px 6px;border-radius:4px;outline:1px solid rgba(242,242,244,0.35);">24 FPS</span></span></span>
+  <span style="position:absolute;left:16px;bottom:58px;display:flex;flex-direction:column;gap:4px;"><span style="font-family:'Geist Mono',monospace;font-size:9.5px;color:#d4d5db;">Chapter 03 · Reports</span><span style="font-size:clamp(24px,3vw,34px);font-weight:500;letter-spacing:-0.045em;line-height:1;">See what your team ships</span></span>
+  <div style="position:absolute;left:10px;right:10px;bottom:10px;display:flex;flex-direction:column;gap:6px;padding:7px 10px 8px;border-radius:9px;background:rgba(9,9,11,0.72);backdrop-filter:blur(8px);">
+    <span style="position:relative;display:flex;gap:3px;height:4px;"><span style="position:relative;flex:14;border-radius:2px;background:rgba(242,242,244,0.22);overflow:hidden;"><span style="position:absolute;left:0;top:0;bottom:0;width:100%;background:#f2f2f4;"></span></span><span style="position:relative;flex:24;border-radius:2px;background:rgba(242,242,244,0.22);overflow:hidden;"><span style="position:absolute;left:0;top:0;bottom:0;width:100%;background:#f2f2f4;"></span></span><span style="position:relative;flex:32;border-radius:2px;background:rgba(242,242,244,0.22);overflow:hidden;"><span style="position:absolute;left:0;top:0;bottom:0;width:31.25%;background:#f2f2f4;"></span></span><span style="position:relative;flex:30;border-radius:2px;background:rgba(242,242,244,0.22);overflow:hidden;"><span style="position:absolute;left:0;top:0;bottom:0;width:0%;background:#f2f2f4;"></span></span><span style="position:absolute;left:48%;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#f2f2f4;"></span></span>
+    <span style="display:flex;align-items:center;gap:10px;font-size:10px;"><span>▶</span><span style="font-family:'Geist Mono',monospace;font-size:9.5px;color:#d4d5db;">01:12 / 02:30</span><span style="flex:1;display:flex;gap:3px;font-family:'Geist Mono',monospace;font-size:8.5px;color:#7d7f89;"><span style="flex:14;">Intro</span><span style="flex:24;">Inbox</span><span style="flex:32;">Reports</span><span style="flex:30;">Teams</span></span><span style="padding:1px 5px;border-radius:3px;outline:1px solid rgba(242,242,244,0.35);font-family:'Geist Mono',monospace;font-size:8.5px;">CC</span><span style="font-family:'Geist Mono',monospace;font-size:10px;">⛶</span></span>
+  </div>
+</div></div>
+          <div style="position:absolute;inset:0;visibility:{{ ucVis4 }};"><div style="position:absolute;top:12px;bottom:12px;left:50%;transform:translateX(-50%);aspect-ratio:9/16;border-radius:22px;overflow:hidden;background:#000;outline:4px solid #2a2a31;box-shadow:0 0 0 5px rgba(242,242,244,0.12);"><div ref="{{ ucRef4 }}" style="position:absolute;inset:0;"></div><div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(to bottom,rgba(0,0,0,0.5),rgba(0,0,0,0) 20%,rgba(0,0,0,0) 42%,rgba(0,0,0,0.88) 82%);"></div>
+<div style="position:absolute;inset:0;pointer-events:none;display:flex;flex-direction:column;padding:9px 12px 14px;">
+  <span style="display:flex;gap:3px;"><span style="flex:1;height:2px;border-radius:2px;background:#f2f2f4;"></span><span style="flex:1;height:2px;border-radius:2px;background:linear-gradient(90deg,#f2f2f4 55%,rgba(242,242,244,0.35) 55%);"></span><span style="flex:1;height:2px;border-radius:2px;background:rgba(242,242,244,0.35);"></span></span>
+  <span style="display:flex;align-items:center;gap:7px;margin-top:9px;"><span style="width:22px;height:22px;border-radius:50%;background:#f2f2f4;color:#09090b;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;">H</span><span style="display:flex;flex-direction:column;gap:1px;"><span style="font-size:10px;font-weight:600;">helixbio</span><span style="font-size:8.5px;color:#c9cad1;">Sponsored</span></span></span>
+  <span style="flex:1;"></span>
+  <span style="display:flex;flex-direction:column;gap:9px;">
+    <span style="align-self:flex-start;padding:3px 7px;border-radius:999px;background:rgba(242,242,244,0.16);font-family:'Geist Mono',monospace;font-size:8px;letter-spacing:0.06em;text-transform:uppercase;">Series A</span>
+    <span style="font-size:19px;font-weight:600;letter-spacing:-0.04em;line-height:1.02;">Protein design in days, not months.</span>
+    <span style="font-size:10px;line-height:1.4;color:#d4d5db;">Helix models and tests new molecules before they reach the lab.</span>
+    <span style="margin-top:3px;display:flex;justify-content:center;padding:9px 0;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:10.5px;font-weight:600;">Learn more</span>
+  </span>
+</div></div></div>
+          <div style="position:absolute;inset:0;visibility:{{ ucVis5 }};"><div style="position:absolute;left:5%;right:5%;top:50%;transform:translateY(-50%);aspect-ratio:16/9;border-radius:6px;overflow:hidden;background:#000;outline:1px solid rgba(242,242,244,0.28);box-shadow:0 0 0 5px rgba(242,242,244,0.05),0 16px 44px rgba(0,0,0,0.6);"><div ref="{{ ucRef5 }}" style="position:absolute;inset:0;"></div><div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(9,9,11,0.96) 0%,rgba(9,9,11,0.88) 48%,rgba(9,9,11,0.15) 88%);"></div><div style="position:absolute;inset:0;pointer-events:none;"><div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:18px 22px;">
+  <span style="display:flex;justify-content:space-between;align-items:center;"><span style="display:flex;align-items:center;gap:5.5px;font-size:11px;font-weight:600;letter-spacing:-0.01em;"><span style="width:11px;height:11px;border-radius:2.75px;background:#f2f2f4;"></span>Kite</span><span style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:0.06em;text-transform:uppercase;color:#a4a6b0;">Board review · Q3 2026</span></span>
+  <span style="display:flex;flex-direction:column;gap:9px;max-width:66%;"><span style="font-size:clamp(26px,3.2vw,36px);font-weight:500;letter-spacing:-0.05em;line-height:0.98;">Growth, margin and the road to 2027</span><span style="font-size:10.5px;line-height:1.45;color:#a4a6b0;">Results for July to September and the plan for next year.</span></span>
+  <span style="display:flex;justify-content:space-between;align-items:flex-end;font-size:9.5px;"><span style="display:flex;align-items:center;gap:8px;"><span style="width:20px;height:20px;border-radius:50%;background:#2a2a30;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:600;">MC</span><span style="display:flex;flex-direction:column;gap:1px;"><span style="font-weight:500;">Maya Chen</span><span style="color:#7d7f89;">Chief Financial Officer</span></span></span><span style="font-family:'Geist Mono',monospace;color:#7d7f89;">01 / 18</span></span>
+</div></div></div></div>
+          <div style="position:absolute;inset:0;visibility:{{ ucVis6 }};"><div ref="{{ ucRef6 }}" style="position:absolute;inset:0;"></div><div style="position:absolute;inset:0;pointer-events:none;background:rgba(9,9,11,0.35);"></div><div style="position:absolute;inset:0;pointer-events:none;"><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><div style="width:min(240px,80%);display:flex;flex-direction:column;gap:9px;padding:20px;border-radius:14px;background:rgba(14,14,17,0.82);backdrop-filter:blur(10px);outline:1px solid rgba(242,242,244,0.12);"><span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;letter-spacing:-0.01em;"><span style="width:12px;height:12px;border-radius:3px;background:#f2f2f4;"></span>Kite</span><span style="margin-top:4px;font-size:18px;font-weight:500;letter-spacing:-0.03em;">Welcome back</span><span style="display:block;padding:8px 10px;border-radius:7px;background:rgba(9,9,11,0.6);outline:1px solid rgba(242,242,244,0.14);font-size:11px;color:#7d7f89;text-align:left;">you@company.com</span><span style="display:block;padding:8px 10px;border-radius:7px;background:rgba(9,9,11,0.6);outline:1px solid rgba(242,242,244,0.14);font-size:11px;color:#7d7f89;text-align:left;">••••••••</span><span style="margin-top:2px;display:flex;justify-content:center;padding:8px 0;border-radius:7px;background:#f2f2f4;color:#09090b;font-size:11.5px;font-weight:600;">Sign in</span></div></div></div></div>
+          <div style="position:absolute;inset:0;visibility:{{ ucVis7 }};"><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:clamp(14px,2.4vw,24px);padding:0 6%;">
+  <div style="position:relative;flex:none;height:72%;aspect-ratio:1;border-radius:10px;overflow:hidden;background:#000;outline:1px solid rgba(242,242,244,0.28);box-shadow:0 0 0 5px rgba(242,242,244,0.05),0 16px 44px rgba(0,0,0,0.6);"><div ref="{{ ucRef7 }}" style="position:absolute;inset:0;"></div><div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top,rgba(0,0,0,0.75),rgba(0,0,0,0.05) 60%);"></div><div style="position:absolute;inset:0;pointer-events:none;"><div style="position:absolute;inset:14px;display:flex;flex-direction:column;justify-content:space-between;"><span style="display:flex;justify-content:space-between;align-items:center;"><span style="padding:2px 6px;border-radius:4px;background:#f2f2f4;color:#09090b;font-family:'Geist Mono',monospace;font-size:8.5px;font-weight:600;letter-spacing:0.06em;">PODCAST</span><span style="font-family:'Geist Mono',monospace;font-size:9px;">EP 42</span></span><span style="display:flex;flex-direction:column;gap:5px;"><span style="font-size:clamp(28px,3.6vw,42px);font-weight:700;letter-spacing:-0.055em;line-height:0.86;">The Slow<br>Build</span><span style="font-size:9.5px;color:#d4d5db;">Maya Chen and Leo Park</span></span></div></div></div>
+  <div style="flex:1;min-width:0;max-width:210px;display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:12px;background:rgba(20,20,24,0.9);outline:1px solid rgba(242,242,244,0.1);">
+    <span style="font-family:'Geist Mono',monospace;font-size:9.5px;letter-spacing:0.06em;text-transform:uppercase;color:#7d7f89;">Now playing</span>
+    <span style="display:flex;flex-direction:column;gap:3px;"><span style="font-size:13px;font-weight:500;letter-spacing:-0.02em;line-height:1.2;">Shipping in public, without the burnout</span><span style="font-size:10.5px;color:#a4a6b0;">The Slow Build · Episode 42</span></span>
+    <span style="display:flex;align-items:center;gap:2px;height:26px;"><span style="flex:1;border-radius:1px;background:#f2f2f4;height:20%;"></span><span style="flex:1;border-radius:1px;background:#f2f2f4;height:83%;"></span><span style="flex:1;border-radius:1px;background:#f2f2f4;height:47%;"></span><span style="flex:1;border-radius:1px;background:#f2f2f4;height:41%;"></span><span style="flex:1;border-radius:1px;background:#f2f2f4;height:26%;"></span><span style="flex:1;border-radius:1px;background:#f2f2f4;height:24%;"></span><span style="flex:1;border-radius:1px;background:#f2f2f4;height:62%;"></span><span style="flex:1;border-radius:1px;background:#f2f2f4;height:39%;"></span><span style="flex:1;border-radius:1px;background:#f2f2f4;height:77%;"></span><span style="flex:1;border-radius:1px;background:#f2f2f4;height:72%;"></span><span style="flex:1;border-radius:1px;background:#f2f2f4;height:45%;"></span><span style="flex:1;border-radius:1px;background:#f2f2f4;height:61%;"></span><span style="flex:1;border-radius:1px;background:#f2f2f4;height:22%;"></span><span style="flex:1;border-radius:1px;background:#f2f2f4;height:26%;"></span><span style="flex:1;border-radius:1px;background:rgba(242,242,244,0.28);height:39%;"></span><span style="flex:1;border-radius:1px;background:rgba(242,242,244,0.28);height:51%;"></span><span style="flex:1;border-radius:1px;background:rgba(242,242,244,0.28);height:81%;"></span><span style="flex:1;border-radius:1px;background:rgba(242,242,244,0.28);height:28%;"></span><span style="flex:1;border-radius:1px;background:rgba(242,242,244,0.28);height:84%;"></span><span style="flex:1;border-radius:1px;background:rgba(242,242,244,0.28);height:42%;"></span><span style="flex:1;border-radius:1px;background:rgba(242,242,244,0.28);height:43%;"></span><span style="flex:1;border-radius:1px;background:rgba(242,242,244,0.28);height:25%;"></span><span style="flex:1;border-radius:1px;background:rgba(242,242,244,0.28);height:26%;"></span><span style="flex:1;border-radius:1px;background:rgba(242,242,244,0.28);height:63%;"></span><span style="flex:1;border-radius:1px;background:rgba(242,242,244,0.28);height:33%;"></span><span style="flex:1;border-radius:1px;background:rgba(242,242,244,0.28);height:81%;"></span><span style="flex:1;border-radius:1px;background:rgba(242,242,244,0.28);height:67%;"></span><span style="flex:1;border-radius:1px;background:rgba(242,242,244,0.28);height:51%;"></span><span style="flex:1;border-radius:1px;background:rgba(242,242,244,0.28);height:60%;"></span><span style="flex:1;border-radius:1px;background:rgba(242,242,244,0.28);height:20%;"></span><span style="flex:1;border-radius:1px;background:rgba(242,242,244,0.28);height:27%;"></span><span style="flex:1;border-radius:1px;background:rgba(242,242,244,0.28);height:36%;"></span><span style="flex:1;border-radius:1px;background:rgba(242,242,244,0.28);height:56%;"></span><span style="flex:1;border-radius:1px;background:rgba(242,242,244,0.28);height:78%;"></span></span>
+    <span style="display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:9.5px;color:#7d7f89;"><span>18:04</span><span>48:30</span></span>
+    <span style="display:flex;justify-content:center;align-items:center;gap:16px;font-size:11px;color:#c9cad1;"><span>15</span><span style="width:30px;height:30px;border-radius:50%;background:#f2f2f4;color:#09090b;display:flex;align-items:center;justify-content:center;font-size:9px;letter-spacing:-1px;">❚❚</span><span>30</span></span>
+  </div>
+</div></div>
+          <div style="position:absolute;inset:0;visibility:{{ ucVis8 }};"><div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:0 8%;">
+  <div style="position:relative;width:100%;aspect-ratio:16/9;max-height:70%;border-radius:10px;overflow:hidden;background:#000;outline:1px solid rgba(242,242,244,0.28);box-shadow:0 0 0 5px rgba(242,242,244,0.05),0 16px 44px rgba(0,0,0,0.6);align-self:center;"><div ref="{{ ucRef8 }}" style="position:absolute;top:0;bottom:0;left:26%;right:-14%;"></div><div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(0,0,0,0.88) 28%,rgba(0,0,0,0) 70%);"></div>
+    <div style="position:absolute;inset:0;pointer-events:none;">
+      <span style="position:absolute;left:16px;top:14px;display:flex;align-items:center;gap:6px;"><span style="width:16px;height:16px;border-radius:50%;background:#f2f2f4;color:#09090b;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;">K</span><span style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:#d4d5db;">Build log · Part 3</span></span>
+      <span style="position:absolute;left:16px;top:50%;transform:translateY(-46%);width:56%;display:flex;flex-direction:column;gap:10px;">
+        <span style="font-size:clamp(28px,3.8vw,44px);font-weight:700;letter-spacing:-0.05em;line-height:0.95;">I rebuilt our app in a week</span>
+        <span style="display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;color:#d4d5db;"><span style="padding:3px 7px;border-radius:4px;outline:1px solid rgba(242,242,244,0.45);">7 days</span><span style="padding:3px 7px;border-radius:4px;outline:1px solid rgba(242,242,244,0.45);">1 developer</span></span>
+      </span>
+      <span style="position:absolute;right:14px;top:14px;padding:3px 7px;border-radius:4px;background:#f2f2f4;color:#09090b;font-size:9px;font-weight:800;letter-spacing:0.06em;">NEW</span>
+      <span style="position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(242,242,244,0.25);"><span style="display:block;height:100%;width:38%;background:#f2f2f4;"></span></span>
+      <span style="position:absolute;right:8px;bottom:10px;padding:2px 6px;border-radius:4px;background:rgba(0,0,0,0.85);font-family:'Geist Mono',monospace;font-size:10px;">12:48</span>
+    </div>
+  </div>
+  <div style="display:flex;gap:10px;align-items:flex-start;"><span style="flex:none;width:30px;height:30px;border-radius:50%;background:#f2f2f4;color:#09090b;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">K</span><span style="display:flex;flex-direction:column;gap:3px;min-width:0;"><span style="font-size:13px;font-weight:500;letter-spacing:-0.01em;">I rebuilt our app in a week. Here is what broke.</span><span style="font-size:11px;color:#a4a6b0;">Kite · 48K views · 2 days ago</span></span></div>
+</div></div>
         </div>
-        <div style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:18px;padding:clamp(18px,2.6vw,28px);border-left:1px solid rgba(242,242,244,0.08);">
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <h3 style="margin:0;font-size:19px;font-weight:500;letter-spacing:-0.02em;">{{ ucName }}</h3>
+        <div style="flex:1 1 280px;min-width:0;display:flex;flex-direction:column;gap:18px;">
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <h3 style="margin:0;font-size:18px;font-weight:500;letter-spacing:-0.02em;">{{ ucName }}</h3>
             <p style="margin:0;font-size:14px;line-height:1.55;color:#a4a6b0;text-wrap:pretty;">{{ ucDesc }}</p>
+            <span style="display:flex;flex-wrap:wrap;gap:6px;margin-top:2px;"><span style="padding:3px 9px;border-radius:999px;outline:1px solid rgba(242,242,244,0.14);font-family:'Geist Mono',monospace;font-size:11px;color:#c9cad1;">{{ ucShader }}</span><span style="padding:3px 9px;border-radius:999px;outline:1px solid rgba(242,242,244,0.14);font-family:'Geist Mono',monospace;font-size:11px;color:#c9cad1;">{{ ucOut }}</span></span>
+            <a href="{{ ucHref }}" style="align-self:flex-start;margin-top:4px;font-size:13.5px;color:#f2f2f4;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(242,242,244,0.35);" style-hover="color:#7dd3fc;text-decoration-color:#0ea5e9;">Open {{ ucShader }} in the library</a>
           </div>
-          <div style="display:flex;flex-direction:column;border-top:1px solid rgba(242,242,244,0.08);">
-            <sc-for list="{{ ucSpecs }}" as="k" hint-placeholder-count="2">
-              <div style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid rgba(242,242,244,0.08);font-size:13.5px;"><span style="color:#7d7f89;">{{ k.label }}</span><span style="color:#f2f2f4;text-align:right;">{{ k.value }}</span></div>
-            </sc-for>
+          <div style="min-width:0;border-radius:10px;background:#09090b;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 6px 6px 12px;border-bottom:1px solid rgba(242,242,244,0.08);"><span style="font-size:12.5px;color:#7d7f89;">{{ ucLang }}</span><button onClick="{{ ucCopy }}" style="all:unset;cursor:pointer;padding:5px 12px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:12px;font-weight:500;" style-hover="background:#0ea5e9;color:#ffffff;transform:translateY(-1px);box-shadow:0 8px 24px -8px rgba(14,165,233,0.75);">{{ ucCopyLabel }}</button></div>
+            <pre style="margin:0;padding:12px 14px;font-family:'Geist Mono',monospace;font-size:12px;line-height:1.65;color:#d4d5db;"><sc-for list="{{ ucLines }}" as="l" hint-placeholder-count="5"><span style="display:block;white-space:pre-wrap;word-break:break-word;min-height:1.7em;"><sc-for list="{{ l.t }}" as="k" hint-placeholder-count="1"><span style="color:{{ k.c }};">{{ k.s }}</span></sc-for></span></sc-for></pre>
           </div>
-          <div style="display:flex;flex-direction:column;border-radius:10px;background:#09090b;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;">
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 6px 6px 12px;border-bottom:1px solid rgba(242,242,244,0.08);"><span style="font-size:12.5px;color:#7d7f89;">{{ ucLang }}</span><button onClick="{{ ucCopy }}" style="all:unset;cursor:pointer;padding:5px 12px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:12px;font-weight:500;" style-hover="background:#ffffff;">{{ ucCopyLabel }}</button></div>
-            <pre style="margin:0;padding:12px 14px;font-family:'Geist Mono',monospace;font-size:12px;line-height:1.65;color:#d4d5db;white-space:pre-wrap;word-break:break-word;">{{ ucCode }}</pre>
-          </div>
-          <a href="{{ ucHref }}" style="margin-top:auto;align-self:flex-start;font-size:13.5px;color:#f2f2f4;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(242,242,244,0.35);" style-hover="text-decoration-color:#f2f2f4;">Open {{ ucEffectName }} in the library</a>
         </div>
       </div>
     </div>
@@ -214,52 +249,33 @@ input::placeholder{color:#6f717b;}
     <span style="position:absolute;left:-5px;top:-7px;font-family:'Geist Mono',monospace;font-size:13px;line-height:1;color:#5f616b;pointer-events:none;">+</span><span style="position:absolute;right:-5px;top:-7px;font-family:'Geist Mono',monospace;font-size:13px;line-height:1;color:#5f616b;pointer-events:none;">+</span>
     <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;padding:clamp(40px,6vw,64px) clamp(16px,3vw,28px) 28px;">
       <h2 style="margin:0;font-weight:400;font-size:clamp(30px,3.6vw,44px);letter-spacing:-0.035em;line-height:1.05;max-width:560px;">Where you can use it</h2>
-      <p style="margin:0;font-size:15px;line-height:1.55;color:#a4a6b0;max-width:440px;text-wrap:pretty;">One file covers your site, your videos and your coding agent. Settings you pick carry over between them.</p>
+      <p style="margin:0;font-size:15px;line-height:1.55;color:#a4a6b0;max-width:440px;text-wrap:pretty;">Five places Shaderfield fits. Open one to see the code that adds it.</p>
     </div>
-    <div style="display:flex;flex-wrap:wrap;gap:14px;padding:0 clamp(16px,3vw,28px) clamp(40px,6vw,64px);">
-      <a href="./components.html" style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;border-radius:16px;background:#0e0e11;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;color:#f2f2f4;transition:outline-color .2s;" style-hover="outline-color:rgba(242,242,244,0.28);color:#f2f2f4;">
-        <div style="position:relative;height:190px;margin:12px 12px 0;border-radius:10px;overflow:hidden;background:#050506;outline:1px solid rgba(242,242,244,0.08);">
-          <div style="position:absolute;left:0;right:0;top:0;height:24px;display:flex;align-items:center;gap:5px;padding:0 10px;background:#141418;border-bottom:1px solid rgba(242,242,244,0.08);z-index:1;"><span style="width:7px;height:7px;border-radius:50%;background:#3a3a42;"></span><span style="width:7px;height:7px;border-radius:50%;background:#3a3a42;"></span><span style="width:7px;height:7px;border-radius:50%;background:#3a3a42;"></span></div>
-          <div style="position:absolute;left:0;right:0;bottom:0;top:24px;">
-            <div ref="{{ appWebRef }}" style="position:absolute;inset:0;"></div>
-            <div style="position:absolute;inset:0;background:linear-gradient(to top right,rgba(9,9,11,0.8),rgba(9,9,11,0) 70%);pointer-events:none;"></div>
-            <div style="position:absolute;left:16px;bottom:14px;display:flex;flex-direction:column;gap:8px;pointer-events:none;"><span style="font-size:19px;font-weight:500;letter-spacing:-0.03em;line-height:1;">Your headline</span><span style="align-self:flex-start;padding:5px 10px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:10.5px;font-weight:500;">Get started</span></div>
-            <span style="position:absolute;right:10px;top:10px;padding:3px 8px;border-radius:999px;background:rgba(9,9,11,0.7);font-size:10.5px;color:#d4d5db;pointer-events:none;">Move your cursor</span>
-          </div></div>
-        <div style="display:flex;flex-direction:column;gap:12px;padding:20px 20px 22px;flex:1;">
-          <h3 style="margin:0;font-size:18px;font-weight:500;letter-spacing:-0.02em;">Websites</h3>
-          <p style="margin:0;font-size:14px;line-height:1.5;color:#a4a6b0;text-wrap:pretty;">Each shader is one HTML element that fills its container and reacts to the cursor.</p>
-          <div style="display:flex;flex-wrap:wrap;gap:6px;"><span style="padding:4px 10px;border-radius:999px;background:#16161a;font-size:12px;color:#c9cad1;">Hero backgrounds</span><span style="padding:4px 10px;border-radius:999px;background:#16161a;font-size:12px;color:#c9cad1;">Text motion</span><span style="padding:4px 10px;border-radius:999px;background:#16161a;font-size:12px;color:#c9cad1;">Transitions</span></div>
-          <code style="margin-top:auto;padding-top:12px;border-top:1px solid rgba(242,242,244,0.08);font-family:'Geist Mono',monospace;font-size:12px;color:#d4d5db;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">&lt;shader-field effect="halo" interactive&gt;</code>
-        </div>
-      </a>
-      <a href="./components.html#current" style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;border-radius:16px;background:#0e0e11;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;color:#f2f2f4;transition:outline-color .2s;" style-hover="outline-color:rgba(242,242,244,0.28);color:#f2f2f4;">
-        <div style="position:relative;height:190px;margin:12px 12px 0;border-radius:10px;overflow:hidden;background:#050506;outline:1px solid rgba(242,242,244,0.08);">
-          <div style="position:absolute;inset:14px 14px 44px;display:flex;gap:4px;">
-            <sc-for list="{{ appFrames }}" as="f" hint-placeholder-count="5"><span style="flex:1;min-width:0;border-radius:5px;background-color:#16161a;background-image:{{ f.img }};background-size:cover;background-position:center;outline:1px solid rgba(242,242,244,0.1);"></span></sc-for>
+    <div style="margin:0 clamp(16px,3vw,28px) clamp(40px,6vw,64px);border-radius:14px;background:#0e0e11;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;">
+      <sc-for list="{{ whereRows }}" as="w" hint-placeholder-count="5">
+        <div style="border-top:{{ w.rule }};background:{{ w.bg }};transition:background 0.25s ease;">
+          <button onClick="{{ w.toggle }}" aria-expanded="{{ w.open }}" style="all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;padding:18px clamp(16px,2.4vw,24px);" style-hover="background:rgba(14,165,233,0.05);">
+            <span style="flex:none;width:28px;font-family:'Geist Mono',monospace;font-size:11px;color:{{ w.numColor }};">{{ w.num }}</span>
+            <span style="flex:1 1 240px;min-width:0;display:flex;flex-direction:column;gap:4px;"><span style="font-size:16.5px;font-weight:500;letter-spacing:-0.02em;color:#f2f2f4;">{{ w.name }}</span><span style="font-size:14px;line-height:1.5;color:#a4a6b0;text-wrap:pretty;">{{ w.desc }}</span></span>
+            <span style="flex:0 1 360px;min-width:0;display:flex;align-items:center;gap:10px;"><span style="flex:none;padding:2px 7px;border-radius:5px;outline:1px solid rgba(242,242,244,0.14);font-family:'Geist Mono',monospace;font-size:10.5px;color:#a4a6b0;">{{ w.lang }}</span><code style="flex:1;min-width:0;font-family:'Geist Mono',monospace;font-size:12.5px;color:#c9cad1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:{{ w.shortOp }};transition:opacity 0.25s ease;">{{ w.short }}</code></span>
+            <span aria-hidden="true" style="flex:none;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;outline:1px solid rgba(242,242,244,0.14);font-size:16px;line-height:1;color:#c9cad1;transform:{{ w.rot }};transition:transform 0.3s ease;">+</span>
+          </button>
+          <div style="display:grid;grid-template-rows:{{ w.rows }};transition:grid-template-rows 0.35s cubic-bezier(0.2,0.7,0.2,1);">
+            <div style="min-height:0;overflow:hidden;">
+              <div style="display:flex;flex-wrap:wrap;gap:16px 24px;padding:0 clamp(16px,2.4vw,24px) 22px calc(clamp(16px,2.4vw,24px) + 48px);">
+                <div style="flex:1 1 420px;min-width:0;border-radius:10px;background:#09090b;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:6px 6px 6px 12px;border-bottom:1px solid rgba(242,242,244,0.08);"><span style="font-family:'Geist Mono',monospace;font-size:11.5px;color:#7d7f89;">{{ w.file }}</span><button onClick="{{ w.copy }}" style="all:unset;cursor:pointer;padding:5px 12px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:12px;font-weight:500;" style-hover="background:#0ea5e9;color:#ffffff;transform:translateY(-1px);box-shadow:0 8px 24px -8px rgba(14,165,233,0.75);">{{ w.copyLabel }}</button></div>
+                  <pre style="margin:0;padding:12px 0;font-family:'Geist Mono',monospace;font-size:12px;line-height:1.7;color:#d4d5db;overflow-x:auto;"><sc-for list="{{ w.lines }}" as="l" hint-placeholder-count="4"><span style="display:flex;"><span style="flex:none;width:36px;padding-right:12px;text-align:right;color:#3f4048;user-select:none;">{{ l.n }}</span><span style="white-space:pre;padding-right:14px;"><sc-for list="{{ l.t }}" as="k" hint-placeholder-count="1"><span style="color:{{ k.c }};">{{ k.s }}</span></sc-for></span></span></sc-for></pre>
+                </div>
+                <div style="flex:1 1 200px;min-width:0;display:flex;flex-direction:column;gap:12px;font-size:13.5px;">
+                  <sc-for list="{{ w.specs }}" as="k" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:3px;padding-bottom:10px;border-bottom:1px solid rgba(242,242,244,0.08);"><span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:0.04em;text-transform:uppercase;color:#7d7f89;">{{ k.label }}</span><span style="color:#f2f2f4;line-height:1.45;">{{ k.value }}</span></div></sc-for>
+                  <a href="{{ w.href }}" style="align-self:flex-start;color:#f2f2f4;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(242,242,244,0.35);" style-hover="color:#7dd3fc;text-decoration-color:#0ea5e9;">{{ w.cta }}</a>
+                </div>
+              </div>
+            </div>
           </div>
-          <div style="position:absolute;left:14px;right:14px;top:14px;bottom:44px;pointer-events:none;">{{ appPlayhead }}</div>
-          <div style="position:absolute;left:14px;right:14px;bottom:12px;display:flex;justify-content:space-between;align-items:center;font-family:'Geist Mono',monospace;font-size:11px;color:#7d7f89;"><span>00:00</span><span style="padding:2px 7px;border-radius:4px;outline:1px solid rgba(242,242,244,0.25);color:#d4d5db;">4K · 60 fps</span><span>00:06</span></div></div>
-        <div style="display:flex;flex-direction:column;gap:12px;padding:20px 20px 22px;flex:1;">
-          <h3 style="margin:0;font-size:18px;font-weight:500;letter-spacing:-0.02em;">Motion video</h3>
-          <p style="margin:0;font-size:14px;line-height:1.5;color:#a4a6b0;text-wrap:pretty;">Record a clip or render frame by frame. The same time always gives the same frame.</p>
-          <div style="display:flex;flex-wrap:wrap;gap:6px;"><span style="padding:4px 10px;border-radius:999px;background:#16161a;font-size:12px;color:#c9cad1;">1080p and 4K</span><span style="padding:4px 10px;border-radius:999px;background:#16161a;font-size:12px;color:#c9cad1;">Remotion</span><span style="padding:4px 10px;border-radius:999px;background:#16161a;font-size:12px;color:#c9cad1;">PNG stills</span></div>
-          <code style="margin-top:auto;padding-top:12px;border-top:1px solid rgba(242,242,244,0.08);font-family:'Geist Mono',monospace;font-size:12px;color:#d4d5db;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">field.record({ width: 3840, height: 2160 })</code>
         </div>
-      </a>
-      <a href="./components.html#halo" style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;border-radius:16px;background:#0e0e11;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;color:#f2f2f4;transition:outline-color .2s;" style-hover="outline-color:rgba(242,242,244,0.28);color:#f2f2f4;">
-        <div style="position:relative;height:190px;margin:12px 12px 0;border-radius:10px;overflow:hidden;background:#050506;outline:1px solid rgba(242,242,244,0.08);">
-          <div style="position:absolute;inset:0;display:flex;flex-direction:column;gap:8px;padding:14px;font-size:12.5px;line-height:1.45;">
-            <span style="align-self:flex-end;max-width:80%;padding:7px 11px;border-radius:12px 12px 4px 12px;background:#26262c;color:#f2f2f4;">Add the Halo shader behind our hero</span>
-            <span style="align-self:flex-start;max-width:92%;padding:8px 11px;border-radius:12px 12px 12px 4px;background:#141418;outline:1px solid rgba(242,242,244,0.08);color:#c9cad1;font-family:'Geist Mono',monospace;font-size:11.5px;white-space:pre-wrap;min-height:58px;">{{ appTyped }}<span style="display:inline-block;width:6px;height:12px;margin-left:1px;vertical-align:-2px;background:#f2f2f4;opacity:{{ appCaret }};"></span></span>
-          </div></div>
-        <div style="display:flex;flex-direction:column;gap:12px;padding:20px 20px 22px;flex:1;">
-          <h3 style="margin:0;font-size:18px;font-weight:500;letter-spacing:-0.02em;">Coding agents</h3>
-          <p style="margin:0;font-size:14px;line-height:1.5;color:#a4a6b0;text-wrap:pretty;">Copy a prompt with your settings and paste it into Claude Code, Cursor or another agent.</p>
-          <div style="display:flex;flex-wrap:wrap;gap:6px;"><span style="padding:4px 10px;border-radius:999px;background:#16161a;font-size:12px;color:#c9cad1;">Exact values</span><span style="padding:4px 10px;border-radius:999px;background:#16161a;font-size:12px;color:#c9cad1;">Web or video</span><span style="padding:4px 10px;border-radius:999px;background:#16161a;font-size:12px;color:#c9cad1;">Placement rules</span></div>
-          <code style="margin-top:auto;padding-top:12px;border-top:1px solid rgba(242,242,244,0.08);font-family:'Geist Mono',monospace;font-size:12px;color:#d4d5db;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">AI prompt tab → paste into your agent</code>
-        </div>
-      </a>
+      </sc-for>
     </div>
   </section>
 
@@ -267,59 +283,72 @@ input::placeholder{color:#6f717b;}
     <span style="position:absolute;left:-5px;top:-7px;font-family:'Geist Mono',monospace;font-size:13px;line-height:1;color:#5f616b;pointer-events:none;">+</span><span style="position:absolute;right:-5px;top:-7px;font-family:'Geist Mono',monospace;font-size:13px;line-height:1;color:#5f616b;pointer-events:none;">+</span>
     <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;padding:clamp(40px,6vw,64px) clamp(16px,3vw,28px) 32px;">
       <h2 style="margin:0;font-weight:400;font-size:clamp(30px,3.6vw,44px);letter-spacing:-0.035em;line-height:1.05;max-width:560px;text-wrap:balance;">What the library handles for you</h2>
-      <p style="margin:0;font-size:15px;line-height:1.55;color:#a4a6b0;max-width:440px;text-wrap:pretty;">These previews run on shaderfield.js, the same file you download.</p>
+      <p style="margin:0;font-size:15px;line-height:1.55;color:#a4a6b0;max-width:440px;text-wrap:pretty;">Four things you get without writing extra code. Every preview below runs on shaderfield.js, the same file you download.</p>
     </div>
-    <div style="display:flex;flex-direction:column;gap:14px;padding:0 clamp(16px,3vw,28px) clamp(40px,6vw,64px);">
-      <div style="display:flex;flex-wrap:wrap;gap:14px;">
-        <div style="flex:2 1 520px;min-width:0;border-radius:16px;background:#0e0e11;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;display:flex;flex-direction:column;">
-          <div style="display:flex;flex-direction:column;gap:6px;padding:22px 22px 0;"><h3 style="margin:0;font-size:17px;font-weight:500;letter-spacing:-0.015em;">Palettes</h3><p style="margin:0;font-size:14px;line-height:1.5;color:#a4a6b0;text-wrap:pretty;">Click a swatch to recolor the shader. You can also set any parameter as an HTML attribute.</p></div>
-          <div style="position:relative;margin:18px 22px 22px;aspect-ratio:16/7;min-height:200px;border-radius:12px;overflow:hidden;background:#000;">
-            <div ref="{{ palRef }}" style="position:absolute;inset:0;"></div>
-            <div style="position:absolute;left:12px;right:12px;bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
-              <div style="display:flex;gap:6px;padding:6px;border-radius:999px;background:rgba(9,9,11,0.72);backdrop-filter:blur(8px);">
-                <sc-for list="{{ palChips }}" as="p" hint-placeholder-count="8">
-                  <button onClick="{{ p.pick }}" title="{{ p.name }}" aria-label="{{ p.name }} palette" style="all:unset;cursor:pointer;width:22px;height:22px;border-radius:50%;background:{{ p.bg }};box-shadow:0 0 0 2px rgba(9,9,11,0.9), 0 0 0 3.5px {{ p.ring }};transition:transform .2s;" style-hover="transform:scale(1.15);"></button>
-                </sc-for>
-              </div>
-              <code style="padding:7px 12px;border-radius:999px;background:rgba(9,9,11,0.72);backdrop-filter:blur(8px);font-family:'Geist Mono',monospace;font-size:12px;color:#d4d5db;">palette="{{ pal }}"</code>
+    <div style="display:flex;flex-wrap:wrap;border-top:1px solid rgba(242,242,244,0.08);">
+      <div style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:10px;padding:clamp(22px,3vw,32px) clamp(16px,3vw,28px);box-shadow:1px 0 0 rgba(242,242,244,0.08);">
+        <span style="font-family:'Geist Mono',monospace;font-size:11.5px;color:#38bdf8;">01</span>
+        <h3 style="margin:0;font-size:19px;font-weight:500;letter-spacing:-0.02em;">Palettes</h3>
+        <p style="margin:0;font-size:14.5px;line-height:1.55;color:#a4a6b0;max-width:380px;text-wrap:pretty;">Every shader ships with colour palettes made for it. Click a swatch to recolor the preview, or set any palette and parameter as an HTML attribute.</p>
+        <code style="align-self:flex-start;margin-top:6px;padding:5px 10px;border-radius:6px;background:#0e0e11;outline:1px solid rgba(242,242,244,0.08);font-family:'Geist Mono',monospace;font-size:12px;color:#c9cad1;">palette="aurora"</code>
+      </div>
+      <div style="flex:2 1 520px;min-width:0;padding:clamp(16px,2.6vw,24px) clamp(16px,3vw,28px);"><div style="position:relative;aspect-ratio:16/6;min-height:190px;border-radius:12px;overflow:hidden;background:#000;outline:1px solid rgba(242,242,244,0.08);">
+          <div ref="{{ palRef }}" style="position:absolute;inset:0;"></div>
+          <div style="position:absolute;left:12px;right:12px;bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+            <div style="display:flex;gap:6px;padding:6px;border-radius:999px;background:rgba(9,9,11,0.72);backdrop-filter:blur(8px);">
+              <sc-for list="{{ palChips }}" as="p" hint-placeholder-count="8"><button onClick="{{ p.pick }}" title="{{ p.name }}" aria-label="{{ p.name }} palette" style="all:unset;cursor:pointer;width:22px;height:22px;border-radius:50%;background:{{ p.bg }};box-shadow:0 0 0 2px rgba(9,9,11,0.9), 0 0 0 3.5px {{ p.ring }};transition:transform .2s;" style-hover="transform:scale(1.15);"></button></sc-for>
             </div>
+            <code style="padding:7px 12px;border-radius:999px;background:rgba(9,9,11,0.72);backdrop-filter:blur(8px);font-family:'Geist Mono',monospace;font-size:12px;color:#d4d5db;">palette="{{ pal }}"</code>
           </div>
-        </div>
-        <div style="flex:1 1 280px;min-width:0;border-radius:16px;background:#0e0e11;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;display:flex;flex-direction:column;">
-          <div style="display:flex;flex-direction:column;gap:6px;padding:22px 22px 0;"><h3 style="margin:0;font-size:17px;font-weight:500;letter-spacing:-0.015em;">Same frame every time</h3><p style="margin:0;font-size:14px;line-height:1.5;color:#a4a6b0;text-wrap:pretty;">Drag the slider to move through time. A given time always draws the same frame, which is why video renders come out the same twice.</p></div>
-          <div style="position:relative;margin:18px 22px 0;flex:1;min-height:180px;border-radius:12px;overflow:hidden;background:#000;">
-            <div ref="{{ scrubRef }}" style="position:absolute;inset:0;"></div>
-          </div>
-          <label style="display:flex;align-items:center;gap:12px;padding:16px 22px 22px;">
+        </div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;border-top:1px solid rgba(242,242,244,0.08);">
+      <div style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:10px;padding:clamp(22px,3vw,32px) clamp(16px,3vw,28px);box-shadow:1px 0 0 rgba(242,242,244,0.08);">
+        <span style="font-family:'Geist Mono',monospace;font-size:11.5px;color:#38bdf8;">02</span>
+        <h3 style="margin:0;font-size:19px;font-weight:500;letter-spacing:-0.02em;">Same frame every time</h3>
+        <p style="margin:0;font-size:14.5px;line-height:1.55;color:#a4a6b0;max-width:380px;text-wrap:pretty;">Time drives the picture, not the clock. Drag through the timeline: a given time always draws the same frame, so video renders come out identical every time.</p>
+        <code style="align-self:flex-start;margin-top:6px;padding:5px 10px;border-radius:6px;background:#0e0e11;outline:1px solid rgba(242,242,244,0.08);font-family:'Geist Mono',monospace;font-size:12px;color:#c9cad1;">field.render(seconds)</code>
+      </div>
+      <div style="flex:2 1 520px;min-width:0;padding:clamp(16px,2.6vw,24px) clamp(16px,3vw,28px);"><div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="position:relative;aspect-ratio:16/6;min-height:180px;border-radius:12px;overflow:hidden;background:#000;outline:1px solid rgba(242,242,244,0.08);"><div ref="{{ scrubRef }}" style="position:absolute;inset:0;"></div></div>
+          <label style="display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:999px;background:#0e0e11;outline:1px solid rgba(242,242,244,0.08);">
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;color:#7d7f89;">0s</span>
             <input type="range" min="0" max="12" step="0.01" value="{{ scrub }}" onChange="{{ setScrub }}" aria-label="Time" style="flex:1;margin:0;"></input>
-            <code style="flex:none;width:72px;text-align:right;font-family:'Geist Mono',monospace;font-size:12px;color:#d4d5db;">t = {{ scrubLabel }}</code>
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;color:#7d7f89;">12s</span>
+            <code style="flex:none;min-width:70px;text-align:right;font-family:'Geist Mono',monospace;font-size:12px;color:#f2f2f4;">t = {{ scrubLabel }}</code>
           </label>
-        </div>
+        </div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;border-top:1px solid rgba(242,242,244,0.08);">
+      <div style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:10px;padding:clamp(22px,3vw,32px) clamp(16px,3vw,28px);box-shadow:1px 0 0 rgba(242,242,244,0.08);">
+        <span style="font-family:'Geist Mono',monospace;font-size:11.5px;color:#38bdf8;">03</span>
+        <h3 style="margin:0;font-size:19px;font-weight:500;letter-spacing:-0.02em;">Any screen size</h3>
+        <p style="margin:0;font-size:14.5px;line-height:1.55;color:#a4a6b0;max-width:380px;text-wrap:pretty;">A shader fills its container and follows it as it resizes, rendering at the screen's pixel density from a phone up to a 4K display.</p>
+        <code style="align-self:flex-start;margin-top:6px;padding:5px 10px;border-radius:6px;background:#0e0e11;outline:1px solid rgba(242,242,244,0.08);font-family:'Geist Mono',monospace;font-size:12px;color:#c9cad1;">auto resize · up to 2× DPR</code>
       </div>
-      <div style="display:flex;flex-wrap:wrap;gap:14px;">
-        <div style="flex:1 1 280px;min-width:0;border-radius:16px;background:#0e0e11;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;display:flex;flex-direction:column;">
-          <div style="display:flex;flex-direction:column;gap:6px;padding:22px 22px 0;"><h3 style="margin:0;font-size:17px;font-weight:500;letter-spacing:-0.015em;">Any screen size</h3><p style="margin:0;font-size:14px;line-height:1.5;color:#a4a6b0;text-wrap:pretty;">A shader resizes with its container and renders at the screen's pixel density, from a phone to a 4K display.</p></div>
-          <div style="position:relative;margin:18px 22px 0;height:200px;border-radius:12px;background:#09090b;outline:1px dashed rgba(242,242,244,0.12);display:flex;align-items:center;justify-content:center;">
-            <div style="position:relative;height:{{ resH }};width:{{ resW }};border-radius:10px;overflow:hidden;background:#000;outline:1px solid rgba(242,242,244,0.18);transition:width .5s cubic-bezier(.2,.8,.2,1), height .5s cubic-bezier(.2,.8,.2,1);">
-              <div ref="{{ resRef }}" style="position:absolute;inset:0;"></div>
-            </div>
+      <div style="flex:2 1 520px;min-width:0;padding:clamp(16px,2.6vw,24px) clamp(16px,3vw,28px);"><div style="display:flex;flex-wrap:wrap;gap:12px;">
+          <div style="flex:1 1 320px;min-width:0;position:relative;height:260px;border-radius:12px;background:#0b0b0d;outline:1px dashed rgba(242,242,244,0.14);display:flex;align-items:center;justify-content:center;overflow:hidden;">
+            <div style="position:relative;height:{{ resH }};aspect-ratio:{{ resAR }};max-width:92%;border-radius:{{ resR }};overflow:hidden;background:#000;outline:1px solid rgba(242,242,244,0.22);box-shadow:0 0 0 4px rgba(242,242,244,0.04);transition:height .45s cubic-bezier(.2,.8,.2,1), border-radius .45s;"><div ref="{{ resRef }}" style="position:absolute;inset:0;"></div></div>
           </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:16px 22px 22px;">
-            <div style="display:flex;gap:4px;flex-wrap:wrap;"><sc-for list="{{ resChips }}" as="r" hint-placeholder-count="3"><button onClick="{{ r.pick }}" style="all:unset;cursor:pointer;padding:6px 12px;border-radius:999px;font-size:12.5px;background:{{ r.bg }};color:{{ r.color }};" style-hover="color:#ffffff;">{{ r.name }}</button></sc-for></div>
-            <code style="font-family:'Geist Mono',monospace;font-size:12px;color:#7d7f89;">{{ resLabel }}</code>
+          <div role="radiogroup" aria-label="Screen size" style="flex:0 1 180px;min-width:150px;display:flex;flex-direction:column;gap:4px;">
+            <sc-for list="{{ resChips }}" as="r" hint-placeholder-count="4"><button onClick="{{ r.pick }}" role="radio" aria-checked="{{ r.sel }}" style="all:unset;cursor:pointer;display:flex;flex-direction:column;gap:2px;padding:10px 14px;border-radius:10px;background:{{ r.bg }};outline:1px solid {{ r.ring }};" style-hover="background:rgba(14,165,233,0.08);"><span style="font-size:13.5px;font-weight:500;color:{{ r.color }};">{{ r.name }}</span><span style="font-family:'Geist Mono',monospace;font-size:11px;color:#7d7f89;">{{ r.size }}</span></button></sc-for>
           </div>
-        </div>
-        <div style="flex:2 1 520px;min-width:0;border-radius:16px;background:#0e0e11;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;display:flex;flex-direction:column;">
-          <div style="display:flex;flex-direction:column;gap:6px;padding:22px 22px 0;"><h3 style="margin:0;font-size:17px;font-weight:500;letter-spacing:-0.015em;">Installation</h3><p style="margin:0;font-size:14px;line-height:1.5;color:#a4a6b0;text-wrap:pretty;">Shaderfield is one JavaScript file with no dependencies. It works in plain HTML and in any framework that renders to the DOM.</p></div>
-          <div style="margin:18px 22px 22px;flex:1;display:flex;flex-direction:column;border-radius:12px;background:#09090b;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;">
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 8px 8px 10px;border-bottom:1px solid rgba(242,242,244,0.08);">
-              <div style="display:flex;gap:4px;"><sc-for list="{{ instTabs }}" as="t" hint-placeholder-count="3"><button onClick="{{ t.pick }}" style="all:unset;cursor:pointer;padding:6px 12px;border-radius:999px;font-size:12.5px;background:{{ t.bg }};color:{{ t.color }};" style-hover="color:#ffffff;">{{ t.name }}</button></sc-for></div>
-              <button onClick="{{ copyInst }}" style="all:unset;cursor:pointer;padding:6px 14px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:12.5px;font-weight:500;" style-hover="background:#ffffff;">{{ copyLabel }}</button>
-            </div>
-            <pre style="margin:0;flex:1;padding:16px 18px;font-family:'Geist Mono',monospace;font-size:12.5px;line-height:1.7;color:#d4d5db;white-space:pre-wrap;word-break:break-word;min-height:150px;">{{ instCode }}</pre>
-          </div>
-        </div>
+        </div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;border-top:1px solid rgba(242,242,244,0.08);">
+      <div style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:10px;padding:clamp(22px,3vw,32px) clamp(16px,3vw,28px);box-shadow:1px 0 0 rgba(242,242,244,0.08);">
+        <span style="font-family:'Geist Mono',monospace;font-size:11.5px;color:#38bdf8;">04</span>
+        <h3 style="margin:0;font-size:19px;font-weight:500;letter-spacing:-0.02em;">One file to install</h3>
+        <p style="margin:0;font-size:14.5px;line-height:1.55;color:#a4a6b0;max-width:380px;text-wrap:pretty;">Shaderfield is a single JavaScript file with no dependencies. Use it in plain HTML or in any framework that renders to the DOM.</p>
+        <code style="align-self:flex-start;margin-top:6px;padding:5px 10px;border-radius:6px;background:#0e0e11;outline:1px solid rgba(242,242,244,0.08);font-family:'Geist Mono',monospace;font-size:12px;color:#c9cad1;">&lt;script src="shaderfield.js"&gt;</code>
       </div>
+      <div style="flex:2 1 520px;min-width:0;padding:clamp(16px,2.6vw,24px) clamp(16px,3vw,28px);"><div style="display:flex;flex-direction:column;border-radius:12px;background:#09090b;outline:1px solid rgba(242,242,244,0.08);overflow:hidden;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 10px 10px 12px;border-bottom:1px solid rgba(242,242,244,0.08);">
+            <div style="display:flex;gap:4px;flex-wrap:wrap;"><sc-for list="{{ instTabs }}" as="t" hint-placeholder-count="3"><button onClick="{{ t.pick }}" style="all:unset;cursor:pointer;padding:6px 14px;border-radius:999px;font-size:12.5px;background:{{ t.bg }};color:{{ t.color }};" style-hover="color:#7dd3fc;">{{ t.name }}</button></sc-for></div>
+            <button onClick="{{ copyInst }}" style="all:unset;cursor:pointer;flex:none;padding:6px 16px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:12.5px;font-weight:500;" style-hover="background:#0ea5e9;color:#ffffff;transform:translateY(-1px);box-shadow:0 8px 24px -8px rgba(14,165,233,0.75);">{{ copyLabel }}</button>
+          </div>
+          <pre style="margin:0;padding:18px 20px;font-family:'Geist Mono',monospace;font-size:12.5px;line-height:1.7;color:#d4d5db;min-height:150px;"><sc-for list="{{ instLines }}" as="l" hint-placeholder-count="5"><span style="display:block;white-space:pre-wrap;word-break:break-word;min-height:1.7em;"><sc-for list="{{ l.t }}" as="k" hint-placeholder-count="1"><span style="color:{{ k.c }};">{{ k.s }}</span></sc-for></span></sc-for></pre>
+        </div></div>
     </div>
   </section>
 
@@ -332,7 +361,7 @@ input::placeholder{color:#6f717b;}
     <div style="display:flex;flex-wrap:wrap;border-top:1px solid rgba(242,242,244,0.08);">
       <div style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;border-right:1px solid rgba(242,242,244,0.08);">
         <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
-          <button onClick="{{ s.pick }}" style="all:unset;cursor:pointer;display:flex;gap:16px;padding:24px clamp(16px,3vw,28px);border-bottom:1px solid rgba(242,242,244,0.08);background:{{ s.bg }};" style-hover="background:#0e0e11;">
+          <button onClick="{{ s.pick }}" style="all:unset;cursor:pointer;display:flex;gap:16px;padding:24px clamp(16px,3vw,28px);border-bottom:1px solid rgba(242,242,244,0.08);background:{{ s.bg }};" style-hover="background:rgba(14,165,233,0.05);">
             <span style="position:relative;flex:none;width:32px;height:32px;display:flex;align-items:center;justify-content:center;margin-top:-4px;">
               <svg width="32" height="32" viewBox="0 0 32 32" style="position:absolute;inset:0;transform:rotate(-90deg);"><circle cx="16" cy="16" r="15" fill="none" stroke="rgba(242,242,244,0.12)" stroke-width="1.5"></circle>{{ s.ring }}</svg>
               <span style="position:relative;font-family:'Geist Mono',monospace;font-size:11.5px;color:{{ s.numColor }};">{{ s.num }}</span>
@@ -351,7 +380,7 @@ input::placeholder{color:#6f717b;}
             <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;background:#09090b;outline:1px solid rgba(242,242,244,0.08);font-size:13.5px;color:#7d7f89;">Search {{ libTotal }} components…</div>
             <div style="display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;overflow:auto;">
               <sc-for list="{{ shaderLinks }}" as="l" hint-placeholder-count="12">
-                <a href="{{ l.href }}" style="display:flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-radius:999px;background:#16161a;font-size:13px;color:#d4d5db;" style-hover="background:#1f1f25;color:#ffffff;">
+                <a href="{{ l.href }}" style="display:flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-radius:999px;background:#16161a;font-size:13px;color:#d4d5db;" style-hover="background:rgba(14,165,233,0.16);color:#ffffff;">
                   <span style="width:16px;height:16px;border-radius:50%;background:{{ l.bg }};"></span>{{ l.name }}
                 </a>
               </sc-for>
@@ -394,12 +423,12 @@ input::placeholder{color:#6f717b;}
       <div style="flex:2 1 480px;min-width:0;display:flex;flex-direction:column;border-top:1px solid rgba(242,242,244,0.08);">
         <sc-for list="{{ faqs }}" as="f" hint-placeholder-count="6">
           <div style="border-bottom:1px solid rgba(242,242,244,0.08);">
-            <button onClick="{{ f.toggle }}" aria-expanded="{{ f.open }}" style="all:unset;cursor:pointer;box-sizing:border-box;width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 0;font-size:16px;color:{{ f.color }};" style-hover="color:#ffffff;">
+            <button onClick="{{ f.toggle }}" aria-expanded="{{ f.open }}" style="all:unset;cursor:pointer;box-sizing:border-box;width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 0;font-size:16px;color:{{ f.color }};" style-hover="color:#7dd3fc;">
               <span>{{ f.q }}</span>
               <span style="flex:none;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;outline:1px solid rgba(242,242,244,0.14);font-size:16px;transform:rotate({{ f.rot }});transition:transform .25s;">+</span>
             </button>
             <div style="display:grid;grid-template-rows:{{ f.rows }};transition:grid-template-rows .3s cubic-bezier(.2,.8,.2,1);">
-              <div style="overflow:hidden;"><p style="margin:0;padding:0 44px 22px 0;font-size:14.5px;line-height:1.6;color:#a4a6b0;text-wrap:pretty;">{{ f.a }}</p></div>
+              <div style="overflow:hidden;"><p style="margin:0;padding:0 44px 22px 0;font-size:14.5px;line-height:1.6;color:#a4a6b0;text-wrap:pretty;">{{ f.a }}</p><sc-for list="{{ f.points }}" as="p" hint-placeholder-count="0"><div style="display:flex;gap:14px;padding:12px 44px 12px 0;border-top:1px solid rgba(242,242,244,0.06);"><span style="flex:none;width:6px;height:6px;margin-top:8px;border-radius:50%;background:#f2f2f4;opacity:0.6;"></span><span style="display:flex;flex-direction:column;gap:3px;"><span style="font-size:14.5px;font-weight:500;color:#f2f2f4;">{{ p.t }}</span><span style="font-size:14px;line-height:1.55;color:#a4a6b0;text-wrap:pretty;">{{ p.d }}</span></span></div></sc-for><div style="height:10px;"></div></div>
             </div>
           </div>
         </sc-for>
@@ -414,10 +443,10 @@ input::placeholder{color:#6f717b;}
       <div style="position:absolute;inset:0;background:linear-gradient(to top right,rgba(9,9,11,0.9) 10%,rgba(9,9,11,0.2) 70%);pointer-events:none;"></div>
       <div style="position:relative;display:flex;flex-direction:column;gap:18px;padding:clamp(24px,5vw,56px);max-width:620px;">
         <h2 style="margin:0;font-weight:400;font-size:clamp(36px,5vw,64px);letter-spacing:-0.045em;line-height:0.98;text-wrap:balance;">Add motion to your next site or video.</h2>
-        <p style="margin:0;font-size:16px;line-height:1.55;color:#d4d5db;">Download one file and start with any of the 27 shaders and 23 motion effects. It is MIT licensed and free to use.</p>
+        <p style="margin:0;font-size:16px;line-height:1.55;color:#d4d5db;">Download one file and start with any of the 31 shaders and 21 motion effects. It is MIT licensed and free to use.</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <a href="./components.html" style="padding:12px 22px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:14px;font-weight:500;" style-hover="background:#ffffff;color:#09090b;">Browse components</a>
-          <a href="./shaderfield.js" download="shaderfield.js" style="padding:12px 22px;border-radius:999px;background:rgba(9,9,11,0.6);outline:1px solid rgba(242,242,244,0.3);font-size:14px;" style-hover="outline-color:#f2f2f4;">Download shaderfield.js</a>
+          <a href="./components.html" style="padding:12px 22px;border-radius:999px;background:#f2f2f4;color:#09090b;font-size:14px;font-weight:500;" style-hover="background:#0ea5e9;color:#ffffff;transform:translateY(-1px);box-shadow:0 8px 24px -8px rgba(14,165,233,0.75);">Browse components</a>
+          <a href="./shaderfield.js" download="shaderfield.js" style="padding:12px 22px;border-radius:999px;background:rgba(9,9,11,0.6);outline:1px solid rgba(242,242,244,0.3);font-size:14px;" style-hover="outline-color:#0ea5e9;box-shadow:0 0 0 4px rgba(14,165,233,0.12);">Download shaderfield.js</a>
         </div>
       </div>
     </div>
@@ -425,19 +454,20 @@ input::placeholder{color:#6f717b;}
 
 
   <footer style="position:relative;padding:28px clamp(20px,4vw,48px) 40px;border-top:1px solid rgba(242,242,244,0.08);display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;font-size:13px;line-height:1.55;color:#7d7f89;">
-    <span style="max-width:720px;">Fret and Skein are adapted from shader.gallery (MIT, E. T. Carter). Halo and Thermal are native rewrites inspired by Paper Shaders. Current, Harmonia, Mesh and the motion helpers are original to Shaderfield.</span>
-    <span style="display:flex;align-items:baseline;gap:10px;"><span style="font-size:15px;letter-spacing:-0.03em;color:#f2f2f4;"><span style="font-weight:600;">Shader</span><span style="font-weight:400;">field</span></span><span style="font-family:'Geist Mono',monospace;font-size:11px;">v1.1 · 2026</span></span>
+    <span style="max-width:720px;display:inline-flex;flex-wrap:wrap;align-items:center;gap:6px 12px;"><span>Made for you by Nchanji Faithful</span><a href="https://github.com/nchanjifaithful" target="_blank" rel="noopener me" aria-label="Nchanji Faithful on GitHub" style="display:inline-flex;align-items:center;gap:6px;color:#c9cad1;text-decoration:none;" style-hover="color:#7dd3fc;"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>GitHub</a></span>
+    <span style="display:flex;align-items:baseline;gap:10px;"><span style="font-size:15px;letter-spacing:-0.03em;color:#f2f2f4;"><span style="font-weight:600;">Shader</span><span style="font-weight:400;">field</span></span><span style="font-family:'Geist Mono',monospace;font-size:11px;">v2.0 · 2026</span></span>
   </footer>
   </div>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 const HERO_MS = 8000, STEP_MS = 6000, UC_MS = 7000;
-const UC_FX = ["current", "halo", "fret", "skein", "thermal", "harmonia"];
+const UC_FX = ["current", "halo", "fret", "skein", "thermal", "harmonia", "hearth", "waves", "globe"];
 class Component extends DCLogic {
   state = { ready: false, heroId: "current", heroCycle: 0, pal: "plasma", scrub: 3.2, res: 2, inst: "html", copied: false, typed: "", step: 0, stepCycle: 0, faq: 0, tune: {}, uc: 0, ucCycle: 0, ucPlay: true };
-  heroRef = React.createRef(); palRef = React.createRef(); scrubRef = React.createRef(); resRef = React.createRef(); tuneRef = React.createRef(); ctaRef = React.createRef(); ucRef = React.createRef(); appWebRef = React.createRef();
+  heroRef = React.createRef(); palRef = React.createRef(); scrubRef = React.createRef(); resRef = React.createRef(); tuneRef = React.createRef(); ctaRef = React.createRef(); ucRefs = UC_FX.map(() => React.createRef()); appWebRef = React.createRef();
   componentDidMount() {
+    this.queueStep();
     const wait = () => window.Shaderfield ? this.init() : (this.waitId = setTimeout(wait, 50));
     wait();
   }
@@ -450,26 +480,15 @@ class Component extends DCLogic {
     this.res = SF.mount(this.resRef.current, { effect: fx("halo"), time: 2 });
     this.tune = SF.mount(this.tuneRef.current, { effect: "current", time: 9 });
     this.cta = SF.mount(this.ctaRef.current, { effect: fx("fret"), time: 7 });
-    this.ucField = SF.mount(this.ucRef.current, { effect: "current", time: 3 });
-    this.appWeb = SF.mount(this.appWebRef.current, { effect: "halo", time: 2 });
+    this.ucFields = []; this.mountUc(0);
+    this.appWeb = this.appWebRef.current ? SF.mount(this.appWebRef.current, { effect: "halo", time: 2 }) : null;
     this.typeLoop();
     this.setState({ ready: true, tune: { ...this.tune.params } });
-    this.queueHero(); this.queueStep(); this.queueUc();
+    this.queueHero(); this.queueStep();
   }
-  queueStep() { clearTimeout(this.stepT); this.stepT = setTimeout(() => this.goStep((this.state.step + 1) % 3), STEP_MS); }
-  queueUc(ms = UC_MS) { clearTimeout(this.ucT); this.ucStart = performance.now(); this.ucLeft = ms; this.ucT = setTimeout(() => this.goUc((this.state.uc + 1) % UC_FX.length), ms); }
-  goUc(j) {
-    const SF = this.SF, fx = SF && SF.EFFECTS[UC_FX[j]] ? UC_FX[j] : "current";
-    this.ucField && this.ucField.setEffect(fx);
-    this.setState(s => ({ uc: j, ucCycle: s.ucCycle + 1 }));
-    if (this.state.ucPlay) this.queueUc(); else this.ucLeft = UC_MS;
-  }
-  toggleUc() {
-    if (this.state.ucPlay) { clearTimeout(this.ucT); this.ucLeft = Math.max(200, this.ucLeft - (performance.now() - this.ucStart)); this.setState({ ucPlay: false }); }
-    else { this.setState({ ucPlay: true }); this.queueUc(this.ucLeft || UC_MS); }
-  }
+  queueStep() { this.stepAt = performance.now(); if (!this.stepI) this.stepI = setInterval(() => { if (performance.now() - this.stepAt >= STEP_MS) this.goStep(((this.state.step || 0) + 1) % 3); }, 200); }
   goStep(i) { this.setState(s => ({ step: i, stepCycle: s.stepCycle + 1 })); this.queueStep(); }
-  componentWillUnmount() { clearTimeout(this.waitId); clearTimeout(this.heroTimer); clearTimeout(this.stepT); clearInterval(this.typeI); clearTimeout(this.typeT); clearTimeout(this.ucT); [this.hero, this.pal, this.scrub, this.res, this.tune, this.cta, this.ucField, this.appWeb].forEach(f => f && f.destroy()); clearTimeout(this.cpT); }
+  componentWillUnmount() { clearTimeout(this.waitId); clearTimeout(this.heroTimer); clearTimeout(this.stepT); clearInterval(this.stepI); clearInterval(this.typeI); clearTimeout(this.typeT); [this.hero, this.pal, this.scrub, this.res, this.tune, this.cta, this.appWeb, ...(this.ucFields || [])].forEach(f => f && f.destroy()); clearTimeout(this.cpT); }
   typeLoop() {
     const full = "Added <shader-field effect=\"halo\">\nto the hero, behind the content.\nText contrast checked. Done.";
     let n = 0; clearInterval(this.typeI);
@@ -487,7 +506,7 @@ class Component extends DCLogic {
   setHero(id) { this.hero.setEffect(id); this.setState(s => ({ heroId: id, heroCycle: s.heroCycle + 1 })); this.queueHero(); }
   staticVals() {
     const S = this.state, mute = "#a4a6b0", ink = "#f2f2f4";
-    const RES = [["Phone", "320 × 568", "34%", "86%"], ["Tablet", "768 × 1024", "52%", "92%"], ["Laptop", "1440 × 900", "78%", "82%"], ["4K", "3840 × 2160", "92%", "78%"]];
+    const RES = [["Phone", "320 × 568", "320 / 568", "86%", "14px"], ["Tablet", "768 × 1024", "768 / 1024", "86%", "12px"], ["Laptop", "1440 × 900", "1440 / 900", "70%", "8px"], ["4K display", "3840 × 2160", "3840 / 2160", "74%", "6px"]];
     const INST = {
       html: `<script src="shaderfield.js"></${"script"}>\n\n<section style="position:relative">\n  <shader-field effect="${S.ready ? "current" : "current"}" palette="${S.pal}" interactive\n    style="position:absolute; inset:0"></shader-field>\n</section>`,
       js: `const field = Shaderfield.mount(el, {\n  effect: "skein",\n  palette: "${S.pal}",\n  interactive: true\n});\n\nfield.set("speed", 0.6);\nfield.setPalette("aurora");`,
@@ -499,69 +518,89 @@ class Component extends DCLogic {
       ["Copy it out", "Copy the element for your site, record a clip for video, or copy the prompt for your agent.", "Seconds"],
     ];
     const FAQ = [
-      ["What is in the library?", "27 shaders and 23 motion effects. The shaders include GLSL fields, text and glyph shaders, particles and Canvas 2D scenes. The motion effects cover text, interface details and transitions. It all ships in one JavaScript file. Glass icons and coins are in a separate add-on that needs three.js."],
-      ["Can I use it in commercial work?", "Yes. Shaderfield is MIT licensed, so you can use it in personal, client and commercial projects. Fret and Skein are adapted from MIT-licensed shaders by E. T. Carter."],
+      ["What is in the library?", "31 shaders and 21 motion effects. The shaders include GLSL fields, text and glyph shaders, particles and Canvas 2D scenes. The motion effects cover text, interface details, transitions and light. It all ships in one JavaScript file. Glass Icons is in a separate add-on that needs three.js."],
+      ["Can I use it in commercial work?", "Yes. Shaderfield is MIT licensed, so you can use it in personal, client and commercial projects. Circuit Arcs and Woven Lines are adapted from MIT-licensed shaders by E. T. Carter."],
       ["Do I need React or a build step?", "No. Load the script and use the <shader-field> element. It works in static HTML, React, Vue, Svelte, or anything else that renders to the DOM."],
       ["How does it work with coding agents?", "Open a component, adjust it, then copy the text from its AI prompt tab into your agent. The prompt includes the effect, the palette and your values. There is one version for website sections and one for video backgrounds."],
       ["How do I export video?", "From a shader's Video tab you can record six seconds at 1080p or 4K. The file is MP4 or WebM, depending on your browser. To render inside Remotion or your own frame loop, call field.render(frame / fps) on each frame."],
-      ["Does it slow pages down?", "All shaders on a page share one WebGL context, and each one stops rendering when it is off screen. Visitors who have reduced motion turned on see a still frame."],
+      ["Does it slow pages down?", "No. Every shader on the page shares one WebGL context, so ten cost about the same as one. Shaders only draw while they are on screen, heavy ones render at half resolution, and visitors with reduced motion turned on see a still frame. The library is one small file with no dependencies."],
     ];
     const r = RES[S.res];
     return {
       heroRef: this.heroRef, palRef: this.palRef, scrubRef: this.scrubRef, resRef: this.resRef, tuneRef: this.tuneRef, ctaRef: this.ctaRef,
       pal: S.pal, scrub: S.scrub, scrubLabel: S.scrub.toFixed(2) + "s",
       setScrub: (ev) => { const t = parseFloat(ev.target.value); this.scrub && this.scrub.render(t); this.setState({ scrub: t }); },
-      resW: r[2], resH: r[3], resLabel: r[1],
-      resChips: RES.map((x, i) => ({ name: x[0], bg: i === S.res ? "#26262c" : "transparent", color: i === S.res ? ink : mute, pick: () => this.setState({ res: i }) })),
-      instTabs: [["html", "HTML"], ["js", "JavaScript"], ["react", "React"]].map(([k, n]) => ({ name: n, bg: S.inst === k ? "#26262c" : "transparent", color: S.inst === k ? ink : mute, pick: () => this.setState({ inst: k }) })),
-      instCode: INST[S.inst], copyInst: () => this.copyText(INST[S.inst]), copyLabel: S.copied ? "Copied" : "Copy",
+      resAR: r[2], resH: r[3], resR: r[4], resLabel: r[1],
+      resChips: RES.map((x, i) => ({ name: x[0], size: x[1] + " px", sel: i === S.res ? "true" : "false", bg: i === S.res ? "rgba(14,165,233,0.1)" : "transparent", ring: i === S.res ? "rgba(14,165,233,0.55)" : "transparent", color: i === S.res ? ink : mute, pick: () => this.setState({ res: i }) })),
+      instTabs: [["html", "HTML"], ["js", "JavaScript"], ["react", "React"]].map(([k, n]) => ({ name: n, bg: S.inst === k ? "rgba(14,165,233,0.16)" : "transparent", color: S.inst === k ? ink : mute, pick: () => this.setState({ inst: k }) })),
+      instCode: INST[S.inst], instLines: this.tokLines(INST[S.inst]), copyInst: () => this.copyText(INST[S.inst]), copyLabel: S.copied ? "Copied" : "Copy",
       steps: STEPS.map(([t, d, tm], i) => ({ num: "0" + (i + 1), title: t, desc: d, time: tm,
-        ring: i === S.step ? React.createElement("circle", { key: "r" + S.stepCycle, cx: 16, cy: 16, r: 15, fill: "none", stroke: "#f2f2f4", strokeWidth: 1.5, strokeLinecap: "round", strokeDasharray: 94.25, style: { animation: `sfRing ${STEP_MS}ms linear forwards` } }) : null, bg: i === S.step ? "#0e0e11" : "transparent", color: i === S.step ? "#ffffff" : "#c9cad1", numColor: i === S.step ? "#f2f2f4" : "#5f616b", pick: () => this.goStep(i) })),
+        ring: i === S.step ? React.createElement("circle", { key: "r" + S.stepCycle, cx: 16, cy: 16, r: 15, fill: "none", stroke: "#0ea5e9", strokeWidth: 1.5, strokeLinecap: "round", strokeDasharray: 94.25, style: { animation: `sfRing ${STEP_MS}ms linear forwards` } }) : null, bg: i === S.step ? "#0e0e11" : "transparent", color: i === S.step ? "#ffffff" : "#c9cad1", numColor: i === S.step ? "#f2f2f4" : "#5f616b", pick: () => this.goStep(i) })),
       step0: S.step === 0 ? "flex" : "none", step1: S.step === 1 ? "flex" : "none", step2: S.step === 2 ? "flex" : "none",
       outputs: [
         { name: "Website", meta: "Custom element", code: `<shader-field effect="current" palette="${S.pal}" interactive>` },
         { name: "Motion video", meta: "1080p or 4K", code: "field.record({ seconds: 6, width: 3840, height: 2160 })" },
         { name: "AI agent", meta: "Prompt with your settings", code: "Copy from the AI prompt tab, then paste into your agent" },
       ],
-      ...this.ucVals(),
+      ...this.ucVals(), ...this.whereVals(),
       appWebRef: this.appWebRef, appTyped: S.typed, appCaret: S.typed.length % 4 < 2 ? 1 : 0.2,
       appFrames: ["skein", "thermal", "fret", "harmonia", "current"].map(id => ({ img: `url(./assets/thumbs/${id}.png)` })),
       appPlayhead: React.createElement("span", { key: "ph", style: { position: "absolute", top: -4, bottom: -4, width: 2, borderRadius: 1, background: "#f2f2f4", boxShadow: "0 0 0 3px rgba(242,242,244,0.15)", animation: "sfPlay 6s linear infinite" } }),
-      faqs: FAQ.map(([q, a], i) => { const o = i === S.faq; return { q, a, open: o ? "true" : "false", rows: o ? "1fr" : "0fr", rot: o ? "45deg" : "0deg", color: o ? "#ffffff" : "#d4d5db", toggle: () => this.setState({ faq: o ? -1 : i }) }; }),
+      faqs: FAQ.map(([q, a, pts], i) => { const o = i === S.faq; return { q, a, points: (pts || []).map(([t, d]) => ({ t, d })), open: o ? "true" : "false", rows: o ? "1fr" : "0fr", rot: o ? "45deg" : "0deg", color: o ? "#38bdf8" : "#d4d5db", toggle: () => this.setState({ faq: o ? -1 : i }) }; }),
     };
   }
-  ucVals() {
-    const S = this.state, SF = this.SF, i = S.uc;
-    const el = (fx, extra) => `<section style="position:relative">\n  <shader-field effect="${fx}"${extra || ""}\n    style="position:absolute; inset:0"></shader-field>\n  <!-- your content -->\n</section>`;
-    const UC = [
-      { name: "Landing page hero", fx: "current", url: "kite.app", desc: "A shader behind the headline that follows the cursor. Text stays readable with a gradient scrim between the two.", out: "HTML element", lang: "HTML", code: el("current", " interactive") },
-      { name: "Waitlist page", fx: "halo", url: "lumen.so/waitlist", desc: "A full-screen background that gives a one-field signup page some presence.", out: "HTML element", lang: "HTML", code: el("halo") },
-      { name: "Event site", fx: "fret", url: "summit2026.com", desc: "A bold backdrop for the date, the venue and the ticket button.", out: "HTML element", lang: "HTML", code: el("fret", " interactive") },
-      { name: "Product video", fx: "skein", desc: "Record a 4K background and set chapter titles over it in your editor, or render it frame by frame in Remotion.", out: "MP4 · 3840 × 2160", lang: "JavaScript", code: `const field = Shaderfield.mount(el, { effect: "skein" });\n\nconst clip = await field.record({\n  seconds: 6, width: 3840, height: 2160\n});` },
-      { name: "Social clip", fx: "thermal", desc: "Record a vertical clip for a teaser, a story or an ad.", out: "MP4 · 1080 × 1920", lang: "JavaScript", code: `const field = Shaderfield.mount(el, { effect: "thermal" });\n\nconst clip = await field.record({\n  seconds: 6, width: 1080, height: 1920\n});` },
-      { name: "Title slide", fx: "harmonia", desc: "Save a still frame for title slides, section breaks and thumbnails.", out: "PNG · 1920 × 1080", lang: "JavaScript", code: `const field = Shaderfield.mount(el, { effect: "harmonia" });\n\nconst png = field.png();  // data URL, drop into your deck` },
+  tokLines(code) {
+    const re = /(\/\/.*$|<!-{2}.*?-{2}>)|("[^"]*"|'[^']*'|`[^`]*`)|\b(const|let|await|return|import|from|export|function|new|false|true)\b|(<\/?[\w-]+|\/?>)|([\w-]+)(?==)|\b(\d+(?:\.\d+)?)\b/g;
+    const C = ["#5f616b", "#a7f3d0", "#c4b5fd", "#8b8d97", "#7dd3fc", "#fcd34d"];
+    return String(code).split("\n").map(line => { const t = []; let k = 0, m; re.lastIndex = 0;
+      while ((m = re.exec(line))) { if (m.index > k) t.push({ s: line.slice(k, m.index), c: "#e4e5ea" }); const g = [1, 2, 3, 4, 5, 6].findIndex(j => m[j] != null); t.push({ s: m[0], c: C[g] }); k = re.lastIndex; if (!m[0].length) re.lastIndex++; }
+      if (k < line.length || !t.length) t.push({ s: line.slice(k) || " ", c: "#e4e5ea" }); return { t }; });
+  }
+  whereVals() {
+    const S = this.state, open = S.where ?? 0;
+    const W = [
+      { name: "Websites", desc: "Hero backgrounds, section washes and text motion that react to the cursor.", lang: "HTML", file: "index.html", short: '<shader-field effect="halo" interactive>', href: "./components.html#halo", cta: "Browse the shaders",
+        code: '<script src="shaderfield.js"><\/script>\n\n<shader-field effect="halo" interactive\n  style="position:absolute; inset:0">\n</shader-field>', specs: [["Works with", "Any HTML page, React, Vue, Webflow"], ["Size", "One file, no dependencies"]] },
+      { name: "Motion video", desc: "4K plates for edits, or frame-accurate renders inside Remotion.", lang: "JS", file: "Scene.tsx", short: "field.render(frame / fps)", href: "./components.html#install", cta: "Read the video setup",
+        code: 'const field = Shaderfield.mount(el, {\n  effect: "current", autoplay: false\n});\n\n// each frame of your composition\nfield.render(frame / fps);', specs: [["Works with", "Remotion, After Effects plates, any editor"], ["Output", "MP4 up to 3840 × 2160"]] },
+      { name: "Stills", desc: "Title cards, thumbnails and slide backgrounds, saved as PNG.", lang: "JS", file: "export.js", short: "field.png()", href: "./components.html#fret", cta: "Pick a backdrop",
+        code: 'const field = Shaderfield.mount(el, { effect: "fret" });\n\nconst png = field.png();  // PNG data URL', specs: [["Works with", "Keynote, Figma, Google Slides"], ["Output", "PNG at the element's size"]] },
+      { name: "App interfaces", desc: "Buttons, cards and status rows with press, glow and focus motion.", lang: "JS", file: "app.js", short: "motion.pressable(button)", href: "./components.html#press-ripple", cta: "Browse interface motion",
+        code: 'const { motion } = Shaderfield;\n\nmotion.pressable(button);\nmotion.focusCard(card);', specs: [["Works with", "Plain DOM elements in any framework"], ["Includes", "21 motion effects"]] },
+      { name: "Coding agents", desc: "A prompt with your exact settings for Claude Code, Cursor or any agent.", lang: "Prompt", file: "steps", short: "AI prompt tab → paste into your agent", href: "./components.html", cta: "Open the library",
+        code: "1. Open any component in the library\n2. Tune it, then open the AI prompt tab\n3. Paste the prompt into your agent", specs: [["Works with", "Claude Code, Cursor, Copilot"], ["Includes", "Your exact effect, palette and settings"]] },
     ];
-    const ok = (id) => SF && SF.EFFECTS[id] ? id : "current", u = UC[i], web = i < 3, social = i === 4;
-    const tab = (x, j) => ({ name: x.name, bg: j === i ? "#1b1b20" : "transparent", color: j === i ? "#ffffff" : "#a4a6b0", pick: () => this.goUc(j),
-      fill: j === i ? React.createElement("span", { key: "f" + S.ucCycle, style: { position: "absolute", inset: 0, background: "rgba(242,242,244,0.1)", animation: `sfHeroProg ${UC_MS}ms linear forwards`, animationPlayState: S.ucPlay ? "running" : "paused" } }) : null });
-    const o = {}; UC.forEach((_, j) => { o["uc" + j] = j === i ? "block" : "none"; });
-    return {
-      ...o, ucRef: this.ucRef,
-      ucIdx: String(i + 1).padStart(2, "0"), ucTotal: String(UC.length).padStart(2, "0"),
-      ucPlayIcon: S.ucPlay ? "❚❚" : "▶", ucPlayLabel: S.ucPlay ? "Pause" : "Play", ucToggle: () => this.toggleUc(),
-      ucPrev: () => this.goUc((i + UC.length - 1) % UC.length), ucNext: () => this.goUc((i + 1) % UC.length),
-      ucWeb: UC.slice(0, 3).map((x, j) => tab(x, j)), ucVideo: UC.slice(3).map((x, j) => tab(x, j + 3)),
-      ucWebChrome: web ? "flex" : "none", ucUrl: u.url || "", ucTop: web ? "34px" : "0px",
-      ucW: social ? "auto" : "100%", ucH: social ? "86%" : "100%", ucAR: social ? "9 / 16" : "auto", ucR: social ? "12px" : "0px",
-      ucName: u.name, ucDesc: u.desc, ucLang: u.lang, ucCode: u.code,
-      ucSpecs: [{ label: "Shader", value: SF ? SF.EFFECTS[ok(u.fx)].name : "" }, { label: "Output", value: u.out }],
-      ucEffectName: SF ? SF.EFFECTS[ok(u.fx)].name : "", ucHref: "./components.html#" + ok(u.fx),
-      ucCopy: () => this.copyText(u.code, "ucCopied"), ucCopyLabel: S.ucCopied ? "Copied" : "Copy",
-    };
+    const re = /(\/\/.*$)|("[^"]*"|'[^']*')|\b(const|await|return|false|true)\b|(<\/?[\w-]+|\/?>)|^(\d+\.)/g, C = ["#5f616b", "#a7f3d0", "#7dd3fc", "#8b8d97", "#7d7f89"];
+    const tok = (line) => { const out = []; let k = 0, m; re.lastIndex = 0; while ((m = re.exec(line))) { if (m.index > k) out.push({ s: line.slice(k, m.index), c: "#e4e5ea" }); const g = [1, 2, 3, 4, 5].findIndex(j => m[j] != null); out.push({ s: m[0], c: C[g] }); k = re.lastIndex; } if (k < line.length || !out.length) out.push({ s: line.slice(k) || " ", c: "#e4e5ea" }); return out; };
+    return { whereRows: W.map((w, j) => { const on = j === open; return { num: String(j + 1).padStart(2, "0"), name: w.name, desc: w.desc, lang: w.lang, file: w.file, short: w.short, href: w.href, cta: w.cta,
+      open: on ? "true" : "false", rows: on ? "1fr" : "0fr", rot: on ? "rotate(45deg)" : "rotate(0deg)", bg: on ? "rgba(14,165,233,0.04)" : "transparent", numColor: on ? "#38bdf8" : "#5f616b", shortOp: on ? 0 : 1, rule: j ? "1px solid rgba(242,242,244,0.08)" : "0",
+      lines: w.code.split("\n").map((l, n) => ({ n: n + 1, t: tok(l) })), specs: w.specs.map(([label, value]) => ({ label, value })),
+      toggle: () => this.setState({ where: on ? -1 : j }), copy: () => this.copyText(w.code, "whereCopied" + j), copyLabel: S["whereCopied" + j] ? "Copied" : "Copy" }; }) };
+  }
+  mountUc(j) { const SF = this.SF, id = UC_FX[j], r = this.ucRefs[j] && this.ucRefs[j].current; if (!SF || !r || this.ucFields[j]) return; this.ucFields[j] = SF.mount(r, { effect: SF.EFFECTS[id] ? id : "current", time: 2 + j * 1.7, params: id === "harmonia" ? { offset: 0.24 } : undefined }); }
+  pickUc(j) { const cur = this.state.uc || 0; if (j === cur) return; this.setState({ uc: j }, () => { const f = this.ucFields[cur]; if (f) { f.destroy(); this.ucFields[cur] = null; } requestAnimationFrame(() => this.mountUc(j)); }); }
+  ucVals() {
+    const S = this.state, i = S.uc || 0, el = (fx, extra) => `<section style="position:relative">\n  <shader-field effect="${fx}"${extra || ""}\n    style="position:absolute; inset:0"></shader-field>\n  <!-- your content -->\n</section>`;
+    const rec = (fx, w, hh) => `const field = Shaderfield.mount(el, { effect: "${fx}" });\n\nconst clip = await field.record({\n  seconds: 6, width: ${w}, height: ${hh}\n});`;
+    const UC = [
+      { name: "Landing page hero", meta: "HTML", fx: "current", shader: "Flow Streaks", out: "HTML element", lang: "HTML", desc: "A shader behind the headline that follows the cursor. A gradient scrim keeps the text readable.", code: el("current", " interactive") },
+      { name: "Waitlist page", meta: "HTML", fx: "halo", shader: "Radial Bloom", out: "HTML element", lang: "HTML", desc: "A full-screen background that gives a one-field signup page some presence.", code: el("halo") },
+      { name: "Event site", meta: "HTML", fx: "fret", shader: "Circuit Arcs", out: "HTML element", lang: "HTML", desc: "A full event landing page: navigation, dates, venue, ticket buttons and key numbers over one shader.", code: el("fret", " interactive") },
+      { name: "Product video", meta: "MP4", fx: "skein", shader: "Woven Lines", out: "MP4 · 3840 × 2160", lang: "JavaScript", desc: "Record a 4K background plate, then set chapter titles and captions over it in your editor.", code: rec("skein", 3840, 2160) },
+      { name: "Social clip", meta: "MP4", fx: "thermal", shader: "Heat Map", out: "MP4 · 1080 × 1920", lang: "JavaScript", desc: "Record a vertical clip to sit behind a story ad, a teaser or a launch post.", code: rec("thermal", 1080, 1920) },
+      { name: "Title slide", meta: "PNG", fx: "harmonia", shader: "Chord Circle", out: "PNG · 1920 × 1080", lang: "JavaScript", desc: "Save a still frame as the backdrop for the opening slide of a board deck or keynote.", code: 'const field = Shaderfield.mount(el, { effect: "harmonia" });\n\nconst png = field.png();  // data URL, drop into your deck' },
+      { name: "Sign-in screen", meta: "HTML", fx: "hearth", shader: "Glow Bed", out: "HTML element", lang: "HTML", desc: "A soft glow along the bottom edge behind a login card. It stays calm so the form reads first.", code: el("hearth") },
+      { name: "Podcast cover", meta: "PNG", fx: "waves", shader: "Wave Bands", out: "PNG · 3000 × 3000", lang: "JavaScript", desc: "Save a square frame as cover art for the show, then reuse it for each episode and the player.", code: 'const field = Shaderfield.mount(el, { effect: "waves" });\n\nconst png = field.png();  // square element, square image' },
+      { name: "Video thumbnail", meta: "PNG", fx: "globe", shader: "Dot Globe", out: "PNG · 1280 × 720", lang: "JavaScript", desc: "A loud, readable thumbnail: big title, series label and badges over a moving backdrop, saved at 1280 × 720.", code: 'const field = Shaderfield.mount(el, { effect: "globe" });\n\nconst png = field.png();  // use a 1280 × 720 element' },
+    ], u = UC[i];
+    const tab = (x, j) => ({ name: x.name, meta: x.meta, sel: j === i ? "true" : "false", bg: j === i ? "rgba(14,165,233,0.14)" : "transparent", color: j === i ? "#ffffff" : "#a4a6b0", pick: () => this.pickUc(j) });
+    const o = {}; UC.forEach((_, j) => { o["ucRef" + j] = this.ucRefs[j]; o["ucVis" + j] = j === i ? "visible" : "hidden"; });
+    return { ...o, ucWeb: [0, 1, 2, 6].map(j => tab(UC[j], j)), ucVideo: [3, 4, 5, 7, 8].map(j => tab(UC[j], j)), ucName: u.name, ucDesc: u.desc, ucShader: u.shader, ucOut: u.out, ucLang: u.lang, ucCode: u.code, ucLines: this.tokLines(u.code),
+      ucHref: "./components.html#" + u.fx, ucCopy: () => this.copyText(u.code, "ucCopied"), ucCopyLabel: S.ucCopied ? "Copied" : "Copy" };
   }
   renderVals() {
     const S = this.state, SF = this.SF;
-    if (!S.ready || !SF) return { ...this.staticVals(), heroDock: [], heroNum: "", heroTotal: "", heroName: "", heroDesc: "", heroKind: "", libItems: [], libTotal: "50", palChips: [], shaderLinks: [], tuneSliders: [] };
+    if (!S.ready || !SF) return { ...this.staticVals(), heroDock: [], heroNum: "", heroTotal: "", heroName: "", heroDesc: "", heroKind: "", libItems: [], libTotal: "67", palChips: [], shaderLinks: [], tuneSliders: [] };
     const E = SF.EFFECTS, O = SF.ORDER, i = O.indexOf(S.heroId), cur = E[S.heroId];
     const grad = (c) => `conic-gradient(${SF.css(c[0])} 0 25%, ${SF.css(c[1])} 0 50%, ${SF.css(c[2])} 0 75%, ${SF.css(c[3])} 0)`;
     const DEMOS = window.SFDemos || [], cats = { Text: 2, Interface: 1, Transitions: 1 };
@@ -573,7 +612,7 @@ class Component extends DCLogic {
     return {
       ...this.staticVals(),
       libItems: [...items, ...items, ...items, ...items], libTotal: String(O.length + motionN),
-      palChips: Object.keys(SF.PALETTES).map(n => ({ name: n, bg: grad(SF.PALETTES[n]), ring: n === S.pal ? "#f2f2f4" : "transparent", pick: () => { this.pal.setPalette(n); this.setState({ pal: n }); } })),
+      palChips: Object.keys(SF.PALETTES).map(n => ({ name: n, bg: grad(SF.PALETTES[n]), ring: n === S.pal ? "#0ea5e9" : "transparent", pick: () => { this.pal.setPalette(n); this.setState({ pal: n }); } })),
       shaderLinks: O.map(id => ({ name: E[id].name, href: "./components.html#" + id, bg: grad(SF.PALETTES[E[id].palette] || SF.PALETTES.plasma) })),
       tuneSliders: tp.map(p => { const v = S.tune[p.key] ?? p.def, d = p.step >= 1 ? 0 : p.step >= 0.1 ? 1 : 2; return { label: p.label, min: p.min, max: p.max, step: p.step, value: v, display: (+v).toFixed(d) + (p.unit || ""), onChange: ev => { const x = parseFloat(ev.target.value); this.tune.set(p.key, x); this.setState(s => ({ tune: { ...s.tune, [p.key]: x } })); } }; }),
       heroDock: O.map(id => { const act = id === S.heroId; return { name: E[id].name, active: act, idle: !act, img: `url(./assets/thumbs/${id}.png)`, pick: () => this.setHero(id),
