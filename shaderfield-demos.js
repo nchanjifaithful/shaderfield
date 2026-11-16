@@ -108,6 +108,11 @@
     build(el, big) { const q = stage(el, big, `<div style="padding:1em 1.3em;border-radius:1.2em;background:#1b1b20"><span data-d></span></div>`, center);
       return loopDemo(() => M().typingDots(q("[data-d]"), { size: big ? 12 : 8, color: "#9a9a96" })); } });
 
+  add({ id: "shock", name: "Shock Ring", cat: "Transitions", from: "Product Video", desc: "A thin glowing ring bursts out from a point.",
+    code: `Shaderfield.motion.shock(stage, x, y, { to: 300, duration: 0.7 });`,
+    build(el, big) { stage(el, big, `<div style="width:1.2em;height:1.2em;border-radius:50%;background:#f2f2f4;font-size:1.6em"></div>`, center);
+      return { play: async () => { const x = el.clientWidth / 2, y = el.clientHeight / 2, r = Math.min(x, y) * 0.9; M().shock(el, x, y, { to: r }); await wait(0.18); return M().shock(el, x, y, { to: r * 0.6, width: 2 }); } }; } });
+
   const card = (extra) => `border-radius:0.7em;background:rgba(242,242,244,0.05);outline:1px solid rgba(242,242,244,0.14);${extra || ""}`;
 
   add({ id: "glow-sheen", name: "Glow Sheen", cat: "Light", from: "Document AI Teaser", desc: "A bright band drifts through gradient text under a soft glow.",
