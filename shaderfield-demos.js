@@ -87,6 +87,11 @@
     build(el, big) { const q = stage(el, big, `<div data-t style="width:100%;font-size:5.4em;font-weight:800;letter-spacing:-0.05em;text-transform:uppercase"></div>`, center);
       return loopDemo(() => M().rollWords(q("[data-t]"), ["Build", "ship", "repeat"], { hold: 0.5 })); } });
 
+  add({ id: "solve", name: "Scramble Solve", cat: "Text", from: "Keep Marching", desc: "Words roll in as scrambled glyphs, then resolve letter by letter.",
+    code: `Shaderfield.motion.solve(el, { perWord: 0.55, solveAfter: 0.3 });`,
+    build(el, big) { const q = stage(el, big, `<div data-t style="font-size:2.7em;font-weight:800;letter-spacing:-0.05em;text-transform:uppercase;justify-content:center;max-width:9em;line-height:1.2">Keep marching forward</div>`, center);
+      return { play: () => M().solve(q("[data-t]"), { perWord: 0.4, solveAfter: 0.2 }) }; } });
+
   add({ id: "pop", name: "Letter Pop", cat: "Text", from: "Product Video", desc: "Letters rise, overshoot and sharpen out of a blur.",
     code: `Shaderfield.motion.pop(el, { by: "char", stagger: 0.04 });\nShaderfield.motion.pop(el, { out: true });`,
     build(el, big) { const q = stage(el, big, `<div data-t style="font-size:5.4em;font-weight:600;letter-spacing:-0.04em">Antithesis</div>`, center);

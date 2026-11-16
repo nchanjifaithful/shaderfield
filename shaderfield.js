@@ -2405,6 +2405,19 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       [...B.children].forEach((s, j) => (s.style.transform = `translateY(${(1 - ROLL((u - j * st) / d)) * 100}%)`));
     });
   }
+  // Words roll in one by one as scrambled glyphs, then resolve letter by letter (Keep Marching)
+  function solve(el, o = {}) {
+    const text = el.dataset.sfText || el.textContent.trim(); el.dataset.sfText = text; el.setAttribute("aria-label", text); el.textContent = "";
+    const G = o.glyphs || "ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&@", d = o.duration ?? 0.5, st = o.stagger ?? 0.025, per = o.perWord ?? 0.55, sv = o.solveAfter ?? 0.3;
+    el.style.display = "flex"; el.style.flexWrap = "wrap"; el.style.columnGap = "0.28em"; el.style.overflow = "hidden";
+    const cells = []; text.split(/\s+/).forEach((w, wi) => { const box = document.createElement("span"); box.style.cssText = "display:inline-flex;overflow:hidden;"; box.setAttribute("aria-hidden", "true");
+      [...w].forEach((ch, j) => { const s = document.createElement("span"); s.style.cssText = "position:relative;display:inline-block;"; const ghost = document.createElement("span"); ghost.style.visibility = "hidden"; ghost.textContent = ch;
+        const vis = document.createElement("span"); vis.style.cssText = "position:absolute;left:0;right:0;top:0;text-align:center;"; s.append(ghost, vis); box.appendChild(s); cells.push({ s, vis, ch, at: wi * per, j }); }); el.appendChild(box); });
+    const end = (text.split(/\s+/).length - 1) * per + sv + 0.045 * 12 + d;
+    return play(end, t => cells.forEach((c, g) => { const pin = ROLL((t - c.at - c.j * st) / d), solved = t >= c.at + sv + c.j * 0.045;
+      c.s.style.transform = `translateY(${(1 - pin) * 100}%)`; c.vis.style.opacity = solved ? 1 : 0.35;
+      c.vis.textContent = solved || /[^a-z]/i.test(c.ch) ? c.ch : G[Math.floor(rnd(Math.floor(t * 18) + g * 13.7, 1) * G.length)]; }));
+  }
   // Corner brackets hop between targets: they shrink to a spinning reticle in between, then snap open around the next one (Clause Film)
   function bracketHop(stage, targets, o = {}) {
     rel(stage); const ink = o.color || "currentColor", TR = o.travel ?? 0.5, hold = o.hold ?? 1.1, IDLE = o.idle ?? 44, PAD = o.pad ?? 10, lw = o.width ?? 3, arm = o.arm ?? 14;
@@ -2510,5 +2523,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, countUp, tick, bars, focusCard, pressable, iris, drawFrame, drawLine, stripes, typeSwap, rollWords, bracketHop, pop, shock, spectrumRing, shine, typingDots, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, countUp, tick, bars, focusCard, pressable, iris, drawFrame, drawLine, stripes, typeSwap, rollWords, solve, bracketHop, pop, shock, spectrumRing, shine, typingDots, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
