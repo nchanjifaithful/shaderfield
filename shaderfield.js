@@ -2441,6 +2441,12 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       else { const q = exIn((t - i * st * 0.6) / 0.35); op = 1 - q; dy = -q * lift * fs; sc = 1 + q * 0.2; }
       s.style.opacity = op; s.style.filter = op > 0.995 ? "none" : `blur(${((1 - op) * px).toFixed(2)}px)`; s.style.transform = `translateY(${dy.toFixed(1)}px) scale(${sc.toFixed(3)})`; }));
   }
+  // Expanding shock ring from a point (Product Video)
+  function shock(stage, x, y, o = {}) {
+    rel(stage); const r0 = o.from ?? 10, r1 = o.to ?? 300, d = o.duration ?? 0.7, w = o.width ?? 3, col = o.color || "#fff", ring = document.createElement("div");
+    ring.style.cssText = "position:absolute;border-radius:50%;pointer-events:none;z-index:25;"; stage.appendChild(ring);
+    return play(d, t => { const a = t / d, r = lerp(r0, r1, oExpo(a)); Object.assign(ring.style, { left: x - r + "px", top: y - r + "px", width: r * 2 + "px", height: r * 2 + "px", border: `${(w * (1 - a) + 0.5).toFixed(2)}px solid ${col}`, opacity: 1 - a, boxShadow: `0 0 24px rgba(255,255,255,${(0.5 * (1 - a)).toFixed(2)})` }); }).then(() => ring.remove());
+  }
   // Spectrum ring: a soft arc of colour travels around the border over a faint base line, with a restrained glow (Product Video)
   const arcG = (d, h, arc) => { const span = 360 * arc, n = h.length, st = h.map((c, i) => `${c} ${((span * (i + 1)) / (n + 1)).toFixed(1)}deg`).join(", "); return `conic-gradient(from ${d.toFixed(1)}deg, transparent 0deg, ${st}, transparent ${span.toFixed(1)}deg, transparent 360deg)`; };
   function spectrumRing(el, o = {}) {
@@ -2504,5 +2510,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, countUp, tick, bars, focusCard, pressable, iris, drawFrame, drawLine, stripes, typeSwap, rollWords, bracketHop, pop, spectrumRing, shine, typingDots, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, countUp, tick, bars, focusCard, pressable, iris, drawFrame, drawLine, stripes, typeSwap, rollWords, bracketHop, pop, shock, spectrumRing, shine, typingDots, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
