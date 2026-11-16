@@ -1,6 +1,5 @@
-/*! Shaderfield v1.0 — live shaders + motion effects for websites and video. One file, no dependencies.
- * Fret and Skein adapted from shader.gallery (MIT, E. T. Carter). Halo and Thermal are native rewrites
- * inspired by Paper Shaders. Current, Harmonia, Mesh and motion helpers are original to Shaderfield.
+/*! Shaderfield v2.0 · Live shaders and motion effects for websites and video. One file, no dependencies.
+ * Made by Nchanji Faithful · https://github.com/nchanjifaithful · MIT License (see LICENSE)
  */
 (function () {
   "use strict";
@@ -18,7 +17,11 @@
     cobalt: [[0.267, 0.455, 1.0], [0.169, 0.416, 1.0], [0.75, 0.82, 1.0], [0.02, 0.03, 0.1]],
     idea: [[0.227, 0.235, 0.965], [0.18, 0.847, 0.984], [0.604, 0.612, 0.953], [0.29, 0.675, 0.973]],
     synth: [[1.0, 0.31, 0.85], [1.0, 0.894, 0.361], [1.0, 0.373, 0.635], [0.043, 0.016, 0.125]],
+    mint: [[0.204, 0.827, 0.6], [0.431, 0.906, 0.718], [0.82, 0.98, 0.9], [0.02, 0.1, 0.06]],
+    sky: [[0.055, 0.647, 0.914], [0.49, 0.83, 0.99], [0.88, 0.95, 1.0], [0.02, 0.06, 0.1]],
+    dusk: [[0.15, 0.3, 0.66], [0.36, 0.27, 0.6], [0.08, 0.44, 0.5], [0.66, 0.46, 0.4]],
     ledger: [[0.122, 0.616, 0.333], [0.086, 0.086, 0.086], [0.35, 0.8, 0.5], [0.98, 0.98, 0.973]],
+    silk: [[1.0, 0.82, 0.82], [1.0, 0.541, 0.541], [0.4, 0.0, 0.0], [0.2, 0.0, 0.0]],
   };
   const MESH_FILTER = { ember: "none", ion: "hue-rotate(185deg) saturate(1.1)", aurora: "hue-rotate(115deg) saturate(1.1)", mono: "grayscale(1) brightness(1.15)" };
 
@@ -276,6 +279,7 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const glyphBits = (i) => { const r = GLYPH_SETS[CHARSET_NAMES[Math.round(i) | 0]] || GLYPH_SETS.ascii, g = new Uint32Array(16); r.forEach((v, k) => (g[k] = v >>> 0)); return { bits: g, count: r.length }; };
   const hex3 = (h) => { h = (h || "#000").replace("#", ""); if (h.length === 3) h = h.split("").map(c => c + c).join(""); const n = parseInt(h, 16); return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255]; };
   const lum3 = (c) => 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2];
+  const SANS_CLEAN = '"Geist", "Inter", "SF Pro Display", -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif';
   const SANS = '"Helvetica Neue", Helvetica, Arial, sans-serif', MONO_F = '"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace', SERIF_F = '"Instrument Serif", "Times New Roman", serif';
   const PANELS = new Map();
   // Text panel: lines centred on a solid ground. size is a fraction of height; text is fitted to 86% of the width.
@@ -415,7 +419,7 @@ void main () {
   }
   outColor = vec4(clamp(base, 0.0, 1.0), 1.0);
 }`;
-  // ── Rain (Living in the Matrix): glyph rain that lights the page beneath it ──
+  // ── Matrix (Living in the Matrix): green glyph rain that lights the page beneath it ──
   const F_RAIN = `#version 300 es
 precision highp float;
 in vec2 vUv;
@@ -1089,25 +1093,26 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
     }
     const out = { canvas: c, cells }; BLINK_P.set(key, out); return out;
   }
-  function drawBlink(ctx, c, p, s, e) {
+  function drawBlink(ctx, c, p, s, e, part) {
+    const showField = part === "field", showText = part !== "field";
     const W = 1920, H = 1080, T = c.t, paper = p.paper >= 0.5, BG = paper ? "#fafaf8" : "#0a0b0a", FG = paper ? "#161616" : "#eeeeea", col = c.pal[0].map(v => Math.round(v * 255)).join(",");
     const sq = p.square, cell = sq + p.gap, off = p.gap / 2, cols = Math.ceil(W / cell), rows = Math.ceil(H / cell), BLINK = 0.7, FLASH = 0.1;
     const ph = phrases(c, e), L = p.hold, k = Math.floor(T / L), t = T - k * L, loop = (T % (L * ph.length)) / (L * ph.length);
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = BG; ctx.fillRect(0, 0, c.w, c.h); cover(ctx, c, W, H);
     const [mx, my] = toDesign(c, W, H), mr = 220;
-    const area = p.field * E3.sine(T / 0.4), density = lerp(0.04, 0.12, loop), top = 1 - area, mode = Math.round(p.edges);
+    const area = showField ? Math.min(1, (p.field ?? 0.92) * (0.55 + 0.45 * Math.sin((T * 6.2832) / (p.cycle || 8)))) * E3.sine(T / 0.6) : 0, density = showField ? p.density ?? 0.1 : lerp(0.04, 0.12, loop), top = 1 - area, mode = Math.round(p.edges || 0);
     const fade = (x, y) => mode === 1 ? ss3(0.25, 0.75, x) : mode === 2 ? ss3(0.25, 0.75, 1 - x) : mode === 3 ? 1 - ss3(0.3, 0.8, Math.hypot((x - 0.5) * 1.8, (y - 0.5) * 1.8)) : 1;
-    for (let r = 0; r < rows; r++) {
-      const y = (r + 0.5) / rows; const vert = area > 0 && y >= top - 0.02 ? ss3(top, top + Math.max(0.12, area * 0.7), y) : 0;
+    if (showField || c.mouse[2] > 0.01) for (let r = 0; r < rows; r++) {
+      const y = (r + 0.5) / rows; const vert = area > 0 && y >= top - 0.02 ? ss3(top, top + Math.max(0.12, area * 0.7), y) : 0, crest = showField && area > 0 ? Math.max(0, 1 - Math.abs(y - top - 0.03) / 0.05) : 0;
       for (let q = 0; q < cols; q++) {
         const cx = q * cell + cell / 2, cy = r * cell + cell / 2, near = c.mouse[2] * Math.max(0, 1 - Math.hypot(cx - mx, cy - my) / mr);
         const m = Math.max(vert * fade((q + 0.5) / cols, (y - top) / Math.max(area, 0.01)), near); if (m <= 0.01) continue;
-        const i = r * cols + q, pp = ihash(i, 911) * BLINK, n = Math.floor((T + pp) / BLINK); let a = 0.06;
-        if (ihash(i, n) < density + near * 0.5) { const sn = Math.sin(((T + pp) / BLINK - n) * Math.PI); a += (0.85 * (0.4 + 0.6 * ihash(n, i)) - a) * sn * sn; }
+        const i = r * cols + q, pp = ihash(i, 911) * BLINK, n = Math.floor((T + pp) / BLINK); let a = showField ? 0.1 : 0.06;
+        if (ihash(i, n) < density + near * 0.5 + crest * 0.25) { const sn = Math.sin(((T + pp) / BLINK - n) * Math.PI); a += ((showField ? 1 : 0.85) * (showField ? 0.7 + 0.3 * ihash(n, i) : 0.4 + 0.6 * ihash(n, i)) - a) * sn * sn; }
         ctx.fillStyle = `rgba(${col},${a * m})`; ctx.fillRect(q * cell + off, r * cell + off, sq, sq);
       }
     }
-    const pn = blinkPanel(ph[k % ph.length], p.size * 1080, cell, FG), e0 = L - 0.4;
+    const pn = showText ? blinkPanel(ph[k % ph.length], p.size * 1080, cell, FG) : { cells: [] }, e0 = L - 0.4;
     for (const cl of pn.cells) {
       const rt = 0.04 + cl.u * 0.32 + cl.h * 0.1, et = e0 + cl.u * 0.22 + cl.h * 0.08; if (t < rt || t > et + FLASH) continue;
       const x = cl.q * cell, y = cl.r * cell; if (t < et) ctx.drawImage(pn.canvas, x, y, cell, cell, x, y, cell, cell); if (!cl.ink) continue;
@@ -1120,14 +1125,15 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
   const DRIFT_B = [{ x: 0.30, y: 0.62, r: 0.55, fx: 0.31, fy: 0.23, ph: 0 }, { x: 0.12, y: 0.95, r: 0.45, fx: 0.27, fy: 0.35, ph: 1.7 }, { x: 0.78, y: 0.28, r: 0.42, fx: 0.22, fy: 0.29, ph: 3.1 }, { x: 0.72, y: 0.82, r: 0.38, fx: 0.33, fy: 0.21, ph: 4.4 }];
   function driftField(x, c, t, zoom, p) {
     const W = c.w, H = c.h, CX = W / 2, CY = H / 2, S = Math.max(W, H * 16 / 9);
-    x.setTransform(1, 0, 0, 1, 0, 0); x.globalCompositeOperation = "source-over"; x.fillStyle = "#070920"; x.fillRect(0, 0, W, H);
-    x.translate(CX, CY); x.scale(zoom, zoom); x.translate(-CX, -CY); x.globalCompositeOperation = "lighter";
+    x.setTransform(1, 0, 0, 1, 0, 0); x.globalCompositeOperation = "source-over"; x.fillStyle = "#060914"; x.fillRect(0, 0, W, H);
+    x.translate(CX, CY); x.scale(zoom, zoom); x.translate(-CX, -CY); x.globalCompositeOperation = "screen";
     const [mx, my] = [c.mouse[0] / W, c.mouse[1] / H];
     DRIFT_B.forEach((b, i) => {
       const bx = (b.x + Math.sin(t * b.fx * p.flow + b.ph) * 0.08 + (mx - 0.5) * 0.12 * c.mouse[2] * (i % 2 ? -1 : 1)) * W, by = (b.y + Math.cos(t * b.fy * p.flow + b.ph) * 0.08 + (my - 0.5) * 0.12 * c.mouse[2]) * H, r = b.r * S;
-      const cc = c.pal[i].map(v => Math.round(v * 255)).join(","), g = x.createRadialGradient(bx, by, 0, bx, by, r);
-      g.addColorStop(0, `rgba(${cc},${0.62 * p.glow})`); g.addColorStop(0.45, `rgba(${cc},${0.26 * p.glow})`); g.addColorStop(1, `rgba(${cc},0)`); x.fillStyle = g; x.fillRect(0, 0, W, H);
+      const cc = c.pal[i].map(v => Math.round(v * 255)).join(","), g = x.createRadialGradient(bx, by, 0, bx, by, r), A = 0.5 * p.glow;
+      [[0, 1], [0.18, 0.86], [0.36, 0.6], [0.54, 0.34], [0.72, 0.14], [0.88, 0.04], [1, 0]].forEach(([o, f]) => g.addColorStop(o, `rgba(${cc},${(A * f).toFixed(3)})`)); x.fillStyle = g; x.fillRect(0, 0, W, H);
     });
+    x.globalCompositeOperation = "source-over"; const v = x.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.25, W / 2, H / 2, Math.max(W, H) * 0.75); v.addColorStop(0, "rgba(5,7,16,0)"); v.addColorStop(1, "rgba(5,7,16,0.55)"); x.setTransform(1, 0, 0, 1, 0, 0); x.fillStyle = v; x.fillRect(0, 0, W, H);
     x.setTransform(1, 0, 0, 1, 0, 0); x.globalCompositeOperation = "source-over";
   }
   const starPath = (k) => typeof Path2D !== "undefined" ? new Path2D(`M0,-1 Q${k},${-k} 1,0 Q${k},${k} 0,1 Q${-k},${k} -1,0 Q${-k},${-k} 0,-1Z`) : null;
@@ -1136,18 +1142,32 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
     const W = c.w, H = c.h, L = p.cycle, t = c.t % L, sg = (a, b) => clamp((t - a) / (b - a)), ex = (v) => v >= 1 ? 1 : 1 - Math.pow(2, -10 * clamp(v));
     STAR_P = STAR_P || starPath(0.16);
     const cx = lerp(W / 2, c.mouse[0], c.mouse[2] * 0.6), cy = lerp(H / 2, c.mouse[1], c.mouse[2] * 0.6), base = Math.min(W, H) * 0.075 * p.size;
-    const G = 1.2, Z0 = 2.0, ZA = 2.28, ZE = 3.12, out0 = L - 0.9;
+    const G = 1.2, Z0 = 2.0, ZA = 2.28, ZE = 3.12;
     const grow = E3.out(sg(0, G)), a = Math.sin(Math.PI / 2 * sg(Z0, ZA)), pz = sg(ZA, ZE), q = Math.pow(pz, 1.7), Rm = base * (1 - 0.2 * a), end = Math.hypot(W, H) * 2.6;
     const R = t < ZA ? lerp(base * 0.05, base, grow) * (1 - 0.2 * a) : Rm * Math.pow(end / Rm, q);
     const rot = 360 * E3.io(sg(0, Z0)) - 14 * a + 59 * Math.pow(pz, 1.25);
-    const fade = 1 - sg(out0, L);
+    // Outro: the colour field closes back into a shrinking star iris, then collapses into a twinkle with glints and sparks
+    const O0 = Math.max(ZE + 0.3, L - 1.35), O1 = Math.max(O0 + 0.4, L - 0.5), cq = E3.io(sg(O0, O1)), Rc = end * Math.pow((base * 0.08) / end, cq), rotC = rot + 120 * cq;
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = "source-over"; ctx.filter = "none";
     ctx.fillStyle = "#050616"; ctx.fillRect(0, 0, W, H);
     const fld = buf(s, "field", W, H), fx = fld.getContext("2d");
-    if (t >= ZA - 0.05) {
-      driftField(fx, c, c.t, lerp(1.7, 1, ex(sg(ZA, ZE + 0.35))), p);
-      if (t < ZE) { fx.globalCompositeOperation = "destination-in"; fx.filter = `blur(${Math.max(0.6, R * 0.006).toFixed(2)}px)`; fx.translate(cx, cy); fx.rotate(rot * Math.PI / 180); fx.scale(R, R); fx.fillStyle = "#fff"; fx.fill(STAR_P); fx.setTransform(1, 0, 0, 1, 0, 0); fx.filter = "none"; fx.globalCompositeOperation = "source-over"; }
-      ctx.globalAlpha = fade; ctx.drawImage(fld, 0, 0); ctx.globalAlpha = 1;
+    if (t >= ZA - 0.05 && t < O1) {
+      driftField(fx, c, c.t, lerp(1.7, 1, ex(sg(ZA, ZE + 0.35))) * (1 + 0.25 * cq), p);
+      const mR = t < ZE ? R : t >= O0 ? Rc : 0, mRot = t < ZE ? rot : rotC;
+      if (mR) { fx.globalCompositeOperation = "destination-in"; fx.filter = `blur(${Math.max(0.6, mR * 0.006).toFixed(2)}px)`; fx.translate(cx, cy); fx.rotate(mRot * Math.PI / 180); fx.scale(mR, mR); fx.fillStyle = "#fff"; fx.fill(STAR_P); fx.setTransform(1, 0, 0, 1, 0, 0); fx.filter = "none"; fx.globalCompositeOperation = "source-over"; }
+      ctx.drawImage(fld, 0, 0);
+      if (t >= O0 && cq > 0.02) { ctx.save(); ctx.translate(cx, cy); ctx.rotate(rotC * Math.PI / 180); ctx.scale(Rc, Rc); ctx.shadowColor = "rgba(200,230,255,0.85)"; ctx.shadowBlur = 14 * c.k; ctx.lineWidth = (2 * c.k) / Rc; ctx.strokeStyle = `rgba(225,238,255,${(0.9 * Math.min(1, cq * 1.4)).toFixed(3)})`; ctx.stroke(STAR_P); ctx.restore(); ctx.shadowBlur = 0; }
+    }
+    const tw = sg(O1 - 0.06, L);
+    if (tw > 0 && tw < 1) {
+      const e = E3.out(tw), fa = Math.pow(1 - tw, 1.4), hi = c.pal[1];
+      ctx.save(); ctx.translate(cx, cy); ctx.globalCompositeOperation = "lighter";
+      ctx.save(); ctx.rotate(((rotC + 45 * e) * Math.PI) / 180); const rs = base * 0.34 * (1 - 0.55 * e); ctx.scale(rs, rs); ctx.fillStyle = `rgba(255,255,255,${fa.toFixed(3)})`; ctx.fill(STAR_P); ctx.restore();
+      const len = base * (1.1 + 3.4 * e), th = 1.3 * c.k;
+      [0, Math.PI / 2, Math.PI / 4, -Math.PI / 4].forEach((a, j) => { const ln = j < 2 ? len : len * 0.45; ctx.save(); ctx.rotate(a); const g = ctx.createLinearGradient(-ln, 0, ln, 0); g.addColorStop(0, "rgba(255,255,255,0)"); g.addColorStop(0.5, `rgba(255,255,255,${(0.9 * fa * (j < 2 ? 1 : 0.5)).toFixed(3)})`); g.addColorStop(1, "rgba(255,255,255,0)"); ctx.fillStyle = g; ctx.fillRect(-ln, -th, ln * 2, th * 2); ctx.restore(); });
+      for (let i = 0; i < 10; i++) { const a = (i / 10) * 6.2832 + 0.3, d = base * (0.4 + 2.6 * e) * (0.75 + 0.5 * h2(i, 5)), r = Math.max(0.5, (2.4 - 1.7 * e) * c.k); ctx.fillStyle = pcss(i % 2 ? hi : [1, 1, 1], fa); ctx.beginPath(); ctx.arc(Math.cos(a) * d, Math.sin(a) * d, r, 0, 6.2832); ctx.fill(); }
+      const hg = ctx.createRadialGradient(0, 0, 0, 0, 0, base * 1.6); hg.addColorStop(0, pcss(hi, 0.35 * fa)); hg.addColorStop(1, pcss(hi, 0)); ctx.fillStyle = hg; ctx.fillRect(-base * 1.6, -base * 1.6, base * 3.2, base * 3.2);
+      ctx.restore(); ctx.globalCompositeOperation = "source-over";
     }
     if (t < ZE + 0.05) {
       const col = sg(0.2, 0.6) * (1 - sg(ZA - 0.05, ZA + 0.22)), rim = sg(Z0 + 0.05, ZA) * (1 - sg(ZE - 0.18, ZE)), gA = Math.max(col, rim * 0.7) * (1 - clamp((R - 300 * c.k) / (400 * c.k))), gR = Math.min(R, 260 * c.k);
@@ -1175,6 +1195,8 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
     else { const e = sw((t - S - 0.5 * k) / (SD - 0.5 * k)); p = [lerp(F.Q1[0], F.P0[0], e), lerp(F.Q1[1], F.P0[1], e)]; }
     return { p, q: F.Q2, s2: E3.out((t - Pp - 0.4 * k) / (1.4 * k)) * (1 - sw((t - S) / (1.1 * k))) };
   }
+  const FZ = (ctx, Z) => { ctx.translate(960, 540); ctx.scale(Z, Z); ctx.translate(-960, -540); };
+  const unZ = (pt, Z) => [960 + (pt[0] - 960) / Z, 540 + (pt[1] - 540) / Z];
   function mouseTrail(s, c, W, H) {
     const h = s.hist || (s.hist = []), [mx, my] = toDesign(c, W, H); h.push([c.t, mx, my]); while (h.length > 90) h.shift();
     return (t) => { for (let i = h.length - 1; i >= 0; i--) if (h[i][0] <= t) return [h[i][1], h[i][2]]; return h.length ? [h[0][1], h[0][2]] : [mx, my]; };
@@ -1182,9 +1204,9 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
   function drawFilings(ctx, c, p, s) {
     const { W, H } = FIL, paper = p.paper >= 0.5, bg = paper ? "#f4f4f3" : "#0c0c0d", ink = paper ? "#171717" : "#ececea", z = c.mouse[2], trail = mouseTrail(s, c, W, H);
     const cell = p.cell, cols = Math.ceil(W / cell) + 1, rows = Math.ceil(H / cell) + 1, ox = (W - (cols - 1) * cell) / 2, oy = (H - (rows - 1) * cell) / 2;
-    const at = (t) => { const m = filPoles(t, p.cycle); if (z > 0.001) { const mp = trail(t); m.p = [lerp(m.p[0], mp[0], z), lerp(m.p[1], mp[1], z)]; m.s2 *= 1 - z; } return m; };
+    const Z = p.zoom ?? 1.6, at = (t) => { const m = filPoles(t, p.cycle); if (z > 0.001) { const mp = unZ(trail(t), Z); m.p = [lerp(m.p[0], mp[0], z), lerp(m.p[1], mp[1], z)]; m.s2 *= 1 - z; } return m; };
     const now = at(c.t), cam = 1.03 - 0.03 * Math.cos(2 * Math.PI * c.t / p.cycle);
-    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = bg; ctx.fillRect(0, 0, c.w, c.h); const [sc, tx, ty] = cover(ctx, c, W, H);
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = bg; ctx.fillRect(0, 0, c.w, c.h); const [sc, tx, ty] = cover(ctx, c, W, H); FZ(ctx, Z);
     ctx.translate(now.p[0], now.p[1]); ctx.scale(cam, cam); ctx.translate(-now.p[0], -now.p[1]);
     const len = cell * 0.56, th = Math.max(2, cell * 0.075); ctx.strokeStyle = ink; ctx.lineWidth = th; ctx.lineCap = "round";
     ctx.beginPath();
@@ -1211,16 +1233,16 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
     return [C[0], lerp(C[1], 1300, sw((t - U.Out - 0.9) / 0.9))];
   }
   function drawGather(ctx, c, p, s) {
-    const { W, H, C } = FIL, paper = p.paper >= 0.5, bg = paper ? "#f4f4f3" : "#0c0c0d", ink = paper ? "#171717" : "#ececea", L = p.cycle, k = L / 10, T = c.t % L, z = c.mouse[2];
+    const { W, H, C } = FIL, paper = p.paper >= 0.5, bg = paper ? "#f4f4f3" : "#0c0c0d", ink = paper ? "#171717" : "#ececea", L = p.cycle, k = L / 10, ST = 3.8 * k, T = ST + (c.t % (L - ST)), z = c.mouse[2], Z = p.zoom ?? 1.6;
     const U = { Pull: 0.4 * k, Orbit: 2.2 * k, Logo: 4.6 * k, Out: 7.4 * k }, sw = E3.io, cell = p.cell;
     if (!s.grid || s.cell !== cell) {
       const cols = Math.ceil(W / cell) + 1, rows = Math.ceil(H / cell) + 1, ox = (W - (cols - 1) * cell) / 2, oy = (H - (rows - 1) * cell) / 2, ci = Math.round((C[0] - ox) / cell), ri = Math.round((C[1] - oy) / cell); s.grid = []; s.cell = cell;
       for (let r = 0; r < rows; r++) for (let q = 0; q < cols; q++) { const dc = q - ci, dr = r - ri, mark = Math.abs(dc) <= 2 && Math.abs(dr) <= 2 && (dc || dr) ? [dc * MK.gap, dr * MK.gap] : null, gx = ox + q * cell, gy = oy + r * cell;
         s.grid.push({ gx, gy, base: h2(q, r) * 180, ph: h2(r, q + 9) * 6.283, mark, d: Math.hypot(gx - C[0], gy - C[1]) }); }
     }
-    const [mx, my] = toDesign(c, W, H), mag = (t) => { const m = gatherMagnet(t, U); return z > 0.001 ? [lerp(m[0], mx, z), lerp(m[1], my, z)] : m; };
+    const m0 = gatherMagnet(U.Logo, U), [mx, my] = unZ(toDesign(c, W, H), Z), mag = (t) => { const g = gatherMagnet(t, U), q = sw((t - ST) / (U.Logo - ST)), m = t < U.Logo ? [lerp(C[0], m0[0], q), lerp(1300, m0[1], q)] : g; return z > 0.001 ? [lerp(m[0], mx, z), lerp(m[1], my, z)] : m; };
     const tL = T - U.Logo, tO = T - U.Out, now = mag(T), len0 = cell * 0.56, th0 = Math.max(2, cell * 0.075), loop = 2 * Math.PI * T / L, release = sw((tO - 0.6) / 1.4);
-    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = bg; ctx.fillRect(0, 0, c.w, c.h); cover(ctx, c, W, H); ctx.strokeStyle = ink; ctx.lineCap = "round";
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = bg; ctx.fillRect(0, 0, c.w, c.h); cover(ctx, c, W, H); FZ(ctx, Z); ctx.strokeStyle = ink; ctx.lineCap = "round";
     for (const f of s.grid) {
       const kk = (f.mark ? sw(tL / 1.1) * (1 - sw((tO - 0.5) / 1.3)) : sw((tL - f.d / 2600) / 0.9) * (1 - sw((tO - 0.5 - f.d / 2600) / 1.1))) * (1 - z);
       const x = f.mark ? lerp(f.gx, now[0] + f.mark[0], kk) : lerp(f.gx, now[0], kk * 0.8), y = f.mark ? lerp(f.gy, now[1] + f.mark[1], kk) : lerp(f.gy, now[1], kk * 0.8);
@@ -1264,34 +1286,164 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
     const vg = ctx.createRadialGradient(W / 2, H / 2, H * 0.3, W / 2, H / 2, H * 0.95); vg.addColorStop(0, "rgba(0,0,0,0)"); vg.addColorStop(1, "rgba(0,0,0,0.7)"); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
     ctx.setTransform(1, 0, 0, 1, 0, 0);
   }
+  const ORB_STARS = Array.from({ length: 170 }, (_, i) => [h2(i, 11) * 1920, h2(i, 12) * 1080, h2(i, 13), h2(i, 14) * 6.28]);
   function drawOrbits(ctx, c, p) {
-    const W = 1920, H = 1080, TAU = Math.PI * 2, CX = W / 2, CY = H / 2, O = c.t, ink = c.pal[2].map(v => Math.round(v * 255)).join(",");
+    const W = 1920, H = 1080, TAU = Math.PI * 2, CX = W / 2, CY = H / 2, O = c.t, ink = c.pal[2].map(v => Math.round(v * 255)).join(","), acc = c.pal[0].map(v => Math.round(v * 255)).join(",");
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = "#000"; ctx.fillRect(0, 0, c.w, c.h); cover(ctx, c, W, H);
     const [mx, my] = toDesign(c, W, H), ti = (my / H - 0.5) * c.mouse[2], ro = (mx / W - 0.5) * c.mouse[2];
+    ORB_STARS.forEach(([x, y, s, ph]) => { const a = (0.08 + 0.3 * s) * (0.55 + 0.45 * Math.sin(O * (0.6 + s) + ph)); ctx.fillStyle = `rgba(${ink},${a.toFixed(3)})`; ctx.fillRect(x, y, 1 + s * 1.4, 1 + s * 1.4); });
     const R = [{ r: 165, n: 2, sp: 1.6, ph: 0 }, { r: 360, n: 3, sp: 0.9, ph: 2.1 }, { r: 560, n: 4, sp: 0.6, ph: 4.2 }];
+    const ring = (g) => { const r = g.r * p.scale * (1 + 0.04 * Math.sin(O * 0.7 + g.ph)), tilt = clamp(0.55 + 0.45 * Math.sin(O * 0.31 * p.sway + g.ph) + ti * 1.2, 0, 1.45), rot = 0.35 * Math.sin(O * 0.17 * p.sway + g.ph * 1.3) + ro * 0.8; return { r, ct: Math.cos(tilt), rot }; };
+    const front = [];
     R.forEach((g, i) => {
-      const r = g.r * p.scale * (1 + 0.04 * Math.sin(O * 0.7 + g.ph)), tilt = clamp(0.55 + 0.45 * Math.sin(O * 0.31 * p.sway + g.ph) + ti * 1.2, 0, 1.45), rot = 0.35 * Math.sin(O * 0.17 * p.sway + g.ph * 1.3) + ro * 0.8, ct = Math.cos(tilt);
-      ctx.save(); ctx.translate(CX, CY); ctx.rotate(rot); ctx.strokeStyle = `rgba(${ink},0.16)`; ctx.lineWidth = 5; ctx.beginPath(); ctx.ellipse(0, 0, r, Math.max(0.5, r * ct), 0, 0, TAU); ctx.stroke();
-      for (let k = 0; k < g.n; k++) {
-        const a = O * g.sp * p.rate + (k * TAU) / g.n + g.n, x = r * Math.cos(a), y = r * ct * Math.sin(a), ang = Math.atan2(r * ct * Math.cos(a), -r * Math.sin(a)), m = 6 + r * 0.028, depth = 0.7 + 0.3 * Math.sin(a);
-        ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.scale(2.1, 1); const gr = ctx.createRadialGradient(0, 0, 0, 0, 0, m * 1.8);
-        gr.addColorStop(0, `rgba(${ink},${0.95 * depth})`); gr.addColorStop(0.45, `rgba(${ink},${0.6 * depth})`); gr.addColorStop(1, `rgba(${ink},0)`); ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(0, 0, m * 1.8, 0, TAU); ctx.fill(); ctx.restore();
-      }
+      const { r, ct, rot } = ring(g), ry = Math.max(0.5, r * ct);
+      ctx.save(); ctx.translate(CX, CY); ctx.rotate(rot);
+      ctx.strokeStyle = `rgba(${ink},0.05)`; ctx.lineWidth = 9; ctx.beginPath(); ctx.ellipse(0, 0, r, ry, 0, 0, TAU); ctx.stroke();
+      ctx.strokeStyle = `rgba(${ink},0.22)`; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.ellipse(0, 0, r, ry, 0, 0, TAU); ctx.stroke();
+      const nT = 96, spin = O * 0.05 * (i % 2 ? -1 : 1);
+      for (let k = 0; k < nT; k++) { const a = (k / nT) * TAU + spin, d = 0.45 + 0.55 * (0.5 + 0.5 * Math.sin(a)), L = k % 8 === 0 ? 10 : 4, x = r * Math.cos(a), y = ry * Math.sin(a), nx = Math.cos(a), ny = Math.sin(a) * ct, nl = Math.hypot(nx, ny) || 1;
+        ctx.strokeStyle = `rgba(${ink},${(0.2 * d).toFixed(3)})`; ctx.lineWidth = k % 8 === 0 ? 1.2 : 0.8; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + (nx / nl) * L, y + (ny / nl) * L); ctx.stroke(); }
       ctx.restore();
+      for (let k = 0; k < g.n; k++) front.push({ g, i, k, r, ry, ct, rot });
     });
-    const orR = 26 * p.scale, g = ctx.createRadialGradient(CX, CY, 0, CX, CY, orR * 3.2); g.addColorStop(0, `rgba(${ink},1)`); g.addColorStop(0.3, `rgba(${ink},1)`); g.addColorStop(0.36, `rgba(${ink},0.3)`); g.addColorStop(1, `rgba(${ink},0)`);
-    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(CX, CY, orR * 3.2, 0, TAU); ctx.fill(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+    const comet = ({ g, k, r, ry, ct, rot }) => {
+      const a = O * g.sp * p.rate + (k * TAU) / g.n + g.n, depth = 0.6 + 0.4 * Math.sin(a), m = 5 + r * 0.022, col = k === 0 ? acc : ink;
+      ctx.save(); ctx.translate(CX, CY); ctx.rotate(rot); ctx.lineCap = "butt";
+      const N = 40, span = 0.9 / Math.max(0.6, g.sp);
+      for (let j = N; j > 0; j--) { const a0 = a - (j / N) * span, a1 = a - ((j - 1) / N) * span + 0.004, f = 1 - j / N; ctx.strokeStyle = `rgba(${col},${(0.55 * f * f * depth).toFixed(3)})`; ctx.lineWidth = 0.6 + m * 0.9 * f; ctx.beginPath(); ctx.moveTo(r * Math.cos(a0), ry * Math.sin(a0)); ctx.lineTo(r * Math.cos(a1), ry * Math.sin(a1)); ctx.stroke(); }
+      const x = r * Math.cos(a), y = ry * Math.sin(a), gr = ctx.createRadialGradient(x, y, 0, x, y, m * 2.6);
+      gr.addColorStop(0, `rgba(${col},${0.9 * depth})`); gr.addColorStop(0.35, `rgba(${col},${0.35 * depth})`); gr.addColorStop(1, `rgba(${col},0)`); ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(x, y, m * 2.6, 0, TAU); ctx.fill();
+      ctx.fillStyle = `rgba(255,255,255,${(0.95 * depth).toFixed(3)})`; ctx.beginPath(); ctx.arc(x, y, Math.max(1.2, m * 0.32), 0, TAU); ctx.fill(); ctx.restore();
+      return Math.sin(a) >= 0;
+    };
+    const back = front.filter(q => !(Math.sin(O * q.g.sp * p.rate + (q.k * TAU) / q.g.n + q.g.n) >= 0)); back.forEach(comet);
+    const orR = 26 * p.scale, pulse = 0.5 + 0.5 * Math.sin(O * 1.4);
+    const halo = ctx.createRadialGradient(CX, CY, 0, CX, CY, orR * (7 + pulse)); halo.addColorStop(0, `rgba(${acc},0.28)`); halo.addColorStop(0.4, `rgba(${acc},0.08)`); halo.addColorStop(1, `rgba(${acc},0)`); ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(CX, CY, orR * (7 + pulse), 0, TAU); ctx.fill();
+    const g = ctx.createRadialGradient(CX, CY, 0, CX, CY, orR * 3.2); g.addColorStop(0, `rgba(${ink},1)`); g.addColorStop(0.3, `rgba(${ink},1)`); g.addColorStop(0.36, `rgba(${ink},0.3)`); g.addColorStop(1, `rgba(${ink},0)`);
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(CX, CY, orR * 3.2, 0, TAU); ctx.fill();
+    [[1.9, 0.32, 1, 14], [2.7, 0.18, -0.6, 40]].forEach(([k, a, sp, n]) => { ctx.save(); ctx.translate(CX, CY); ctx.rotate(O * sp * 0.4); ctx.setLineDash([(orR * k * TAU) / n * 0.55, (orR * k * TAU) / n * 0.45]); ctx.strokeStyle = `rgba(${ink},${a})`; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(0, 0, orR * k, 0, TAU); ctx.stroke(); ctx.restore(); });
+    front.filter(q => !back.includes(q)).forEach(comet);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
   }
 
-  // ── Prism (Product Video): six spectrum blobs orbit and screen-blend into a soft wash ──
-  const PRISM_H = [[1, 0.373, 0.427], [1, 0.702, 0.278], [1, 0.902, 0.427], [0.29, 0.871, 0.502], [0.22, 0.741, 0.973], [0.506, 0.549, 0.973]];
-  function drawPrism(ctx, c, p) {
-    const W = 1920, H = 1080, CX = 960, CY = 540, t = c.t * p.flow; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = "source-over"; ctx.fillStyle = "#000"; ctx.fillRect(0, 0, c.w, c.h); cover(ctx, c, W, H);
-    const [mx, my] = toDesign(c, W, H), kick = 1 + 0.15 * (0.5 + 0.5 * Math.sin(c.t * 1.3)) * p.pulse; ctx.translate(CX, CY); ctx.scale(kick, kick); ctx.translate(-CX, -CY);
-    ctx.globalCompositeOperation = "screen";
-    PRISM_H.forEach((h, i) => { const x = lerp(CX + Math.cos(t * 0.5 + i * 1.3) * 580, mx, c.mouse[2] * 0.25), y = lerp(CY + Math.sin(t * 0.62 + i * 2.1) * 320, my, c.mouse[2] * 0.25), R = 380 * 1.9 * p.size;
-      const g = ctx.createRadialGradient(x, y, 0, x, y, R); g.addColorStop(0, pcss(h, p.glow)); g.addColorStop(0.35, pcss(h, p.glow * 0.55)); g.addColorStop(1, pcss(h, 0)); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); });
-    ctx.globalCompositeOperation = "source-over"; ctx.setTransform(1, 0, 0, 1, 0, 0);
+  // ── Hearth (Document AI Teaser): a breathing bed of light along the bottom edge; columns of light surge up out of it on a cycle ──
+  const q4 = (p) => 1 - Math.pow(1 - clamp(p), 4);
+  const io4 = (p) => { p = clamp(p); return p < 0.5 ? 8 * p * p * p * p : 1 - Math.pow(-2 * p + 2, 4) / 2; };
+  const HEARTH_F = [[16, 1000, 620, 0, 0.28, 1, 0], [40, 1200, 740, 2, 0.24, 2, 0.3], [62, 960, 580, 0, 0.26, 1, 0.6], [86, 1040, 660, 2, 0.22, 2, 0.8], [30, 760, 360, 1, 0.1, 3, 0.2], [72, 720, 340, 1, 0.09, 2, 0.5], [50, 900, 280, 1, 0.07, 1, 0.4]];
+  const HEARTH_B = Array.from({ length: 22 }, (_, i) => { const r = (k) => { const x = Math.sin(i * 91.7 + k * 47.3) * 43758.5453; return x - Math.floor(x); };
+    return { x: ((i + 0.5) / 22 + (r(1) - 0.5) * 0.05) * 1920, w: 140 + r(2) * 200, d: r(3) * 0.5, c: i % 3 === 1 ? 1 : i % 2 ? 2 : 0, a: 0.8 + r(4) * 0.2, sway: r(5) * 40, ph: r(6) }; });
+  let HEARTH_DOTS = null;
+  const hearthDots = () => { if (HEARTH_DOTS) return HEARTH_DOTS; const cv = HEARTH_DOTS = document.createElement("canvas"); cv.width = 1920; cv.height = 1080; const x = cv.getContext("2d"); x.fillStyle = "#f0f0f4";
+    for (let yy = 14; yy < 1080; yy += 28) for (let xx = 14; xx < 1920; xx += 28) { const d = Math.hypot((xx - 960) / 1152, (yy - 486) / 648), m = d < 0.6 ? lerp(0.3, 0.12, d / 0.6) : lerp(0.12, 0, clamp((d - 0.6) / 0.4)); if (m <= 0.002) continue; x.globalAlpha = Math.min(1, 0.45 * m); x.beginPath(); x.arc(xx, yy, 1.2, 0, 6.2832); x.fill(); }
+    return cv; };
+  const glowEllipse = (ctx, x, y, rx, ry, stops) => { if (rx < 1 || ry < 1) return; ctx.save(); ctx.translate(x, y); ctx.scale(rx, ry); const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 1); stops.forEach(([o, c]) => g.addColorStop(o, c)); ctx.fillStyle = g; ctx.fillRect(-1, -1, 2, 2); ctx.restore(); };
+  function drawHearth(ctx, c, p, s0, e, part) {
+    const bed = part !== "surge";
+    const W = 1920, H = 1080, t = c.t, pal = c.pal, I = p.intensity; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = 1;
+    ctx.fillStyle = pcss(pal[3].map(v => v * 0.06 + 0.008)); ctx.fillRect(0, 0, c.w, c.h); cover(ctx, c, W, H);
+    const [mx] = toDesign(c, W, H), pres = c.mouse[2] || 0;
+    if (p.dots) ctx.drawImage(hearthDots(), 0, 0);
+    ctx.globalCompositeOperation = "lighter";
+    const br = 0.5 + 0.5 * Math.sin(t * 0.9), bs = 0.96 + 0.04 * br;
+    if (bed) glowEllipse(ctx, W / 2 + Math.sin(t * 0.35) * 30, H - 30, 950 * bs, 550 * bs, [[0, pcss(mx3(pal[0], [1, 1, 1], 0.12), 0.55 * I * (0.8 + 0.2 * br))], [0.38, pcss(pal[1], 0.22 * I)], [0.72, pcss(pal[0], 0.04 * I)], [1, pcss(pal[0], 0)]]);
+    const u = t * 0.1 * p.sway;
+    if (bed) HEARTH_F.forEach(([x, w, h, ci, a, f, ph]) => {
+      const w1 = Math.sin((u * f + ph) * 6.2832), w2 = Math.sin((u * f * 2 + ph * 1.7) * 6.2832), cx = (x / 100) * W, near = pres * Math.exp(-Math.pow((cx - mx) / 520, 2));
+      const sy = (1 + 0.12 * w1 + 0.05 * w2) * p.height * (1 + 0.5 * near), ry = (h * sy) / 2, A = Math.min(1, a * 2.3) * (0.8 + 0.2 * w1) * I * (1 + 0.7 * near), col = mx3(pal[ci], [1, 1, 1], 0.08);
+      glowEllipse(ctx, cx + w2 * 30, H + 0.45 * h - ry, (w * (1 + 0.05 * w2)) / 2, ry, [[0, pcss(col, Math.min(1, A))], [0.45, pcss(col, Math.min(1, A) * 0.62)], [1, pcss(col, 0)]]);
+    });
+    if (!bed) {
+      const s = (t % p.cycle) - 0.6, S = p.intensity, wash = io4((s - 0.4) / 0.91) * (1 - E3.sine((s - 1.4) / 1.6));
+      if (wash > 0.001) glowEllipse(ctx, W / 2, H * 0.7, W * 0.9, H * 0.8, [[0, pcss(pal[0], 0.36 * wash * S)], [0.5, pcss(pal[0], 0.14 * wash * S)], [1, pcss(pal[0], 0.04 * wash * S)]]);
+      HEARTH_B.forEach(b => { const up = io4((s - b.d) / 1.12), aw = E3.sine((s - 1.3 - b.d * 1.2) / 1.9); if (up <= 0.001 || aw >= 0.999) return;
+        const op = Math.min(1, up * 1.4) * b.a * Math.pow(Math.cos((aw * Math.PI) / 2), 2) * S * 0.36; if (op < 0.004) return;
+        const top = H + 80 - (1400 + aw * 140) * up, hI = 1400 * (1 - 0.7 * aw) * up, x = b.x + Math.sin((t * 1.3 + b.ph) * 6.2832) * b.sway, col = pal[b.c];
+        glowEllipse(ctx, x, top + 0.55 * hI, b.w / 2, hI / 2, [[0, pcss(col, op)], [0.35, pcss(col, op * 0.6)], [0.65, pcss(col, op * 0.2)], [1, pcss(col, 0)]]); });
+    }
+    ctx.globalCompositeOperation = "source-over"; ctx.setTransform(1, 0, 0, 1, 0, 0); filmGrain(ctx, c.w, c.h, t, p.grain);
+  }
+
+  // ── Silk Swirl (Oncheck Brand Animation): banded spiral that twists toward the centre and keeps turning ──
+  const F_SWIRL = HEAD + HASH + VNOISE + `
+uniform float u_bands; uniform float u_twist; uniform float u_soft; uniform float u_noise; uniform float u_scale; uniform float u_phase; uniform vec2 u_c; uniform float u_grain;
+void main(){vec2 res=u_resolution;vec2 p=(gl_FragCoord.xy-u_c)/(min(res.x,res.y)*max(u_scale,0.05));
+vec3 c0=u_palette[0],c1=u_palette[1],c2=u_palette[2],c3=u_palette[3];
+float l=max(length(p),1e-4);float a=atan(p.y,p.x);
+float s=fract(floor(u_bands+0.5)*a/6.2831853+pow(l,-3.0*clamp(u_twist,0.0,1.0))+u_phase);
+s=1.0-abs(2.0*s-1.0);s+=u_noise*(vnoise(p*9.0+u_phase*3.0)-0.5);
+float w=mix(0.006,0.22,u_soft);
+vec3 col=c3;col=mix(col,c2,smoothstep(0.25-w,0.25+w,s));col=mix(col,c1,smoothstep(0.5-w,0.5+w,s));col=mix(col,c0,smoothstep(0.75-w,0.75+w,s));
+col=mix(col,mix(c3,(c0+c1+c2+c3)*0.25,0.4),smoothstep(0.2,0.7,(3.0*clamp(u_twist,0.0,1.0)*pow(l,-3.0*clamp(u_twist,0.0,1.0)-1.0)+floor(u_bands+0.5)/(6.2831853*l))*2.0/(min(res.x,res.y)*max(u_scale,0.05))));
+col+=(hash21(gl_FragCoord.xy+fract(u_time*7.3)*91.0)-0.5)*u_grain;
+gl_FragColor=vec4(max(col,0.0),1.0);}`;
+
+  const mx3 = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+  const rrect = (x, X, Y, W, H, R) => { R = Math.min(R, W / 2, H / 2); x.beginPath(); x.moveTo(X + R, Y); x.arcTo(X + W, Y, X + W, Y + H, R); x.arcTo(X + W, Y + H, X, Y + H, R); x.arcTo(X, Y + H, X, Y, R); x.arcTo(X, Y, X + W, Y, R); x.closePath(); };
+
+  // ── Dot Globe (Invois App Launch): a turning sphere of dots; land on the near side lights up and pings ──
+  const GLOBE_PTS = (() => { const pts = [], N = 2600, ga = Math.PI * (3 - Math.sqrt(5));
+    for (let i = 0; i < N; i++) { const y = 1 - (i / (N - 1)) * 2, lat = Math.asin(y), lon = (ga * i) % (Math.PI * 2);
+      pts.push([lat, lon, h2(i, 7), Math.sin(lon * 2 + 1.1) * Math.cos(lat * 3) + 0.6 * Math.sin(lon * 5 + lat * 4) + 0.35 * Math.cos(lon * 9 - lat * 7)]); }
+    return pts; })();
+  function drawGlobe(ctx, c, p) {
+    const W = c.w, H = c.h, k = Math.min(W, H) / 1080, pal = c.pal, t = c.t, mz = c.mouse[2];
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = "source-over"; ctx.fillStyle = pcss(pal[3]); ctx.fillRect(0, 0, W, H);
+    const R = Math.min(W, H) * 0.5 * p.size, cx = W / 2, cy = H / 2, rot = t * p.rate + mz * (c.mouse[0] / W - 0.5) * 2.4, tl = (p.tilt + mz * (c.mouse[1] / H - 0.5) * 50) * Math.PI / 180;
+    const g = ctx.createRadialGradient(cx, cy, R * 0.55, cx, cy, R * 1.3); g.addColorStop(0, pcss(pal[0], 0.18 * p.glow)); g.addColorStop(1, pcss(pal[0], 0)); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    const thr = 1.05 - 1.4 * p.density, ct = Math.cos(tl), st = Math.sin(tl), B = 6, front = Array.from({ length: B }, () => new Path2D()), back = [new Path2D(), new Path2D()], hot = new Path2D();
+    const r0 = Math.max(0.8, 2.6 * k * p.dot), rb = Math.max(0.6, 1.6 * k * p.dot), proj = [];
+    GLOBE_PTS.forEach(([lat, lon, q, land]) => { if (land <= thr) return;
+      const l = lon + rot, x = Math.cos(lat) * Math.sin(l), z0 = Math.cos(lat) * Math.cos(l), y0 = Math.sin(lat), y = y0 * ct - z0 * st, z = y0 * st + z0 * ct, px = cx + x * R, py = cy - y * R;
+      if (z > 0) { const r = r0 * (1 + 0.45 * q), path = q > 0.94 ? hot : front[Math.min(B - 1, Math.floor((0.35 + 0.65 * z) * B))]; path.moveTo(px + r, py); path.arc(px, py, r, 0, 6.2832); if (z > 0.35) proj.push([px, py]); }
+      else { const path = back[z > -0.45 ? 0 : 1]; path.moveTo(px + rb, py); path.arc(px, py, rb, 0, 6.2832); } });
+    ctx.fillStyle = pcss(mx3(pal[1], pal[3], 0.4), 0.16); ctx.fill(back[0]); ctx.fillStyle = pcss(mx3(pal[1], pal[3], 0.4), 0.06); ctx.fill(back[1]);
+    front.forEach((path, b) => { ctx.fillStyle = pcss(pal[0], (b + 1) / B); ctx.fill(path); }); ctx.fillStyle = pcss(pal[2]); ctx.fill(hot);
+    if (p.pings > 0 && proj.length) for (let j = 0; j < 3; j++) { const per = 1.4, i = Math.floor(t / per) * 3 + j, u = (t % per) / per - j * 0.18; if (u <= 0 || h2(i, 4) > p.pings + 0.15) continue;
+      const [px, py] = proj[Math.floor(h2(i, 9) * proj.length)], rr = (4 + 34 * E3.out(u)) * k; ctx.strokeStyle = pcss(pal[2], 0.8 * (1 - u)); ctx.lineWidth = 2 * k; ctx.beginPath(); ctx.arc(px, py, rr, 0, 6.2832); ctx.stroke();
+      ctx.fillStyle = pcss(pal[2], 1 - u); ctx.beginPath(); ctx.arc(px, py, 3.2 * k, 0, 6.2832); ctx.fill(); }
+  }
+
+  // ── Wave Bands (Oncheck Brand Book): the swirl distilled into a two-colour repeat of drifting waves ──
+  function drawWaves(ctx, c, p) {
+    const W = c.w, H = c.h, k = c.k, pal = c.pal, t = c.t, tl = p.tilt * Math.PI / 180;
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = "source-over"; ctx.fillStyle = pcss(pal[3]); ctx.fillRect(0, 0, W, H);
+    const gap = Math.max(4, p.gap * k), th = gap * p.thick, lam = Math.max(10, p.length * k), step = Math.max(3, 7 * k), amp = p.amp * k * (1 + p.breathe * 0.35 * Math.sin(t * 0.8)), ph = -t * p.drift;
+    const diag = Math.abs(tl) > 0.005, DX = (diag ? Math.hypot(W, H) / 2 : W / 2) + lam, DY = (diag ? Math.hypot(W, H) / 2 : H / 2) + gap * 2;
+    const ca = Math.cos(-tl), sa = Math.sin(-tl), qx = c.mouse[0] - W / 2, qy = c.mouse[1] - H / 2, mxr = qx * ca - qy * sa, myr = qx * sa + qy * ca, mz = c.mouse[2], R2 = Math.pow(260 * k, 2);
+    const bump = (x, y) => 1 + 2.2 * mz * Math.exp(-((x - mxr) * (x - mxr) + (y - myr) * (y - myr)) / R2);
+    ctx.save(); ctx.translate(W / 2, H / 2); ctx.rotate(tl);
+    for (let r = 0, y0 = -DY; y0 < DY; r++, y0 += gap) {
+      ctx.beginPath(); for (let x = -DX; x <= DX; x += step) { const yy = y0 + amp * bump(x, y0) * Math.sin((6.2832 * x) / lam + ph + r * 0.9); x === -DX ? ctx.moveTo(x, yy) : ctx.lineTo(x, yy); }
+      for (let x = DX; x >= -DX; x -= step) ctx.lineTo(x, y0 + th + amp * bump(x, y0) * Math.sin((6.2832 * x) / lam + ph + r * 0.9 + 0.5));
+      ctx.closePath(); ctx.fillStyle = pcss(p.duo >= 0.5 && r % 2 ? pal[1] : pal[0]); ctx.fill(); }
+    ctx.restore();
+  }
+
+  // ── Stage Light (Vaulton Launch): light pours up from a glowing base, with soft shafts, a mirrored floor and drifting motes ──
+  function drawStage(ctx, c, p) {
+    const pal = c.pal, t = c.t, A = pal[0], B = pal[1], hot = mx3(pal[2], [1, 1, 1], 0.65), m = c.mouse[2], mx = m * (c.mouse[0] / c.w - 0.5), my = m * (c.mouse[1] / c.h - 0.5);
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = "source-over"; cover(ctx, c, 1920, 1080); const x = ctx;
+    const by = 1080 * p.base, cx = 960 + mx * 220, W = 1920 * p.width, R = 1080 * p.reach * (1 - my * 0.25), I = p.intensity * (1 + p.breathe * 0.08 * Math.sin(t * 1.3) + p.breathe * 0.04 * Math.sin(t * 3.1 + 1));
+    const bg = x.createLinearGradient(0, 0, 0, 1080); const ink = mx3(A, [0, 0, 0], 0.93); bg.addColorStop(0, pcss(mx3(ink, [0, 0, 0], 0.6))); bg.addColorStop(p.base, pcss(ink)); bg.addColorStop(1, pcss(mx3(ink, [0, 0, 0], 0.7))); x.fillStyle = bg; x.fillRect(-20, -20, 1960, 1120);
+    const blob = (gx, gy, rx, ry, col, a) => { if (a <= 0) return; x.save(); x.translate(gx, gy); x.scale(rx, ry); const g = x.createRadialGradient(0, 0, 0, 0, 0, 1); g.addColorStop(0, pcss(col, a)); g.addColorStop(0.45, pcss(col, a * 0.35)); g.addColorStop(1, pcss(col, 0)); x.fillStyle = g; x.fillRect(-1, -1, 2, 2); x.restore(); };
+    x.globalCompositeOperation = "lighter";
+    x.save(); x.beginPath(); x.rect(-20, -20, 1960, by + 20); x.clip();
+    blob(cx + 260 * Math.sin(t * 0.13), by - R * 0.9, W * 1.1, R * 0.7, B, 0.07 * I); blob(cx, by - R * 0.35, W * 0.28, R * 0.9, mx3(A, hot, 0.2), 0.12 * I);
+    for (let k = 0; k < 5; k++) blob(cx, by, W * (0.55 + k * 0.32), R * (0.22 + k * 0.2), mx3(A, B, k / 5), (0.42 - k * 0.07) * I);
+    const n = Math.round(4 + 8 * p.shafts);
+    for (let i = 0; i < n && p.shafts > 0; i++) { const u = (i + 0.5) / n - 0.5, sx = cx + u * W * 1.05 + 18 * Math.sin(t * 0.4 + i * 1.7), sw = W / n * (0.6 + 0.8 * h2(i, 3)), sh = R * (0.55 + 0.5 * h2(i, 5)) * (0.85 + 0.15 * Math.sin(t * 0.7 + i)), al = p.shafts * I * 0.3 * (0.5 + 0.5 * Math.sin(t * (0.35 + 0.2 * h2(i, 7)) + i * 2.1)) * (1 - Math.abs(u) * 1.2);
+      if (al <= 0) continue; const g = x.createLinearGradient(0, by, 0, by - sh); g.addColorStop(0, pcss(mx3(A, hot, 0.3), al)); g.addColorStop(0.35, pcss(A, al * 0.5)); g.addColorStop(1, pcss(B, 0));
+      const hg = x.createLinearGradient(sx - sw, 0, sx + sw, 0); x.save(); x.fillStyle = g; x.beginPath(); x.moveTo(sx - sw * 0.5, by); x.lineTo(sx + sw * 0.5, by); x.lineTo(sx + sw * 0.95, by - sh); x.lineTo(sx - sw * 0.95, by - sh); x.closePath(); x.filter = "blur(18px)"; x.fill(); x.restore(); }
+    x.restore();
+    x.save(); x.beginPath(); x.rect(-20, by, 1960, 1120 - by); x.clip(); x.translate(0, by); x.scale(1, -0.32); x.translate(0, -by);
+    for (let k = 0; k < 3; k++) blob(cx, by, W * (0.6 + k * 0.4), R * (0.25 + k * 0.25), mx3(A, B, k / 3), (0.2 - k * 0.05) * I); x.restore();
+    blob(cx, by, W * 0.62, 26, hot, 0.55 * I); blob(cx, by, W * 0.42, 9, [1, 1, 1], 0.7 * I);
+    const lg = x.createLinearGradient(cx - W * 0.6, 0, cx + W * 0.6, 0); lg.addColorStop(0, pcss(hot, 0)); lg.addColorStop(0.5, pcss([1, 1, 1], Math.min(1, 0.95 * I))); lg.addColorStop(1, pcss(hot, 0)); x.fillStyle = lg; x.fillRect(cx - W * 0.6, by - 1.5, W * 1.2, 3);
+    if (p.motes > 0) for (let i = 0; i < 28; i++) { const life = (t * (0.035 + 0.03 * h2(i, 3)) + h2(i, 2)) % 1, my2 = by - 8 - life * R * 0.95, mxp = cx + (h2(i, 1) - 0.5) * W * (0.9 + life * 0.5) + 16 * Math.sin(t * 0.6 + i), al = p.motes * Math.sin(Math.PI * life) * 0.55 * Math.min(1, I);
+      blob(mxp, my2, 4 + 3 * h2(i, 8), 4 + 3 * h2(i, 8), hot, al); }
+    x.globalCompositeOperation = "source-over";
+    const vg = x.createRadialGradient(960, by * 0.75, 380, 960, by * 0.75, 1250); vg.addColorStop(0, "rgba(0,0,0,0)"); vg.addColorStop(1, "rgba(0,0,0,0.6)"); x.fillStyle = vg; x.fillRect(-20, -20, 1960, 1120);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
   }
 
   const P = (key, label, min, max, step, def, unit) => ({ key, label, min, max, step, def, unit: unit || "" });
@@ -1299,40 +1451,40 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
 
   const EFFECTS = {
     current: {
-      name: "Current", from: "Blastlabs Flow", kind: "GLSL", res: 0.5, rawPr: true, palette: "plasma",
-      desc: "Line-integral flow streaks that speed up, heat up and bend around the cursor.",
+      name: "Flow Streaks", from: "Blastlabs Flow", kind: "GLSL", res: 0.5, rawPr: true, palette: "plasma",
+      desc: "Flow streaks that speed up, heat up and bend around the cursor.",
       hint: "Move to bend the current",
       params: [P("scale", "Scale", 0.4, 3, 0.05, 1.2), P("current", "Current", 0, 2, 0.05, 0.7), P("length", "Trail", 6, 80, 1, 32), P("density", "Density", 0, 1, 0.01, 0.55)],
       frag: F_CURRENT,
       uniforms: (c, p) => ({ u_scale: p.scale, u_current: p.current, u_length: p.length, u_density: p.density, u_mouseInfluence: 1 }),
     },
     fret: {
-      name: "Fret", from: "Nodepath Launch", kind: "GLSL", res: 0.75, palette: "ion",
-      desc: "Truchet arcs that join into endless circuits, with light pulses running along every path.",
+      name: "Circuit Arcs", from: "Nodepath Launch", kind: "GLSL", res: 0.75, palette: "ion",
+      desc: "Arcs join into endless circuits with light pulses running along them.",
       hint: "Move to swirl · Click for a shockwave",
       params: [P("cell", "Cell", 10, 60, 1, 24), P("line", "Line", 0.5, 4, 0.05, 1.3), P("glow", "Glow", 0, 1, 0.01, 0.6), P("pulse", "Pulse", 0, 1.5, 0.01, 1), P("weld", "Weld", 0, 1, 0.01, 0.2), P("warp", "Swirl", 0, 1, 0.01, 0.15), P("split", "Chroma split", 0, 4, 0.05, 0.6)],
       frag: F_FRET,
       uniforms: (c, p) => ({ u_scale: p.cell, u_line: p.line, u_glow: p.glow, u_pulse: p.pulse, u_weld: p.weld, u_phase: c.t * 0.45, u_seed: 4, u_pan: [c.t * 0.05, c.t * 0.025], u_rot: c.t * 0.01, u_warp: p.warp + c.mouse[2] * 0.35, u_ca: p.split + c.shockA * 3 }),
     },
     skein: {
-      name: "Skein", from: "Weftline Launch", kind: "GLSL", res: 0.75, palette: "aurora",
-      desc: "Woven filaments that ripple at their own pace, drift sideways and draw in from the left.",
+      name: "Woven Lines", from: "Weftline Launch", kind: "GLSL", res: 0.75, palette: "aurora",
+      desc: "Woven filaments ripple, drift sideways and draw in from the left.",
       hint: "Click for a shockwave",
       params: [P("cell", "Spacing", 10, 60, 1, 22), P("line", "Line", 0.5, 4, 0.05, 1.3), P("wave", "Wave", 0, 1.5, 0.01, 0.55), P("vary", "Variety", 0, 1, 0.01, 0.7), P("tilt", "Tilt", -45, 45, 1, -8, "°"), P("scatter", "Scatter", 0, 1, 0.01, 0.5), P("depth", "Depth", 0, 1, 0.01, 0.6), P("glow", "Glow", 0, 1, 0.01, 0.6), P("draw", "Draw-in", 0, 1, 0.01, 1), P("split", "Chroma split", 0, 4, 0.05, 0.4)],
       frag: F_SKEIN,
       uniforms: (c, p) => ({ u_scale: p.cell, u_line: p.line, u_wave: p.wave, u_vary: p.vary, u_rotate: p.tilt, u_scatter: p.scatter, u_depth: p.depth, u_glow: p.glow, u_draw: p.draw, u_phase: c.t * 0.4, u_wphase: c.t * 0.8, u_panx: c.t * 0.25, u_seed: 2, u_pulse: 0.9, u_ca: p.split + c.shockA * 3 }),
     },
     harmonia: {
-      name: "Harmonia", from: "Harmonia Launch", kind: "GLSL", res: 0.75, palette: "ion",
-      desc: "Times-table chords on a circle. Shift the multiplier and cardioids, nephroids and roses appear.",
+      name: "Chord Circle", from: "Harmonia Launch", kind: "GLSL", res: 0.75, palette: "solar",
+      desc: "Times-table chords on a circle morph into cardioids and roses.",
       hint: "Move left and right to shift the multiplier",
-      params: [P("points", "Points", 20, 150, 1, 120), P("mult", "Multiplier", 2, 40, 0.01, 2), P("drift", "Drift", 0, 0.5, 0.005, 0.06), P("radius", "Radius", 0.2, 0.48, 0.005, 0.38), P("line", "Line", 0.3, 2, 0.05, 0.7), P("glow", "Glow", 0, 1.5, 0.01, 0.8), P("dots", "Dots", 0, 1, 0.01, 0.5), P("field", "Field", 0, 1, 0.01, 0.35), P("ring", "Ring", 0, 1, 0.01, 0.5)],
+      params: [P("points", "Points", 20, 150, 1, 120), P("offset", "Offset", -0.4, 0.4, 0.01, 0), P("mult", "Multiplier", 2, 40, 0.01, 2), P("drift", "Drift", 0, 0.5, 0.005, 0.06), P("radius", "Radius", 0.2, 0.48, 0.005, 0.38), P("line", "Line", 0.3, 2, 0.05, 0.7), P("glow", "Glow", 0, 1.5, 0.01, 0.8), P("dots", "Dots", 0, 1, 0.01, 0.5), P("field", "Field", 0, 1, 0.01, 0.35), P("ring", "Ring", 0, 1, 0.01, 0.5)],
       frag: F_HARMONIA,
-      uniforms: (c, p) => ({ u_points: p.points, u_mult: p.mult + c.t * p.drift + c.mouse[2] * (c.mouse[0] / c.w - 0.5) * 6, u_R: Math.min(c.w, c.h) * p.radius, u_ctr: [c.w / 2, c.h / 2], u_line: p.line, u_glow: p.glow, u_dots: p.dots, u_bg: p.field, u_ring: p.ring, u_spin: c.t * 0.05, u_mult2: 3 + c.t * 0.01 }),
+      uniforms: (c, p) => ({ u_points: p.points, u_mult: p.mult + c.t * p.drift + c.mouse[2] * (c.mouse[0] / c.w - 0.5) * 6, u_R: Math.min(c.w, c.h) * p.radius, u_ctr: [c.w * (0.5 + (p.offset || 0)), c.h / 2], u_line: p.line, u_glow: p.glow, u_dots: p.dots, u_bg: p.field, u_ring: p.ring, u_spin: c.t * 0.05, u_mult2: 3 + c.t * 0.01 }),
     },
     halo: {
-      name: "Halo", from: "Gloww Announcement · Coming Soon", kind: "GLSL", res: 0.75, palette: "aqua",
-      desc: "A soft radial bloom with a slowly orbiting focal point. Made for hero backgrounds.",
+      name: "Radial Bloom", from: "Gloww Announcement · Coming Soon", kind: "GLSL", res: 0.75, palette: "aqua",
+      desc: "A soft radial bloom with a slowly orbiting focal point.",
       hint: "Move to pull the focal point",
       params: [P("radius", "Radius", 0.1, 1.4, 0.01, 0.8), P("falloff", "Falloff", 0.05, 0.6, 0.01, 0.24), P("focal", "Focal", 0, 1, 0.01, 0.7), P("spin", "Orbit", 0, 60, 1, 14, "°/s"), P("core", "Core", 0, 1, 0.01, 0.8), P("grain", "Grain", 0, 0.15, 0.005, 0.03)],
       frag: F_HALO,
@@ -1345,43 +1497,43 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
       },
     },
     thermal: {
-      name: "Thermal", from: "Shader Trials Announcement", kind: "GLSL", res: 0.75, palette: "heat",
-      desc: "Drifting heat sources merge into a banded thermal map. The cursor adds heat.",
+      name: "Heat Map", from: "Shader Trials Announcement", kind: "GLSL", res: 0.75, palette: "heat",
+      desc: "Drifting heat sources merge into a banded thermal map.",
       hint: "Move to add heat",
-      params: [P("blobs", "Sources", 1, 6, 1, 5), P("size", "Size", 0.4, 2, 0.01, 1), P("bands", "Bands", 2, 24, 1, 9), P("contour", "Contour", 0, 1, 0.01, 0.5), P("glow", "Glow", 0, 1, 0.01, 0.6), P("grain", "Grain", 0, 0.15, 0.005, 0.03)],
+      params: [P("blobs", "Sources", 1, 6, 1, 5), P("size", "Size", 0.4, 2.5, 0.01, 1.45), P("bands", "Bands", 2, 24, 1, 9), P("contour", "Contour", 0, 1, 0.01, 0.5), P("glow", "Glow", 0, 1, 0.01, 0.6), P("grain", "Grain", 0, 0.15, 0.005, 0.03)],
       frag: F_THERMAL,
       uniforms: (c, p) => ({ u_blobs: p.blobs, u_size: p.size, u_bands: p.bands, u_contour: p.contour, u_glow: p.glow, u_grain: p.grain }),
     },
     mesh: {
-      name: "Mesh", from: "Kinetic Opening", kind: "Canvas 2D", res: 1, palette: "ember", palettes: ["ember", "ion", "aurora", "mono"],
-      desc: "A spring lattice that glows by tension. Every kick travels across it like a struck net.",
+      name: "Spring Net", from: "Kinetic Opening", kind: "Canvas 2D", res: 1, palette: "ember", palettes: ["ember", "ion", "aurora", "mono"],
+      desc: "A spring net that glows by tension. Every kick ripples across it.",
       hint: "Move to push · Click to strike",
       params: [P("energy", "Energy", 0, 2, 0.01, 1), P("stiffness", "Stiffness", 0.04, 0.3, 0.005, 0.12), P("damping", "Damping", 0.95, 0.995, 0.001, 0.978), P("kicks", "Kicks / s", 0, 3, 0.05, 0.8)],
     },
     decrypt: {
-      name: "Decrypt", from: "Meridian Launch", kind: "GLSL", gl2: true, res: 1, palette: "aqua", palettes: ["aqua", "ion", "phosphor", "ember"],
-      desc: "Text is rebuilt from best-fit glyphs and kept scrambled. A lens with a glowing, aberrated rim decodes it as it passes.",
+      name: "Decode Lens", from: "Meridian Launch", kind: "GLSL", gl2: true, res: 1, palette: "aqua", palettes: ["aqua", "ion", "phosphor", "ember"],
+      desc: "Text stays scrambled until a glowing lens decodes it.",
       hint: "Move to decode", text: "Something is thinking.",
       params: [P("radius", "Lens", 0.05, 1, 0.01, 0.34), P("softness", "Softness", 0.02, 1, 0.01, 0.5), P("cell", "Cell", 8, 32, 0.5, 15), P("scramble", "Scramble", 0, 1, 0.01, 0.1), P("edge", "Edge glow", 0, 4, 0.05, 2), P("split", "Chroma split", 0, 30, 0.5, 10), P("pass", "Pass-through", 0, 1, 0.01, 0.15), P("size", "Text size", 0.04, 0.25, 0.002, 0.12)],
       frag: F_DECRYPT,
       uniforms: (c, p, e) => decryptU(c, p, textPanel(c.w, c.h, phrases(c, e)[0], { size: p.size, weight: 600, fg: "#f4f5f2", bg: "#000", ls: "-0.04em" }), false),
     },
     datawall: {
-      name: "Data Wall", from: "Meridian Launch", kind: "GLSL", gl2: true, res: 1, palette: "aqua", palettes: ["aqua", "ion", "phosphor", "ember"],
-      desc: "A wall of backlog items held in cipher. Two lenses hunt across it and decode what they cross.",
+      name: "Cipher Wall", from: "Meridian Launch", kind: "GLSL", gl2: true, res: 1, palette: "aqua", palettes: ["aqua", "ion", "phosphor", "ember"],
+      desc: "A wall of ciphered text with two lenses decoding as they pass.",
       hint: "Move to steer the first lens", text: "",
       params: [P("radius", "Lens", 0.05, 0.6, 0.01, 0.22), P("softness", "Softness", 0.02, 1, 0.01, 0.5), P("cell", "Cell", 8, 32, 0.5, 15), P("scramble", "Scramble", 0, 1, 0.01, 0.1), P("edge", "Edge glow", 0, 4, 0.05, 2), P("split", "Chroma split", 0, 30, 0.5, 10), P("pass", "Pass-through", 0, 1, 0.01, 0.15)],
       frag: F_DECRYPT,
       uniforms: (c, p, e) => decryptU(c, p, dataWall(c.w, c.h, phrases(c, e)[0], c.k), true),
     },
     sand: {
-      name: "Sand", from: "Launch Film", kind: "GLSL", gl2: true, res: 1, palette: "mono", palettes: ["mono"],
-      desc: "Each line forms out of drifting grains as a formation line sweeps down, holds, then blows back to dust.",
+      name: "Sand Text", from: "Launch Film", kind: "GLSL", gl2: true, res: 1, palette: "mono", palettes: ["mono"],
+      desc: "Lines gather from fine drifting grains into crisp text, hold, then blow back to dust.",
       hint: "Move up and down to gather and scatter", text: "Money still moves slowly.|Forms. Fees. Waiting.|Transactions, made effortless.",
-      params: [P("grain", "Grain", 1.5, 8, 0.1, 3), P("spread", "Spread", 20, 600, 5, 220), P("band", "Band", 60, 600, 5, 260), P("swirl", "Swirl", 0, 200, 1, 60), P("drift", "Drift", 0, 2, 0.01, 0.7), P("gravity", "Gravity", -1, 1, 0.01, 0.35), P("cycle", "Cycle", 2.5, 12, 0.1, 5, "s"), P("size", "Text size", 0.03, 0.2, 0.002, 0.07)],
+      params: [P("grain", "Grain", 1.5, 8, 0.1, 2.2), P("spread", "Spread", 20, 600, 5, 200), P("band", "Band", 60, 600, 5, 180), P("swirl", "Swirl", 0, 200, 1, 36), P("drift", "Drift", 0, 2, 0.01, 0.45), P("gravity", "Gravity", -1, 1, 0.01, 0.35), P("cycle", "Cycle", 2, 12, 0.1, 3.4, "s"), P("size", "Text size", 0.03, 0.2, 0.002, 0.07)],
       frag: F_SAND,
       uniforms: (c, p, e) => {
-        const ph = phrases(c, e), pn = textPanel(c.w, c.h, ph[Math.floor(c.t / p.cycle) % ph.length], { size: p.size, fg: "#f2f2ee", bg: "transparent" });
+        const ph = phrases(c, e), pn = textPanel(c.w, c.h, ph[Math.floor(c.t / p.cycle) % ph.length], { size: p.size, fg: "#ffffff", bg: "transparent", weight: 500, ls: "-0.035em", font: SANS_CLEAN });
         const box = [pn._rect[1] * c.h, pn._rect[3] * c.h], d = Math.max(1, p.grain * c.k);
         c._sand = { pn, box, d, line: sandLine(c, p, box) };
         return { uContent: pn, uRes: [c.w, c.h], uDensity: d, uStagger: 0.7, uLine: c._sand.line, uBand: p.band * c.k, uBg: hex3("#0b0c0e") };
@@ -1391,13 +1543,13 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
         uniforms: (c, p) => {
           const s = c._sand, r0 = Math.max(0, Math.floor((s.box[0] - 4) / s.d)), r1 = Math.min(Math.ceil(c.h / s.d), Math.ceil((s.box[1] + 4) / s.d)), gx = Math.ceil(c.w / s.d), gy = r1 - r0;
           return { count: gx * gy, uContent: s.pn, uRes: [c.w, c.h], uGrid: [gx, gy], uOrigin: [0, r0], uDensity: s.d, uStagger: 0.7, uSpread: p.spread * c.k, uGravity: p.gravity, uDrift: p.drift,
-            uSwirl: p.swirl * c.k, uTime: c.t, uFade: 0.85, uSize: Math.max(1, 1.6 * c.k), uLine: s.line, uBand: p.band * c.k };
+            uSwirl: p.swirl * c.k, uTime: c.t, uFade: 1, uSize: Math.max(1.2, 1.9 * c.k), uLine: s.line, uBand: p.band * c.k };
         },
       },
     },
     assemble: {
-      name: "Assemble", from: "No Peace", kind: "GLSL", res: 1, palette: "solar", palettes: ["solar", "mono", "ember"],
-      desc: "Thousands of particles orbit in a tilted ring, then swirl in to rebuild an image, catch a sweep of light and unravel again.",
+      name: "Particle Portrait", from: "No Peace", kind: "GLSL", res: 1, palette: "solar", palettes: ["solar", "mono", "ember"],
+      desc: "Particles orbit in a ring, then swirl in to rebuild an image.",
       hint: "Move to turn it · set src for your own image",
       params: [P("grain", "Density", 2, 6, 1, 3), P("scale", "Scale", 0.4, 1.6, 0.01, 1), P("offset", "Offset", -0.4, 0.4, 0.01, 0), P("cycle", "Cycle", 5, 20, 0.5, 10, "s"), P("bloom", "Bloom", 0, 1.5, 0.01, 0.9)],
       frag: F_ASM,
@@ -1423,79 +1575,86 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
     },
     aurora: {
       name: "Aurora", from: "Going to Be Alright", kind: "Canvas 2D", res: 1, palette: "aurora", palettes: ["aurora", "ember", "aqua"],
-      desc: "Aurora curtains sweep in from the left over a ridge and a rippling lake, flare, then fade to start again.",
+      desc: "Aurora curtains sweep over a ridge and a rippling lake.",
       hint: "Move to lead the sweep",
       params: [P("intensity", "Intensity", 0.2, 2, 0.01, 1), P("cycle", "Cycle", 5, 20, 0.5, 9, "s"), P("reflection", "Reflection", 0, 1, 0.01, 1), P("stars", "Stars", 0, 1, 0.01, 1), P("grain", "Grain", 0, 0.2, 0.005, 0.07)],
       draw: (ctx, c, p, s) => drawAurora(ctx, c, p, s),
     },
     horizon: {
-      name: "Horizon", from: "Anticipating the Future", kind: "Canvas 2D", res: 1, palette: "synth", palettes: ["synth", "aqua", "aurora", "ember"],
-      desc: "A striped sun rises behind a wireframe valley that flies toward the camera.",
+      name: "Synth Valley", from: "Anticipating the Future", kind: "Canvas 2D", res: 1, palette: "synth", palettes: ["synth", "aqua", "aurora", "ember"],
+      desc: "A striped sun rises behind a wireframe valley flying toward you.",
       hint: "Move to steer",
       params: [P("rate", "Flight", 0, 6, 0.05, 2), P("peaks", "Peaks", 0, 2.5, 0.01, 1), P("sun", "Sun", 0.4, 1.6, 0.01, 1)],
       draw: (ctx, c, p) => drawHorizon(ctx, c, p),
     },
     blink: {
-      name: "Blink", from: "Supreme Effort Squares", kind: "Canvas 2D", res: 1, palette: "ledger", palettes: ["ledger", "phosphor", "cobalt", "ember"],
-      desc: "A field of squares blinks up from the floor. Each line dissolves in square by square, holds, then blinks out.",
+      name: "Square Text", from: "Supreme Effort Squares", kind: "Canvas 2D", res: 1, palette: "mint", palettes: ["mint", "ledger", "phosphor", "cobalt", "ember"],
+      desc: "Each line dissolves in square by square, holds, then blinks out.",
       hint: "Move to stir the squares", text: "A supreme goal needs supreme effort.|Good enough never wins.|Supreme effort. Supreme results.",
-      params: [P("square", "Square", 4, 40, 1, 12), P("gap", "Gap", 0, 16, 1, 4), P("field", "Field", 0, 1.02, 0.01, 0.4), P("edges", "Edge fade", 0, 3, 1, 0), P("hold", "Hold", 1.2, 6, 0.1, 2.6, "s"), P("paper", "Paper", 0, 1, 1, 1), P("size", "Text size", 0.02, 0.12, 0.002, 0.06)],
-      draw: drawBlink,
+      params: [P("square", "Square", 4, 40, 1, 12), P("gap", "Gap", 0, 16, 1, 4), P("hold", "Hold", 1.2, 6, 0.1, 1.9, "s"), P("paper", "Paper", 0, 1, 1, 1), P("size", "Text size", 0.02, 0.12, 0.002, 0.06)],
+      draw: (ctx, c, p, s, e) => drawBlink(ctx, c, p, s, e, "text"),
     },
-    drift: {
-      name: "Drift", from: "Idea Reveal", kind: "Canvas 2D", res: 0.5, palette: "idea", palettes: ["idea", "ion", "aurora", "ember"],
-      desc: "Four soft colour pools drift and overlap on deep navy. Built as something for glass to refract.",
-      hint: "Move to part the colour",
-      params: [P("flow", "Flow", 0, 4, 0.01, 1), P("glow", "Glow", 0.2, 1.6, 0.01, 1)],
-      draw: (ctx, c, p) => driftField(ctx, c, c.t, 1, p),
+    blinkfield: {
+      name: "Square Field", from: "Supreme Effort Squares", kind: "Canvas 2D", res: 1, palette: "sky", palettes: ["sky", "mint", "ledger", "phosphor", "cobalt", "ember"],
+      desc: "A floor of blinking squares rises and falls on a slow tide with a bright crest.",
+      hint: "Move to stir the squares",
+      params: [P("square", "Square", 4, 80, 1, 44), P("gap", "Gap", 0, 24, 1, 10), P("field", "Height", 0.1, 1, 0.01, 0.92), P("cycle", "Tide", 3, 20, 0.1, 8, "s"), P("density", "Density", 0.02, 0.4, 0.01, 0.16), P("edges", "Edge fade", 0, 3, 1, 0), P("paper", "Paper", 0, 1, 1, 1)],
+      draw: (ctx, c, p, s, e) => drawBlink(ctx, c, p, s, e, "field"),
     },
     sparkle: {
       name: "Sparkle", from: "Idea Reveal", kind: "Canvas 2D", res: 1, palette: "idea", palettes: ["idea", "ion", "aurora", "ember"],
-      desc: "A four-point sparkle spins in, inhales, then punches toward the camera and becomes the window onto a colour field.",
+      desc: "A sparkle spins in and punches through to colour, then closes back and bursts into a twinkle.",
       hint: "Move to place the sparkle",
-      params: [P("size", "Size", 0.4, 3, 0.01, 1.4), P("cycle", "Cycle", 4, 14, 0.1, 6, "s"), P("flow", "Flow", 0, 4, 0.01, 1), P("glow", "Glow", 0.2, 1.6, 0.01, 1)],
+      params: [P("size", "Size", 0.4, 3, 0.01, 1.4), P("cycle", "Cycle", 4, 14, 0.1, 5, "s"), P("flow", "Flow", 0, 4, 0.01, 1), P("glow", "Glow", 0.2, 1.6, 0.01, 1)],
       draw: drawSparkle,
     },
     filings: {
-      name: "Filings", from: "Magnetic Filings", kind: "Canvas 2D", res: 1, palette: "mono", palettes: ["mono"],
-      desc: "A grid of iron filings turns to face a magnet as it sweeps, arcs and orbits. Far filings answer a beat late; a second pole repels.",
+      name: "Iron Filings", from: "Magnetic Filings", kind: "Canvas 2D", res: 1, palette: "mono", palettes: ["mono"],
+      desc: "A grid of iron filings turns to follow a moving magnet.",
       hint: "Move to become the magnet",
-      params: [P("cell", "Cell", 24, 120, 1, 54), P("lag", "Lag", 0, 3, 0.01, 1), P("cycle", "Cycle", 6, 30, 0.5, 12, "s"), P("magnet", "Show magnet", 0, 1, 1, 1), P("paper", "Paper", 0, 1, 1, 1)],
+      params: [P("cell", "Cell", 24, 120, 1, 60), P("zoom", "Zoom", 1, 2.5, 0.05, 1.6), P("lag", "Lag", 0, 3, 0.01, 1), P("cycle", "Cycle", 6, 30, 0.5, 12, "s"), P("magnet", "Show magnet", 0, 1, 1, 1), P("paper", "Paper", 0, 1, 1, 1)],
       draw: drawFilings,
     },
     gather: {
-      name: "Gather", from: "Magnett Promo", kind: "Canvas 2D", res: 1, palette: "mono", palettes: ["mono"],
-      desc: "Filings at rest catch a passing magnet, then collapse inward and lock into a 5×5 mark around it before letting go.",
+      name: "Magnet Snap", from: "Magnett Promo", kind: "Canvas 2D", res: 1, palette: "mono", palettes: ["mono"],
+      desc: "Filings catch a passing magnet and snap into a 5×5 mark.",
       hint: "Move to pull the filings",
-      params: [P("cell", "Cell", 24, 120, 1, 54), P("cycle", "Cycle", 6, 24, 0.5, 10, "s"), P("paper", "Paper", 0, 1, 1, 1)],
+      params: [P("cell", "Cell", 24, 120, 1, 60), P("zoom", "Zoom", 1, 2.5, 0.05, 1.6), P("cycle", "Cycle", 6, 24, 0.5, 10, "s"), P("paper", "Paper", 0, 1, 1, 1)],
       draw: drawGather,
     },
     lattice: {
-      name: "Lattice", from: "Ideas to Reality Promo", kind: "Canvas 2D", res: 1, palette: "mono", palettes: ["mono", "aqua", "ember", "aurora"],
-      desc: "An endless lattice of slowly turning wireframe cubes flows toward the camera and fades into the dark.",
+      name: "Cube Tunnel", from: "Ideas to Reality Promo", kind: "Canvas 2D", res: 1, palette: "mono", palettes: ["mono", "aqua", "ember", "aurora"],
+      desc: "A lattice of turning wireframe cubes flows toward the camera.",
       hint: "Move to steer the camera",
       params: [P("rate", "Flight", 0, 4, 0.01, 0.8), P("spin", "Spin", 0, 3, 0.01, 1), P("size", "Cube", 0.3, 2, 0.01, 1)],
       draw: drawLattice,
     },
     orbits: {
-      name: "Orbits", from: "Ideas to Reality Promo", kind: "Canvas 2D", res: 1, palette: "mono", palettes: ["mono", "aqua", "ember", "aurora"],
-      desc: "Three rings tilt and sway around a glowing core, each carrying comets that stretch along their path.",
+      name: "Orbit Rings", from: "Ideas to Reality Promo", kind: "Canvas 2D", res: 1, palette: "mono", palettes: ["mono", "aqua", "ember", "aurora"],
+      desc: "Tilted rings with tick marks sway round a glowing core. Comets with fading tails pass behind and in front.",
       hint: "Move to tilt the rings",
       params: [P("scale", "Scale", 0.3, 1.6, 0.01, 0.9), P("rate", "Orbit", 0, 3, 0.01, 1), P("sway", "Sway", 0, 3, 0.01, 1)],
       draw: drawOrbits,
     },
-    prism: {
-      name: "Prism", from: "Product Video", kind: "Canvas 2D", res: 0.5, palette: "plasma", palettes: ["plasma"],
-      desc: "Six spectrum blobs orbit on black and screen-blend into a soft, breathing rainbow wash.",
-      hint: "Move to draw the colour in",
-      params: [P("flow", "Flow", 0, 3, 0.01, 1), P("size", "Size", 0.4, 2, 0.01, 1), P("glow", "Glow", 0.1, 1, 0.01, 0.62), P("pulse", "Pulse", 0, 2, 0.01, 1)],
-      draw: drawPrism,
+    hearth: {
+      name: "Glow Bed", from: "Document AI Teaser", kind: "Canvas 2D", res: 0.5, palette: "aurora", palettes: ["aurora", "ion", "ember", "synth"],
+      desc: "A bed of soft light breathes and sways along the bottom edge.",
+      hint: "Move to stoke the glow",
+      params: [P("intensity", "Intensity", 0.2, 2, 0.01, 1), P("height", "Height", 0.4, 1.8, 0.01, 1), P("sway", "Sway", 0, 3, 0.01, 1), P("dots", "Dot grid", 0, 1, 1, 1), P("grain", "Grain", 0, 0.2, 0.005, 0.06)],
+      draw: (ctx, c, p, s, e) => drawHearth(ctx, c, p, s, e, "bed"),
+    },
+    lightsurge: {
+      name: "Light Surge", from: "Document AI Teaser", kind: "Canvas 2D", res: 0.5, palette: "aurora", palettes: ["aurora", "ion", "ember", "synth"],
+      desc: "Columns of light rise from the floor over a wash, sway, then lift away. Good as a cut.",
+      hint: "",
+      params: [P("intensity", "Intensity", 0.2, 2, 0.01, 1), P("cycle", "Cycle", 4, 16, 0.1, 6, "s"), P("dots", "Dot grid", 0, 1, 1, 0), P("grain", "Grain", 0, 0.2, 0.005, 0.05)],
+      draw: (ctx, c, p, s, e) => drawHearth(ctx, c, p, s, e, "surge"),
     },
     sweep: {
-      name: "Sweep", from: "AI Revolution Sweep", kind: "GLSL", gl2: true, res: 1, palette: "phosphor", palettes: ["phosphor", "cobalt", "ledger", "ember"],
-      desc: "A band of glyphs sweeps across the frame, tears the scanlines and swaps one line of text for the next.",
+      name: "Glyph Sweep", from: "AI Revolution Sweep", kind: "GLSL", gl2: true, res: 1, palette: "phosphor", palettes: ["phosphor", "cobalt", "ledger", "ember"],
+      desc: "A band of glyphs sweeps across and swaps one line for the next.",
       hint: "Move across to scrub the sweep", text: "Every few centuries, the ground shifts.|AI is turning thought into infrastructure.|This is our industrial revolution.",
-      params: [P("glyph", "Glyph", 0.5, 4, 0.05, 2), P("band", "Band", 0.05, 0.6, 0.01, 0.28), P("trail", "Trail", 0, 2, 0.01, 0.75), P("turbulence", "Turbulence", 0, 1, 0.01, 0.5), P("glow", "Glow", 0, 2, 0.01, 2), P("split", "Chroma split", 0, 12, 0.1, 5), P("tear", "Tear", 0, 40, 0.5, 14), P("flicker", "Flicker", 0, 1, 0.01, 0.35), P("hold", "Hold", 0.4, 6, 0.1, 1.6, "s"), P("charset", "Charset", 0, 2, 1, 0), P("size", "Text size", 0.02, 0.12, 0.002, 0.045)],
+      params: [P("glyph", "Glyph", 0.5, 4, 0.05, 2), P("band", "Band", 0.05, 0.6, 0.01, 0.28), P("trail", "Trail", 0, 2, 0.01, 0.75), P("turbulence", "Turbulence", 0, 1, 0.01, 0.5), P("glow", "Glow", 0, 2, 0.01, 2), P("split", "Chroma split", 0, 12, 0.1, 5), P("tear", "Tear", 0, 40, 0.5, 14), P("flicker", "Flicker", 0, 1, 0.01, 0.35), P("hold", "Hold", 0.4, 6, 0.1, 1.1, "s"), P("charset", "Charset", 0, 2, 1, 0), P("size", "Text size", 0.02, 0.12, 0.002, 0.045)],
       frag: F_SWEEP,
       uniforms: (c, p, e) => {
         const ph = phrases(c, e), n = ph.length, per = p.hold + 1.4, i = Math.floor(c.t / per), lt = c.t - i * per;
@@ -1507,34 +1666,63 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
           uInk: c.pal[0], uTint: 0.75, uGlow: p.glow, uAberration: p.split * c.k, uFlicker: p.flicker, uDensity: 0.9, uDisplace: p.tear * c.k, uContrast: 1.2, uBrightness: 0, uThreshold: 0.1, uFade: 0.75, uBg: bg, uBgLum: lum3(bg), uTime: c.t };
       },
     },
-    rain: {
-      name: "Rain", from: "Living in the Matrix", kind: "GLSL", gl2: true, res: 1, palette: "cobalt", palettes: ["cobalt", "phosphor", "ember", "mono"],
-      desc: "Columns of glyph rain fall over a line of text. Each falling head lights the words it passes.",
+    matrix: {
+      name: "Matrix", from: "Living in the Matrix", kind: "GLSL", gl2: true, res: 1, palette: "phosphor", palettes: ["phosphor", "cobalt", "ember", "mono"],
+      desc: "Green glyph rain falls over a line of text and lights it up.",
       hint: "", text: "Are we living in the matrix?",
       params: [P("cell", "Cell", 8, 40, 1, 15), P("rate", "Fall", 0.05, 1, 0.01, 0.2), P("density", "Density", 0.02, 0.8, 0.01, 0.32), P("trail", "Trail", 0.2, 3, 0.05, 1.4), P("glow", "Glow", 0, 3, 0.01, 1.75), P("light", "Light", 0, 3, 0.01, 1.2), P("layers", "Layers", 1, 3, 1, 2), P("mutate", "Mutate", 0, 3, 0.01, 0), P("show", "Text", 0, 1, 0.01, 1), P("size", "Text size", 0.02, 0.14, 0.002, 0.056)],
       frag: F_RAIN,
       uniforms: (c, p, e) => {
-        const a = glyphAtlas(KATAKANA), bg = hex3("#05070c");
-        return { uContent: textPanel(c.w, c.h, phrases(c, e)[0], { size: p.size, fg: "#e8ecf5", bg: "#05070c", ls: "-0.02em" }), uAtlas: a.canvas, uResolution: [c.w, c.h], uTime: c.t + 7.3, uCell: p.cell * c.k,
+        const a = glyphAtlas(KATAKANA), bg = hex3("#020805");
+        return { uContent: textPanel(c.w, c.h, phrases(c, e)[0], { size: p.size, fg: "#e4f7ea", bg: "#020805", ls: "-0.02em" }), uAtlas: a.canvas, uResolution: [c.w, c.h], uTime: c.t + 7.3, uCell: p.cell * c.k,
           uGlyphCount: a.count, uAtlasGrid: a.grid, uColor: c.pal[0], uHeadColor: c.pal[1], uSpeed: p.rate, uSpeedVar: 0.5, uDensity: p.density, uTrail: p.trail, uGlow: p.glow, uMutate: p.mutate,
           uLayers: p.layers, uDim: 0.08, uLight: p.light, uLightRadius: 160 * c.k, uLightHeight: 172 * c.k, uRelief: 0, uBg: bg, uShow: p.show };
       },
     },
     asciify: {
-      name: "Asciify", from: "It Pays Off", kind: "GLSL", gl2: true, res: 1, palette: "ledger", palettes: ["ledger", "phosphor", "cobalt"],
-      desc: "A soft lens turns whatever sits under it into 5×5 glyphs or halftone dots. It reads text along the line on its own.",
-      hint: "Move to steer the lens", text: "Effort compounds quietly.",
-      params: [P("radius", "Lens", 0.05, 0.45, 0.005, 0.16), P("softness", "Softness", 0, 1, 0.01, 1), P("glyph", "Glyph", 0.5, 4, 0.05, 2), P("dots", "Dots", 0, 1, 1, 0), P("charset", "Charset", 0, 2, 1, 0), P("glow", "Glow", 0, 1, 0.01, 0.75), P("split", "Chroma split", 0, 1, 0.01, 0.75), P("invert", "Invert", 0, 1, 1, 0), P("paper", "Paper", 0, 1, 1, 1), P("size", "Text size", 0.03, 0.2, 0.002, 0.11)],
-      frag: F_ASCII,
-      uniforms: (c, p, e) => asciiU(c, p, e, false),
+      name: "ASCII Text", from: "It Pays Off", kind: "Canvas 2D", res: 1, palette: "mint", palettes: ["mint", "ledger", "phosphor", "cobalt"],
+      desc: "Crisp text wipes into ASCII glyphs, a scan band lights the characters, then it wipes back.",
+      hint: "Move to hold the ASCII and steer the scan", text: "Quietly.",
+      params: [P("cycle", "Cycle", 3, 12, 0.1, 5.5, "s"), P("radius", "Scan width", 0.03, 0.4, 0.005, 0.12), P("softness", "Softness", 0, 1, 0.01, 0.5), P("glyph", "Glyph", 0.5, 4, 0.05, 2), P("dots", "Dots", 0, 1, 1, 0), P("charset", "Charset", 0, 2, 1, 0), P("glow", "Glow", 0, 1, 0.01, 0.6), P("split", "Chroma split", 0, 1, 0.01, 0.3), P("invert", "Invert", 0, 1, 1, 0), P("paper", "Paper", 0, 1, 1, 0), P("size", "Text size", 0.05, 0.5, 0.005, 0.34)],
+      draw: (ctx, c, p, s, e) => drawAsciiLens(ctx, c, p, e),
     },
     graph: {
-      name: "Glyph Graph", from: "It Pays Off", kind: "GLSL", gl2: true, res: 1, palette: "ledger", palettes: ["ledger", "phosphor", "cobalt"],
-      desc: "Columns of glyphs rise from the floor like a chart, keep moving, then climb to fill the frame and loop.",
+      name: "Glyph Graph", from: "It Pays Off", kind: "GLSL", gl2: true, res: 1, palette: "sky", palettes: ["sky", "ledger", "mint", "phosphor", "cobalt"],
+      desc: "Columns of glyphs rise like a chart, then climb to fill the frame.",
       hint: "", text: "",
-      params: [P("height", "Height", 0.1, 0.9, 0.01, 0.4), P("cycle", "Cycle", 4, 30, 0.5, 12, "s"), P("glyph", "Glyph", 0.5, 4, 0.05, 2), P("charset", "Charset", 0, 2, 1, 0), P("paper", "Paper", 0, 1, 1, 1), P("size", "Text size", 0.03, 0.2, 0.002, 0.07)],
+      params: [P("height", "Height", 0.1, 0.9, 0.01, 0.4), P("cycle", "Cycle", 4, 30, 0.5, 8, "s"), P("glyph", "Glyph", 0.5, 10, 0.05, 6), P("charset", "Charset", 0, 2, 1, 0), P("paper", "Paper", 0, 1, 1, 1), P("size", "Text size", 0.03, 0.2, 0.002, 0.07)],
       frag: F_ASCII,
       uniforms: (c, p, e) => asciiU(c, p, e, true),
+    },
+    swirl: {
+      name: "Silk Swirl", from: "Oncheck Brand Animation", kind: "GLSL", res: 0.75, palette: "silk", palettes: ["silk", "ember", "dusk", "aurora", "mono"],
+      desc: "Silk bands spiral in toward the centre and keep turning.",
+      hint: "Move to shift the centre",
+      params: [P("bands", "Bands", 1, 8, 1, 4), P("twist", "Twist", 0, 1, 0.01, 0.42), P("spin", "Spin", 0, 4, 0.01, 1.4), P("soft", "Softness", 0, 1, 0.01, 0), P("noise", "Noise", 0, 0.6, 0.01, 0.2), P("scale", "Scale", 0.4, 2, 0.01, 1), P("grain", "Grain", 0, 0.15, 0.005, 0.02)],
+      frag: F_SWIRL,
+      uniforms: (c, p) => ({ u_bands: p.bands, u_twist: p.twist, u_soft: p.soft, u_noise: p.noise, u_scale: p.scale, u_grain: p.grain, u_phase: (c.t * p.spin / 6.2832) % 1,
+        u_c: [lerp(c.w / 2, c.mouse[0], 0.35 * c.mouse[2]), lerp(c.h / 2, c.h - c.mouse[1], 0.35 * c.mouse[2])] }),
+    },
+    waves: {
+      name: "Wave Bands", from: "Oncheck Brand Book", kind: "Canvas 2D", res: 1, palette: "silk", palettes: ["silk", "ember", "mint", "cobalt", "mono"],
+      desc: "Rows of soft waves drift across a second colour and breathe.",
+      hint: "Move to swell the waves",
+      params: [P("gap", "Spacing", 16, 200, 1, 96), P("thick", "Thickness", 0.1, 0.9, 0.01, 0.46), P("amp", "Wave", 0, 80, 0.5, 26), P("length", "Length", 80, 1400, 5, 640), P("drift", "Drift", 0, 6, 0.01, 2.6), P("breathe", "Breathe", 0, 1, 0.01, 0.35), P("tilt", "Tilt", -30, 30, 1, 0, "°"), P("duo", "Two colours", 0, 1, 1, 0)],
+      draw: drawWaves,
+    },
+    stage: {
+      name: "Stage Light", from: "Vaulton Launch", kind: "Canvas 2D", res: 0.5, palette: "cobalt", palettes: ["cobalt", "aqua", "synth", "aurora", "ember"],
+      desc: "Light pours up from a glowing base, with soft shafts, a mirrored floor and drifting motes.",
+      hint: "Move to steer the light",
+      params: [P("intensity", "Intensity", 0.3, 2, 0.01, 1), P("reach", "Reach", 0.2, 1, 0.01, 0.62), P("width", "Base width", 0.1, 0.9, 0.01, 0.42), P("base", "Base height", 0.5, 0.95, 0.01, 0.8), P("shafts", "Shafts", 0, 1, 0.01, 0.6), P("motes", "Motes", 0, 1, 0.01, 0.5), P("breathe", "Breathe", 0, 1, 0.01, 0.5)],
+      draw: drawStage,
+    },
+    globe: {
+      name: "Dot Globe", from: "Invois App Launch", kind: "Canvas 2D", res: 1, palette: "cobalt", palettes: ["cobalt", "aqua", "mint", "ember", "mono"],
+      desc: "A globe of dots turns slowly. Land on the near side lights up and pings.",
+      hint: "Move to turn the globe",
+      params: [P("size", "Size", 0.3, 1.4, 0.01, 0.62), P("rate", "Spin", 0, 2, 0.01, 0.45), P("tilt", "Tilt", -40, 40, 1, 16, "°"), P("density", "Land", 0.1, 1, 0.01, 0.5), P("dot", "Dot", 0.4, 3, 0.05, 1), P("glow", "Glow", 0, 1.5, 0.01, 0.7), P("pings", "Pings", 0, 1, 0.01, 0.6)],
+      draw: drawGlobe,
     },
   };
   function decryptU(c, p, panel, two) {
@@ -1562,7 +1750,53 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
       uDotPx: dot, uDotLod: Math.max(0, Math.log2(dot) - 1), uGlowAmt: graph ? 0.75 : p.glow, uAberration: graph ? 0.75 : p.split, uReveal: 2, uErase: -1, uTextRect: r, uTextMode: graph ? 0 : p.dots,
       uTime: c.t, uLoop: (c.t % cyc) / cyc, uTotal: cyc, uGraphInk: c.pal[0], uGraphH: graph ? p.height : 0.4, uGraphOn: graph ? 1 : 0 };
   }
-  const ORDER = Object.keys(EFFECTS);
+  // ── ASCII Lens (It Pays Off): crisp headline; inside a sweeping lens the same letters are rebuilt from big glyphs or dots ──
+  const ASC_RAMPS = [" .:-=+*#%@", " ░▒▓█", " 0011"];
+  const ASC_G = new WeakMap();
+  function ascGrid(pn, cs, bgL) {
+    let m = ASC_G.get(pn); if (!m) ASC_G.set(pn, (m = new Map()));
+    const key = cs.toFixed(2); if (m.has(key)) return m.get(key);
+    const cols = Math.ceil(pn.width / cs), rows = Math.ceil(pn.height / cs), cv = document.createElement("canvas"); cv.width = cols; cv.height = rows;
+    const x = cv.getContext("2d", { willReadFrequently: true }); x.imageSmoothingEnabled = true; x.imageSmoothingQuality = "high"; x.drawImage(pn, 0, 0, cols, rows);
+    const d = x.getImageData(0, 0, cols, rows).data, v = new Float32Array(cols * rows);
+    for (let i = 0; i < v.length; i++) v[i] = Math.min(1, Math.pow(Math.abs((0.299 * d[i * 4] + 0.587 * d[i * 4 + 1] + 0.114 * d[i * 4 + 2]) / 255 - bgL) * 1.15, 0.6));
+    const g = { cols, rows, v }; if (m.size > 6) m.clear(); m.set(key, g); return g;
+  }
+  // ASCII text: the headline is drawn entirely in glyphs; a scan band sweeps across, lighting and densifying the characters it crosses
+  const ASC_LONG = [" .,:;-~=+*cxoO0#%@", " ░░▒▒▓▓█", " 0101"];
+  function drawAsciiLens(ctx, c, p, e) {
+    const W = c.w, H = c.h, k = H / 1080, paper = p.paper >= 0.5, BGc = paper ? "#fafaf8" : "#0a0b0a", FG = paper ? "#161616" : "#e6e8e3", t = c.t;
+    const pn = textPanel(W, H, phrases(c, e)[0], { size: p.size, fg: "#000", bg: "#fff", weight: 800, ls: "-0.03em", fit: 0.9 }), r = pn._rect;
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = 1; ctx.fillStyle = BGc; ctx.fillRect(0, 0, W, H);
+    // Cycle: crisp text → wipe into ASCII → hold with the scan → wipe back to text
+    const L = p.cycle ?? 5.5, u = t % L, sg = (a, b) => clamp((u - a) / (b - a)), live = c.mouse[2] > 0.3;
+    const fwd = live ? 1 : E3.io(sg(0.16 * L, 0.36 * L)), back = live ? 0 : E3.io(sg(0.8 * L, 0.97 * L)), fF = fwd * 1.25 - 0.12, fB = back * 1.25 - 0.12;
+    const pnT = textPanel(W, H, phrases(c, e)[0], { size: p.size, fg: FG, bg: BGc, weight: 800, ls: "-0.03em", fit: 0.9 }); ctx.drawImage(pnT, 0, 0);
+    const cs = Math.max(5, (pn._size || p.size * H) * 0.03 * p.glyph), G = ascGrid(pn, cs, 1), ramp = ASC_LONG[Math.round(p.charset)] || ASC_LONG[0], inv = p.invert >= 0.5, dots = p.dots >= 0.5;
+    const band = Math.max(cs * 2, p.radius * W), sx = lerp(lerp(r[0] * W - band, r[2] * W + band, 0.5 + 0.5 * Math.sin(t * 0.8 - 1.4)), c.mouse[0], c.mouse[2]), soft = Math.max(0.15, p.softness);
+    const ink = c.pal[0], fgc = hex3(FG), sp = p.split * 2.5 * k;
+    const r0 = Math.max(0, Math.floor((r[1] * H) / cs) - 2), r1 = Math.min(G.rows - 1, Math.ceil((r[3] * H) / cs) + 2), rx0 = r[0] * W, rw = Math.max(1, (r[2] - r[0]) * W);
+    ctx.font = `700 ${(cs * 1.12).toFixed(1)}px ${MONO_F}`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    for (let yy = r0; yy <= r1; yy++) for (let xx = 0; xx < G.cols; xx++) {
+      const cx = (xx + 0.5) * cs, cy = (yy + 0.5) * cs; let v = G.v[yy * G.cols + xx]; if (inv) v = 1 - v;
+      const nx = (cx - rx0) / rw + (h2(xx, yy + 31) - 0.5) * 0.08, asc = nx < fF && !(nx < fB), edge = Math.max(fwd > 0 && fwd < 1 ? Math.exp(-Math.pow((nx - fF) / 0.035, 2)) : 0, back > 0 && back < 1 ? Math.exp(-Math.pow((nx - fB) / 0.035, 2)) : 0);
+      if (!asc) { if (edge > 0.05 && v > 0.05) { ctx.fillStyle = pcss(c.pal[0], 0.55 * edge); ctx.fillRect(cx - cs / 2, cy - cs / 2, cs, cs); } continue; }
+      ctx.fillStyle = BGc; ctx.fillRect(cx - cs / 2 - 0.5, cy - cs / 2 - 0.5, cs + 1, cs + 1);
+      const lit = Math.max(edge, Math.exp(-Math.pow((cx - sx) / (band * soft + band * 0.25), 2)) * fwd * (1 - back)), fr = Math.floor(t * 12 + h2(xx, yy) * 7);
+      if (v < 0.05) { const a = 0.07 + 0.18 * lit; if (h2(xx * 3 + fr, yy) < 0.5) { ctx.fillStyle = pcss(lit > 0.3 ? ink : fgc, a); ctx.fillRect(cx - 0.9 * k, cy - 0.9 * k, 1.8 * k, 1.8 * k); } continue; }
+      const vv = clamp(v + 0.35 * lit), jit = lit > 0.15 && h2(xx + fr * 13, yy) < 0.25 * lit ? 1 : 0, li = Math.max(1, Math.min(ramp.length - 1, Math.round(vv * (ramp.length - 1)) - jit));
+      const col = lit > 0.02 ? fgc.map((q, m) => lerp(q, ink[m], Math.min(1, lit * 1.4))) : fgc, a = Math.min(1, 0.45 + 0.55 * vv);
+      if (dots) { const rr = cs * 0.5 * Math.sqrt(vv); ctx.fillStyle = pcss(col, a); ctx.beginPath(); ctx.arc(cx, cy, rr, 0, 6.2832); ctx.fill(); continue; }
+      const ch = ramp[li];
+      if (sp > 0.3 && lit > 0.05) { ctx.fillStyle = `rgba(255,70,90,${(0.35 * lit).toFixed(3)})`; ctx.fillText(ch, cx - sp, cy); ctx.fillStyle = `rgba(60,140,255,${(0.35 * lit).toFixed(3)})`; ctx.fillText(ch, cx + sp, cy); }
+      ctx.fillStyle = pcss(col, a); ctx.fillText(ch, cx, cy);
+    }
+    if (p.glow > 0 && fwd > 0.5 && back < 0.5) { const g = ctx.createLinearGradient(sx - band, 0, sx + band, 0); g.addColorStop(0, pcss(ink, 0)); g.addColorStop(0.5, pcss(ink, 0.08 * p.glow)); g.addColorStop(1, pcss(ink, 0)); ctx.fillStyle = g; ctx.fillRect(sx - band, r0 * cs, band * 2, (r1 - r0 + 1) * cs); }
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+  }
+  // Display order groups related shaders together; anything not listed is appended
+  const ORDER = ["current", "fret", "skein", "harmonia", "halo", "thermal", "swirl", "waves", "hearth", "lightsurge", "stage", "aurora", "sparkle", "decrypt", "datawall", "asciify", "sweep", "matrix", "graph", "sand", "blink", "blinkfield", "assemble", "mesh", "filings", "gather", "lattice", "orbits", "globe", "horizon"].filter(id => EFFECTS[id]);
+  Object.keys(EFFECTS).forEach(id => { if (!ORDER.includes(id)) ORDER.push(id); });
 
   // ── WebGL renderer: one shared context, blitted into each field's 2D canvas ──
   // (browsers cap live WebGL contexts at ~8–16; sharing one keeps any number of fields alive)
@@ -2046,6 +2280,13 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
     const out = !!o.out, st = out ? 0.04 : o.stagger ?? 0.08, d = out ? 0.45 : o.duration ?? 0.9;
     return play(lines.length * st + d, t => lines.forEach((k, i) => { const p = clamp((t - i * st) / d); k.style.transform = `translateY(${out ? -Math.pow(p, 3) * 112 : (1 - oCubic(p)) * 112}%)`; }));
   }
+  // Words swapping in one slot (Blastlabs Flow)
+  function cycleWords(el, words, o = {}) {
+    const hold = o.hold ?? 0.9, per = 0.55 + hold + 0.45; el.textContent = ""; el.style.overflow = "hidden"; el.style.paddingBottom = "0.12em";
+    const inner = document.createElement("div"); inner.style.cssText = "white-space:nowrap;"; el.appendChild(inner); let last = -1;
+    return loopFx(t => { const i = Math.floor(t / per) % words.length, u = t % per; if (i !== last) { inner.textContent = words[i]; last = i; }
+      inner.style.transform = `translateY(${u < 0.55 ? (1 - oExpo(u / 0.55)) * 110 : u < 0.55 + hold ? 0 : -Math.pow((u - 0.55 - hold) / 0.45, 3) * 110}%)`; });
+  }
   // Solid block wipes open, then its words roll up (Dev Agency Services)
   function cut(el, o = {}) {
     const parts = masked(el, "word"), d = o.duration ?? 0.45, dl = o.delay || 0; el.style.display = "inline-flex"; el.style.background = o.color || "#09090b"; el.style.clipPath = "inset(-2px 100% -2px 0)";
@@ -2070,14 +2311,6 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
     const v = o.values || [1, 1, 1, 1], h = o.height || 8, st = o.stagger ?? 0.28; el.innerHTML = ""; el.style.display = "grid"; el.style.gridTemplateColumns = o.columns || `repeat(${v.length},1fr)`; el.style.gap = (o.gap ?? 8) + "px";
     const fills = v.map(() => { const tr = document.createElement("div"); tr.style.cssText = `height:${h}px;border-radius:${h / 2}px;background:${o.track || "rgba(242,242,244,0.1)"};overflow:hidden`; const f = document.createElement("div"); f.style.cssText = `height:100%;width:0;border-radius:${h / 2}px;background:${o.color || "#f2f2f4"}`; tr.appendChild(f); el.appendChild(tr); return f; });
     return play(v.length * st + 0.5, t => fills.forEach((f, j) => { f.style.width = oExpo(clamp((t - j * st) / 0.5)) * v[j] * 100 + "%"; }));
-  }
-  // Ping or blink status dot (Desktop Features, Orfa Agents)
-  function pulseDot(el, o = {}) {
-    const c = o.color || "#38bdf8", s = o.size || 8, per = o.period || 1, off = o.offset || 0;
-    Object.assign(el.style, { position: "relative", display: "inline-block", width: s + "px", height: s + "px", borderRadius: "50%", background: c, flexShrink: "0" });
-    const r = document.createElement("span"); r.style.cssText = `position:absolute;inset:0;border-radius:50%;background:${c}`; el.appendChild(r);
-    const stop = loopFx(t => { if (o.mode === "blink") { el.style.opacity = 0.4 + 0.6 * (0.5 + 0.5 * Math.sin((t + off) * 9)); r.style.opacity = 0; return; } const f = oCubic(Math.min(1, ((t + off) % per) / per / 0.75)); r.style.transform = `scale(${1 + f})`; r.style.opacity = 1 - f; });
-    return () => { stop(); r.remove(); };
   }
   // Hover focus: back-eased corner brackets, masked dot grid, cursor spotlight (Orfa Agents)
   function focusCard(el, o = {}) {
@@ -2109,11 +2342,13 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
   function drawLine(el, o = {}) { el.style.transformOrigin = o.origin || "left center"; const d = o.duration || 1; return play((o.delay || 0) + d, t => { el.style.transform = `scaleX(${EZ.inOut(clamp((t - (o.delay || 0)) / d))})`; }); }
   // Drifting diagonal stripes revealed by a wipe (Dev Agency Services)
   function stripes(el, o = {}) {
-    rel(el); const s = document.createElement("div");
-    s.style.cssText = `position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(${o.angle ?? -60}deg, ${o.color || "rgba(148,163,184,0.22)"} 0 1.5px, transparent 1.5px ${o.gap || 13}px);clip-path:inset(0 100% 0 0)`;
-    el.insertBefore(s, el.firstChild);
-    const stopL = loopFx(t => { s.style.clipPath = `inset(0 ${(1 - EZ.inOut(clamp(t / (o.duration || 1.1)))) * 100}% 0 0)`; s.style.backgroundPosition = `${t * (o.drift ?? 10)}px 0`; });
-    return () => { stopL(); s.remove(); };
+    rel(el); const ang = o.angle ?? -60, gap = o.gap || 13, px = gap / Math.max(0.05, Math.abs(Math.sin((ang * Math.PI) / 180))), wrap = document.createElement("div"), s = document.createElement("div");
+    // Drift by translating an oversized layer modulo one horizontal stripe period, so the pattern never wraps at a tile seam
+    wrap.style.cssText = "position:absolute;inset:0;overflow:hidden;pointer-events:none;clip-path:inset(0 100% 0 0)";
+    s.style.cssText = `position:absolute;top:0;bottom:0;left:${-Math.ceil(px) - 1}px;right:0;background-image:repeating-linear-gradient(${ang}deg, ${o.color || "rgba(148,163,184,0.22)"} 0 1.5px, transparent 1.5px ${gap}px);background-repeat:no-repeat;will-change:transform`;
+    wrap.appendChild(s); el.insertBefore(wrap, el.firstChild);
+    const stopL = loopFx(t => { wrap.style.clipPath = `inset(0 ${(1 - EZ.inOut(clamp(t / (o.duration || 1.1)))) * 100}% 0 0)`; s.style.transform = `translateX(${((t * (o.drift ?? 10)) % px).toFixed(2)}px)`; });
+    return () => { stopL(); wrap.remove(); };
   }
   const bez = (x1, y1, x2, y2) => { const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx, cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
     const X = (t) => ((ax * t + bx) * t + cx) * t, Y = (t) => ((ay * t + by) * t + cy) * t, dX = (t) => (3 * ax * t + 2 * bx) * t + cx;
@@ -2175,8 +2410,6 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
       dot.style.transform = `translate(${r.x + r.w / 2}px,${r.y + r.h / 2}px) scale(${sc < 1 ? 0.6 : 1})`;
     });
   }
-  const HUES = ["#ff5f6d", "#ffb347", "#ffe66d", "#4ade80", "#38bdf8", "#818cf8", "#e879f9"];
-  const conicG = (d, h) => `conic-gradient(from ${d.toFixed(1)}deg, ${(h || HUES).join(", ")}, ${(h || HUES)[0]})`;
   const exIn = (t) => (t <= 0 ? 0 : Math.pow(2, 10 * clamp(t) - 10));
   const ob21 = (t) => { t = clamp(t); const c1 = 2.1, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); };
   // Per-letter pop: rise, overshoot scale and de-blur; out flies them up and away (Product Video)
@@ -2190,22 +2423,23 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
       else { const q = exIn((t - i * st * 0.6) / 0.35); op = 1 - q; dy = -q * lift * fs; sc = 1 + q * 0.2; }
       s.style.opacity = op; s.style.filter = op > 0.995 ? "none" : `blur(${((1 - op) * px).toFixed(2)}px)`; s.style.transform = `translateY(${dy.toFixed(1)}px) scale(${sc.toFixed(3)})`; }));
   }
-  // Spinning spectrum border with a soft glow around any box (Product Video)
+  // Spectrum ring: a soft arc of colour travels around the border over a faint base line, with a restrained glow (Product Video)
+  const arcG = (d, h, arc) => { const span = 360 * arc, n = h.length, st = h.map((c, i) => `${c} ${((span * (i + 1)) / (n + 1)).toFixed(1)}deg`).join(", "); return `conic-gradient(from ${d.toFixed(1)}deg, transparent 0deg, ${st}, transparent ${span.toFixed(1)}deg, transparent 360deg)`; };
   function spectrumRing(el, o = {}) {
-    rel(el); const r = o.radius ?? (parseFloat(getComputedStyle(el).borderRadius) || 24), pad = o.width ?? 2.5, glow = o.glow ?? 0.85, spd = o.speed ?? 60;
+    rel(el); const r = o.radius ?? (parseFloat(getComputedStyle(el).borderRadius) || 24), pad = o.width ?? 1.5, glow = o.glow ?? 0.45, spd = o.speed ?? 45, hues = o.hues || ["#a78bfa", "#60a5fa", "#34d399"], arc = o.arc ?? 0.55, base = o.base || "rgba(242,242,244,0.14)";
     const g = document.createElement("div"), b = document.createElement("div");
-    g.style.cssText = `position:absolute;inset:-6px;border-radius:${r + 6}px;filter:blur(26px);opacity:${glow};pointer-events:none;z-index:-1;`;
+    g.style.cssText = `position:absolute;inset:-4px;border-radius:${r + 4}px;filter:blur(18px);opacity:${glow};pointer-events:none;z-index:-1;`;
     b.style.cssText = `position:absolute;inset:${-pad}px;border-radius:${r + pad}px;pointer-events:none;z-index:-1;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;padding:${pad}px;`;
     if (getComputedStyle(el).zIndex === "auto") el.style.zIndex = 0; el.style.isolation = "isolate"; el.prepend(g, b);
-    const stop = loopFx(t => { const c = conicG(t * spd, o.hues); g.style.background = c; b.style.background = c; });
+    const stop = loopFx(t => { const c = arcG(t * spd, hues, arc); g.style.background = c; b.style.background = `${c}, linear-gradient(${base}, ${base})`; });
     return () => { stop(); g.remove(); b.remove(); };
   }
-  // A diagonal glint sweeps across the element once (Product Video)
+  // A crisp diagonal glint sweeps across the element once: a soft band with a bright core (Product Video)
   function shine(el, o = {}) {
-    rel(el); const d = o.duration ?? 0.6, wrap = document.createElement("div"), bar = document.createElement("div");
+    rel(el); const d = o.duration ?? 0.75, col = o.color || "rgba(255,255,255,0.95)", wrap = document.createElement("div"), bar = document.createElement("div");
     wrap.style.cssText = "position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none;z-index:5;";
-    bar.style.cssText = `position:absolute;top:-40%;bottom:-40%;width:${o.size || "30%"};transform:rotate(18deg);background:linear-gradient(90deg,rgba(255,255,255,0),${o.color || "rgba(255,255,255,0.85)"},rgba(255,255,255,0));`; wrap.appendChild(bar); el.appendChild(wrap);
-    return play(d, t => (bar.style.left = lerp(-30, 120, EZ.inOut(t / d)).toFixed(1) + "%")).then(() => wrap.remove());
+    bar.style.cssText = `position:absolute;top:-50%;bottom:-50%;width:${o.size || "34%"};transform:skewX(-20deg);background:linear-gradient(90deg, transparent 0%, ${withA(col, 0.28)} 32%, ${col} 50%, ${withA(col, 0.28)} 68%, transparent 100%);`; wrap.appendChild(bar); el.appendChild(wrap);
+    return play(d, t => (bar.style.left = lerp(-45, 125, EZ.inOut(t / d)).toFixed(1) + "%")).then(() => wrap.remove());
   }
   // Three bouncing dots: the assistant is typing (Product Video)
   function typingDots(el, o = {}) {
@@ -2214,6 +2448,34 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
     return loopFx(t => ds.forEach((d, i) => (d.style.transform = `translateY(${(-Math.max(0, Math.sin(t * 9 - i * 0.9)) * sz * 0.8).toFixed(1)}px)`)));
   }
 
+  // ── Document AI Teaser: glows, cursors, scans and light ──
+  const withA = (col, a) => { a = +clamp(a).toFixed(3); const m = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(col || ""); if (!m) return `color-mix(in srgb, ${col} ${Math.round(a * 100)}%, transparent)`;
+    let h = m[1]; if (h.length === 3) h = h.split("").map(x => x + x).join(""); const n = parseInt(h, 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`; };
+  const sm3 = (p) => { p = clamp(p); return p * p * (3 - 2 * p); };
+  const svgEl = (tag, at) => { const n = document.createElementNS("http://www.w3.org/2000/svg", tag); for (const k in at) n.setAttribute(k, at[k]); return n; };
+  const splitChars = (el, block) => {
+    const text = el.dataset.sfText || el.textContent.trim(); el.dataset.sfText = text; el.setAttribute("aria-label", text); el.textContent = ""; const out = [];
+    text.split(" ").forEach((w, i, a) => { const ws = document.createElement("span"); ws.setAttribute("aria-hidden", "true"); ws.style.cssText = "display:inline-block;white-space:nowrap;";
+      [...w].forEach(ch => { const s = document.createElement("span"); if (block) s.style.display = "inline-block"; s.textContent = ch; ws.appendChild(s); out.push(s); }); el.appendChild(ws); if (i < a.length - 1) el.appendChild(document.createTextNode(" ")); });
+    return out;
+  };
+  // Wire draw: a cubic connector draws between two elements with a bright head riding its tip
+  const SIDE_OPP = { left: "right", right: "left", top: "bottom", bottom: "top" };
+  const anchorOf = (n, sr, side) => { if (!n.getBoundingClientRect) return [n.x, n.y]; const r = n.getBoundingClientRect(), x = r.left - sr.left, y = r.top - sr.top;
+    return side === "left" ? [x, y + r.height / 2] : side === "right" ? [x + r.width, y + r.height / 2] : side === "top" ? [x + r.width / 2, y] : side === "bottom" ? [x + r.width / 2, y + r.height] : [x + r.width / 2, y + r.height / 2]; };
+  // ── Motion Tryouts: text ──
+  const splitWords = (el) => { const text = el.dataset.sfText || el.textContent.trim(); el.dataset.sfText = text; el.setAttribute("aria-label", text); el.textContent = "";
+    el.style.display = "flex"; el.style.flexWrap = "wrap"; el.style.columnGap = el.style.columnGap || "0.26em";
+    return text.split(/\s+/).map(w => { const s = document.createElement("span"); s.setAttribute("aria-hidden", "true"); s.style.cssText = "display:inline-block;white-space:pre;"; s.textContent = w; el.appendChild(s); return s; }); };
+  const fsOf = (el) => parseFloat(getComputedStyle(el).fontSize) || 16;
+  const wrapIn = (el, key) => { if (el[key] && el.contains(el[key])) return el[key]; const s = document.createElement("span"); s.style.cssText = "display:inline-block;position:relative;"; while (el.firstChild) s.appendChild(el.firstChild); el.appendChild(s); return (el[key] = s); };
+  const blurPx = (p, b) => (p > 0.995 ? "none" : `blur(${((1 - p) * b).toFixed(2)}px)`);
+  // ── Motion Tryouts: interface ──
+  const bgOf = (f) => (/^(#|rgb|hsl|oklch|color-mix|linear-gradient|radial-gradient|conic-gradient|repeating-)/.test(f || "") ? f : `center/cover url("${f}")`);
+  const stageXY = (stage, n) => { const sr = stage.getBoundingClientRect(), sc = sr.width / (stage.offsetWidth || 1) || 1, r = n.getBoundingClientRect(); return [(r.left - sr.left + r.width / 2) / sc, (r.top - sr.top + r.height / 2) / sc, r.width / sc, r.height / sc]; };
+  // ── Motion Tryouts: transitions ──
+  const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
+  const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cut, countUp, tick, bars, pulseDot, focusCard, iris, drawFrame, drawLine, stripes, typeSwap, rollWords, bracketHop, pop, spectrumRing, shine, typingDots, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, countUp, tick, bars, focusCard, iris, drawFrame, drawLine, stripes, typeSwap, rollWords, bracketHop, pop, spectrumRing, shine, typingDots, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
