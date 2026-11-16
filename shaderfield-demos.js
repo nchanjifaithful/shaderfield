@@ -110,6 +110,11 @@
 
   const card = (extra) => `border-radius:0.7em;background:rgba(242,242,244,0.05);outline:1px solid rgba(242,242,244,0.14);${extra || ""}`;
 
+  add({ id: "glow-sheen", name: "Glow Sheen", cat: "Light", from: "Document AI Teaser", desc: "A bright band drifts through gradient text under a soft glow.",
+    code: `const stop = Shaderfield.motion.glowText(word, {\n  colors: ["#0ea5e9", "#e0f2fe"], period: 3.6, glow: 16\n});`,
+    build(el, big) { const q = stage(el, big, `<div style="font-size:4.6em;font-weight:600;letter-spacing:-0.04em;line-height:1.1;text-align:center;padding:0 0.6em">Stays <span data-t>private</span></div>`, center);
+      return loopDemo(() => M().glowText(q("[data-t]"), { colors: [ACC, ACC2], glow: big ? 16 : 10 })); } });
+
   // ── Motion Tryouts ──
   const TILE = [["#2c2f36", "#141619", 18, 48], ["#202329", "#0f1114", 82, 26], ["#32353c", "#18191d", 42, 38], ["#25282e", "#121418", 90, 18], ["#2e3138", "#151619", 8, 56], ["#22252a", "#101113", 62, 32]];
   const tileBg = (i) => { const [a, b, x, k] = TILE[i % TILE.length]; return `radial-gradient(120% 85% at ${x}% 0%, color-mix(in srgb, ${ACC} ${k}%, transparent) 0%, transparent 62%), linear-gradient(170deg, ${a} 0%, ${b} 100%)`; };

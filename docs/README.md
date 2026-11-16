@@ -5,10 +5,11 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 22
+- [Motion effects](#motion-effects) · 23
   - [Text](#text) · 9
   - [Interface](#interface) · 8
   - [Transitions](#transitions) · 5
+  - [Light](#light) · 1
 
 ## Shaders
 
@@ -142,3 +143,9 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Line Draw](motion/draw-frame.md) | `drawFrame` | A hairline frame and an underline draw themselves in. |
 | [Line Draw](motion/draw-line.md) | `drawLine` | A hairline frame and an underline draw themselves in. |
 | [Block Reveal](motion/stripes.md) | `stripes` | A solid block wipes open, then its words roll up. |
+
+### Light
+
+| Effect | Helper | Description |
+|---|---|---|
+| [Glow Sheen](motion/glow-text.md) | `glowText` | A bright band drifts through gradient text under a soft glow. |

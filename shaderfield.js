@@ -2477,6 +2477,15 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       [...w].forEach(ch => { const s = document.createElement("span"); if (block) s.style.display = "inline-block"; s.textContent = ch; ws.appendChild(s); out.push(s); }); el.appendChild(ws); if (i < a.length - 1) el.appendChild(document.createTextNode(" ")); });
     return out;
   };
+  // Glow sheen: a highlight band drifts through gradient-filled text under a soft bloom
+  function glowText(el, o = {}) {
+    const [a, b] = o.colors || [o.color || "#34d399", o.highlight || "#d1fae5"], per = o.period ?? 3.6, band = o.band ?? 9, g = o.glow ?? 16, st = el.style, prev = st.cssText;
+    st.backgroundImage = `linear-gradient(100deg, ${a} 0%, ${b} 50%, ${a} 100%)`; st.backgroundSize = band + "em 100%"; st.backgroundRepeat = "repeat";
+    st.setProperty("-webkit-background-clip", "text"); st.backgroundClip = "text"; st.color = "transparent"; st.setProperty("-webkit-text-fill-color", "transparent");
+    if (g) st.filter = `drop-shadow(0 0 ${g}px ${withA(o.glowColor || b, o.bloom ?? 0.35)})`;
+    const stop = loopFx(t => (st.backgroundPosition = `${(-(t / per) * band / 2).toFixed(3)}em 0`));
+    return () => { stop(); st.cssText = prev; };
+  }
   // Wire draw: a cubic connector draws between two elements with a bright head riding its tip
   const SIDE_OPP = { left: "right", right: "left", top: "bottom", bottom: "top" };
   const anchorOf = (n, sr, side) => { if (!n.getBoundingClientRect) return [n.x, n.y]; const r = n.getBoundingClientRect(), x = r.left - sr.left, y = r.top - sr.top;
@@ -2495,5 +2504,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, countUp, tick, bars, focusCard, pressable, iris, drawFrame, drawLine, stripes, typeSwap, rollWords, bracketHop, pop, spectrumRing, shine, typingDots, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, countUp, tick, bars, focusCard, pressable, iris, drawFrame, drawLine, stripes, typeSwap, rollWords, bracketHop, pop, spectrumRing, shine, typingDots, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
