@@ -1,6 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/nchanjifaithful/shaderfield/main/assets/logo-wordmark-on-dark.svg#gh-dark-mode-only" alt="Shaderfield" width="380">
-  <img src="https://raw.githubusercontent.com/nchanjifaithful/shaderfield/main/assets/logo-wordmark-on-light.svg#gh-light-mode-only" alt="Shaderfield" width="380">
+  <img src="assets/readme-banner.svg" alt="Shaderfield" width="640">
 </p>
 
 <p align="center">
