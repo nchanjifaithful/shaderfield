@@ -962,7 +962,7 @@ gl_FragColor = vec4(uBg + uGlow * 0.16 * uForm * g * g, 1.0); }`;
   function asmSource(c, e) {
     if (c.source && (c.source.naturalWidth || c.source.width)) return [c.source, c.source.nodeName === "IMG"];
     if (c.text != null || !BASE_URL) return [textPanel(1600, 920, phrases(c, e)[0] || "Peace", { size: 0.36, font: SERIF_F, weight: 400, fg: "#fff", bg: "#000", fit: 0.94 }), false];
-    if (!ASM_DEFAULT) { ASM_DEFAULT = new Image(); ASM_DEFAULT.src = BASE_URL + "assets/thinker.jpg"; }
+    if (!ASM_DEFAULT) { ASM_DEFAULT = new Image(); ASM_DEFAULT.src = BASE_URL + "assets/assemble-default.jpg"; }
     return ASM_DEFAULT.complete && ASM_DEFAULT.naturalWidth ? [ASM_DEFAULT, true] : [textPanel(1600, 920, "", { bg: "#000" }), false];
   }
   function asmTimes(c, p) {

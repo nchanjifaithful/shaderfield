@@ -2,7 +2,7 @@
 
 # Silk Swirl
 
-<img src="../../assets/thumbs/swirl.png" width="320" height="200" alt="Silk Swirl preview">
+<img src="../../assets/shader-previews/silk-swirl.png" width="320" height="200" alt="Silk Swirl preview">
 
 Silk bands spiral in toward the centre and keep turning. A native rewrite; no third-party shader code.
 

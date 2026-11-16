@@ -2,7 +2,7 @@
 
 # Spring Net
 
-<img src="../../assets/thumbs/mesh.png" width="320" height="200" alt="Spring Net preview">
+<img src="../../assets/shader-previews/spring-net.png" width="320" height="200" alt="Spring Net preview">
 
 A spring lattice that glows by tension. Every kick travels across it like a struck net.
 

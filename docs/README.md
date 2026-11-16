@@ -12,59 +12,59 @@ Every shader and motion effect in Shaderfield has its own page with a descriptio
 
 ## Shaders
 
-<table>
+<table width="100%">
 <tr>
-<td width="33%" valign="top"><a href="shaders/current.md"><img src="../assets/thumbs/current.png" width="100%" alt="Flow Streaks"></a><br><b><a href="shaders/current.md">Flow Streaks</a></b><br><sub><code>current</code></sub></td>
-<td width="33%" valign="top"><a href="shaders/fret.md"><img src="../assets/thumbs/fret.png" width="100%" alt="Circuit Arcs"></a><br><b><a href="shaders/fret.md">Circuit Arcs</a></b><br><sub><code>fret</code></sub></td>
-<td width="33%" valign="top"><a href="shaders/skein.md"><img src="../assets/thumbs/skein.png" width="100%" alt="Woven Lines"></a><br><b><a href="shaders/skein.md">Woven Lines</a></b><br><sub><code>skein</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/current.md"><img src="../assets/shader-previews/flow-streaks.png" width="280" alt="Flow Streaks"></a><br><b><a href="shaders/current.md">Flow Streaks</a></b><br><sub><code>current</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/fret.md"><img src="../assets/shader-previews/circuit-arcs.png" width="280" alt="Circuit Arcs"></a><br><b><a href="shaders/fret.md">Circuit Arcs</a></b><br><sub><code>fret</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/skein.md"><img src="../assets/shader-previews/woven-lines.png" width="280" alt="Woven Lines"></a><br><b><a href="shaders/skein.md">Woven Lines</a></b><br><sub><code>skein</code></sub></td>
 </tr>
 <tr>
-<td width="33%" valign="top"><a href="shaders/harmonia.md"><img src="../assets/thumbs/harmonia.png" width="100%" alt="Chord Circle"></a><br><b><a href="shaders/harmonia.md">Chord Circle</a></b><br><sub><code>harmonia</code></sub></td>
-<td width="33%" valign="top"><a href="shaders/halo.md"><img src="../assets/thumbs/halo.png" width="100%" alt="Radial Bloom"></a><br><b><a href="shaders/halo.md">Radial Bloom</a></b><br><sub><code>halo</code></sub></td>
-<td width="33%" valign="top"><a href="shaders/thermal.md"><img src="../assets/thumbs/thermal.png" width="100%" alt="Heat Map"></a><br><b><a href="shaders/thermal.md">Heat Map</a></b><br><sub><code>thermal</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/harmonia.md"><img src="../assets/shader-previews/chord-circle.png" width="280" alt="Chord Circle"></a><br><b><a href="shaders/harmonia.md">Chord Circle</a></b><br><sub><code>harmonia</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/halo.md"><img src="../assets/shader-previews/radial-bloom.png" width="280" alt="Radial Bloom"></a><br><b><a href="shaders/halo.md">Radial Bloom</a></b><br><sub><code>halo</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/thermal.md"><img src="../assets/shader-previews/heat-map.png" width="280" alt="Heat Map"></a><br><b><a href="shaders/thermal.md">Heat Map</a></b><br><sub><code>thermal</code></sub></td>
 </tr>
 <tr>
-<td width="33%" valign="top"><a href="shaders/mesh.md"><img src="../assets/thumbs/mesh.png" width="100%" alt="Spring Net"></a><br><b><a href="shaders/mesh.md">Spring Net</a></b><br><sub><code>mesh</code></sub></td>
-<td width="33%" valign="top"><a href="shaders/decrypt.md"><img src="../assets/thumbs/decrypt.png" width="100%" alt="Decode Lens"></a><br><b><a href="shaders/decrypt.md">Decode Lens</a></b><br><sub><code>decrypt</code></sub></td>
-<td width="33%" valign="top"><a href="shaders/datawall.md"><img src="../assets/thumbs/datawall.png" width="100%" alt="Cipher Wall"></a><br><b><a href="shaders/datawall.md">Cipher Wall</a></b><br><sub><code>datawall</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/mesh.md"><img src="../assets/shader-previews/spring-net.png" width="280" alt="Spring Net"></a><br><b><a href="shaders/mesh.md">Spring Net</a></b><br><sub><code>mesh</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/decrypt.md"><img src="../assets/shader-previews/decode-lens.png" width="280" alt="Decode Lens"></a><br><b><a href="shaders/decrypt.md">Decode Lens</a></b><br><sub><code>decrypt</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/datawall.md"><img src="../assets/shader-previews/cipher-wall.png" width="280" alt="Cipher Wall"></a><br><b><a href="shaders/datawall.md">Cipher Wall</a></b><br><sub><code>datawall</code></sub></td>
 </tr>
 <tr>
-<td width="33%" valign="top"><a href="shaders/sand.md"><img src="../assets/thumbs/sand.png" width="100%" alt="Sand Text"></a><br><b><a href="shaders/sand.md">Sand Text</a></b><br><sub><code>sand</code></sub></td>
-<td width="33%" valign="top"><a href="shaders/assemble.md"><img src="../assets/thumbs/assemble.png" width="100%" alt="Particle Portrait"></a><br><b><a href="shaders/assemble.md">Particle Portrait</a></b><br><sub><code>assemble</code></sub></td>
-<td width="33%" valign="top"><a href="shaders/aurora.md"><img src="../assets/thumbs/aurora.png" width="100%" alt="Aurora"></a><br><b><a href="shaders/aurora.md">Aurora</a></b><br><sub><code>aurora</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/sand.md"><img src="../assets/shader-previews/sand-text.png" width="280" alt="Sand Text"></a><br><b><a href="shaders/sand.md">Sand Text</a></b><br><sub><code>sand</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/assemble.md"><img src="../assets/shader-previews/particle-portrait.png" width="280" alt="Particle Portrait"></a><br><b><a href="shaders/assemble.md">Particle Portrait</a></b><br><sub><code>assemble</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/aurora.md"><img src="../assets/shader-previews/aurora.png" width="280" alt="Aurora"></a><br><b><a href="shaders/aurora.md">Aurora</a></b><br><sub><code>aurora</code></sub></td>
 </tr>
 <tr>
-<td width="33%" valign="top"><a href="shaders/horizon.md"><img src="../assets/thumbs/horizon.png" width="100%" alt="Synth Valley"></a><br><b><a href="shaders/horizon.md">Synth Valley</a></b><br><sub><code>horizon</code></sub></td>
-<td width="33%" valign="top"><a href="shaders/blink.md"><img src="../assets/thumbs/blink.png" width="100%" alt="Square Text"></a><br><b><a href="shaders/blink.md">Square Text</a></b><br><sub><code>blink</code></sub></td>
-<td width="33%" valign="top"><a href="shaders/blinkfield.md"><img src="../assets/thumbs/blinkfield.png" width="100%" alt="Square Field"></a><br><b><a href="shaders/blinkfield.md">Square Field</a></b><br><sub><code>blinkfield</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/horizon.md"><img src="../assets/shader-previews/synth-valley.png" width="280" alt="Synth Valley"></a><br><b><a href="shaders/horizon.md">Synth Valley</a></b><br><sub><code>horizon</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/blink.md"><img src="../assets/shader-previews/square-text.png" width="280" alt="Square Text"></a><br><b><a href="shaders/blink.md">Square Text</a></b><br><sub><code>blink</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/blinkfield.md"><img src="../assets/shader-previews/square-field.png" width="280" alt="Square Field"></a><br><b><a href="shaders/blinkfield.md">Square Field</a></b><br><sub><code>blinkfield</code></sub></td>
 </tr>
 <tr>
-<td width="33%" valign="top"><a href="shaders/sparkle.md"><img src="../assets/thumbs/sparkle.png" width="100%" alt="Sparkle"></a><br><b><a href="shaders/sparkle.md">Sparkle</a></b><br><sub><code>sparkle</code></sub></td>
-<td width="33%" valign="top"><a href="shaders/filings.md"><img src="../assets/thumbs/filings.png" width="100%" alt="Iron Filings"></a><br><b><a href="shaders/filings.md">Iron Filings</a></b><br><sub><code>filings</code></sub></td>
-<td width="33%" valign="top"><a href="shaders/gather.md"><img src="../assets/thumbs/gather.png" width="100%" alt="Magnet Snap"></a><br><b><a href="shaders/gather.md">Magnet Snap</a></b><br><sub><code>gather</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/sparkle.md"><img src="../assets/shader-previews/sparkle.png" width="280" alt="Sparkle"></a><br><b><a href="shaders/sparkle.md">Sparkle</a></b><br><sub><code>sparkle</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/filings.md"><img src="../assets/shader-previews/iron-filings.png" width="280" alt="Iron Filings"></a><br><b><a href="shaders/filings.md">Iron Filings</a></b><br><sub><code>filings</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/gather.md"><img src="../assets/shader-previews/magnet-snap.png" width="280" alt="Magnet Snap"></a><br><b><a href="shaders/gather.md">Magnet Snap</a></b><br><sub><code>gather</code></sub></td>
 </tr>
 <tr>
-<td width="33%" valign="top"><a href="shaders/lattice.md"><img src="../assets/thumbs/lattice.png" width="100%" alt="Cube Tunnel"></a><br><b><a href="shaders/lattice.md">Cube Tunnel</a></b><br><sub><code>lattice</code></sub></td>
-<td width="33%" valign="top"><a href="shaders/orbits.md"><img src="../assets/thumbs/orbits.png" width="100%" alt="Orbit Rings"></a><br><b><a href="shaders/orbits.md">Orbit Rings</a></b><br><sub><code>orbits</code></sub></td>
-<td width="33%" valign="top"><a href="shaders/hearth.md"><img src="../assets/thumbs/hearth.png" width="100%" alt="Glow Bed"></a><br><b><a href="shaders/hearth.md">Glow Bed</a></b><br><sub><code>hearth</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/lattice.md"><img src="../assets/shader-previews/cube-tunnel.png" width="280" alt="Cube Tunnel"></a><br><b><a href="shaders/lattice.md">Cube Tunnel</a></b><br><sub><code>lattice</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/orbits.md"><img src="../assets/shader-previews/orbit-rings.png" width="280" alt="Orbit Rings"></a><br><b><a href="shaders/orbits.md">Orbit Rings</a></b><br><sub><code>orbits</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/hearth.md"><img src="../assets/shader-previews/glow-bed.png" width="280" alt="Glow Bed"></a><br><b><a href="shaders/hearth.md">Glow Bed</a></b><br><sub><code>hearth</code></sub></td>
 </tr>
 <tr>
-<td width="33%" valign="top"><a href="shaders/lightsurge.md"><img src="../assets/thumbs/lightsurge.png" width="100%" alt="Light Surge"></a><br><b><a href="shaders/lightsurge.md">Light Surge</a></b><br><sub><code>lightsurge</code></sub></td>
-<td width="33%" valign="top"><a href="shaders/swirl.md"><img src="../assets/thumbs/swirl.png" width="100%" alt="Silk Swirl"></a><br><b><a href="shaders/swirl.md">Silk Swirl</a></b><br><sub><code>swirl</code></sub></td>
-<td width="33%" valign="top"><a href="shaders/waves.md"><img src="../assets/thumbs/waves.png" width="100%" alt="Wave Bands"></a><br><b><a href="shaders/waves.md">Wave Bands</a></b><br><sub><code>waves</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/lightsurge.md"><img src="../assets/shader-previews/light-surge.png" width="280" alt="Light Surge"></a><br><b><a href="shaders/lightsurge.md">Light Surge</a></b><br><sub><code>lightsurge</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/swirl.md"><img src="../assets/shader-previews/silk-swirl.png" width="280" alt="Silk Swirl"></a><br><b><a href="shaders/swirl.md">Silk Swirl</a></b><br><sub><code>swirl</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/waves.md"><img src="../assets/shader-previews/wave-bands.png" width="280" alt="Wave Bands"></a><br><b><a href="shaders/waves.md">Wave Bands</a></b><br><sub><code>waves</code></sub></td>
 </tr>
 <tr>
-<td width="33%" valign="top"><a href="shaders/stage.md"><img src="../assets/thumbs/stage.png" width="100%" alt="Stage Light"></a><br><b><a href="shaders/stage.md">Stage Light</a></b><br><sub><code>stage</code></sub></td>
-<td width="33%" valign="top"><a href="shaders/globe.md"><img src="../assets/thumbs/globe.png" width="100%" alt="Dot Globe"></a><br><b><a href="shaders/globe.md">Dot Globe</a></b><br><sub><code>globe</code></sub></td>
-<td width="33%" valign="top"><a href="shaders/sweep.md"><img src="../assets/thumbs/sweep.png" width="100%" alt="Glyph Sweep"></a><br><b><a href="shaders/sweep.md">Glyph Sweep</a></b><br><sub><code>sweep</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/stage.md"><img src="../assets/shader-previews/stage-light.png" width="280" alt="Stage Light"></a><br><b><a href="shaders/stage.md">Stage Light</a></b><br><sub><code>stage</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/globe.md"><img src="../assets/shader-previews/dot-globe.png" width="280" alt="Dot Globe"></a><br><b><a href="shaders/globe.md">Dot Globe</a></b><br><sub><code>globe</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/sweep.md"><img src="../assets/shader-previews/glyph-sweep.png" width="280" alt="Glyph Sweep"></a><br><b><a href="shaders/sweep.md">Glyph Sweep</a></b><br><sub><code>sweep</code></sub></td>
 </tr>
 <tr>
-<td width="33%" valign="top"><a href="shaders/matrix.md"><img src="../assets/thumbs/matrix.png" width="100%" alt="Matrix"></a><br><b><a href="shaders/matrix.md">Matrix</a></b><br><sub><code>matrix</code></sub></td>
-<td width="33%" valign="top"><a href="shaders/asciify.md"><img src="../assets/thumbs/asciify.png" width="100%" alt="ASCII Text"></a><br><b><a href="shaders/asciify.md">ASCII Text</a></b><br><sub><code>asciify</code></sub></td>
-<td width="33%" valign="top"><a href="shaders/graph.md"><img src="../assets/thumbs/graph.png" width="100%" alt="Glyph Graph"></a><br><b><a href="shaders/graph.md">Glyph Graph</a></b><br><sub><code>graph</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/matrix.md"><img src="../assets/shader-previews/matrix.png" width="280" alt="Matrix"></a><br><b><a href="shaders/matrix.md">Matrix</a></b><br><sub><code>matrix</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/asciify.md"><img src="../assets/shader-previews/ascii-text.png" width="280" alt="ASCII Text"></a><br><b><a href="shaders/asciify.md">ASCII Text</a></b><br><sub><code>asciify</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/graph.md"><img src="../assets/shader-previews/glyph-graph.png" width="280" alt="Glyph Graph"></a><br><b><a href="shaders/graph.md">Glyph Graph</a></b><br><sub><code>graph</code></sub></td>
 </tr>
 <tr>
-<td width="33%" valign="top"><a href="shaders/glassicons.md"><img src="../assets/thumbs/glassicons.png" width="100%" alt="Glass Icons"></a><br><b><a href="shaders/glassicons.md">Glass Icons</a></b><br><sub><code>glassicons</code></sub></td>
+<td width="33%" valign="top"><a href="shaders/glassicons.md"><img src="../assets/shader-previews/glass-icons.png" width="280" alt="Glass Icons"></a><br><b><a href="shaders/glassicons.md">Glass Icons</a></b><br><sub><code>glassicons</code></sub></td>
 </tr>
 </table>
 

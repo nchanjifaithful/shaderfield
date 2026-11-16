@@ -2,7 +2,7 @@
 
 # Aurora
 
-<img src="../../assets/thumbs/aurora.png" width="320" height="200" alt="Aurora preview">
+<img src="../../assets/shader-previews/aurora.png" width="320" height="200" alt="Aurora preview">
 
 Aurora curtains sweep in from the left over a ridge and a rippling lake, flare, then fade to start again.
 

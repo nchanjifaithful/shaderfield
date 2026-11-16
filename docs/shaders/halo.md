@@ -2,7 +2,7 @@
 
 # Radial Bloom
 
-<img src="../../assets/thumbs/halo.png" width="320" height="200" alt="Radial Bloom preview">
+<img src="../../assets/shader-previews/radial-bloom.png" width="320" height="200" alt="Radial Bloom preview">
 
 A soft radial bloom with a slowly orbiting focal point. Made for hero backgrounds.
 

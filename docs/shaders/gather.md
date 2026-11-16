@@ -2,7 +2,7 @@
 
 # Magnet Snap
 
-<img src="../../assets/thumbs/gather.png" width="320" height="200" alt="Magnet Snap preview">
+<img src="../../assets/shader-previews/magnet-snap.png" width="320" height="200" alt="Magnet Snap preview">
 
 Filings at rest catch a passing magnet, then collapse inward and lock into a 5×5 mark around it before letting go.
 

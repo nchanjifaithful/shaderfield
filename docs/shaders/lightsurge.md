@@ -2,7 +2,7 @@
 
 # Light Surge
 
-<img src="../../assets/thumbs/lightsurge.png" width="320" height="200" alt="Light Surge preview">
+<img src="../../assets/shader-previews/light-surge.png" width="320" height="200" alt="Light Surge preview">
 
 Columns of light rise from the floor over a colour wash, sway, then lift away on a cycle. Time a cut to the peak.
 

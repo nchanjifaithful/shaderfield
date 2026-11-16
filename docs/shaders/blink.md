@@ -2,7 +2,7 @@
 
 # Square Text
 
-<img src="../../assets/thumbs/blink.png" width="320" height="200" alt="Square Text preview">
+<img src="../../assets/shader-previews/square-text.png" width="320" height="200" alt="Square Text preview">
 
 Each line dissolves in square by square, holds, then blinks out.
 

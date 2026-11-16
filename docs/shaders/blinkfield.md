@@ -2,7 +2,7 @@
 
 # Square Field
 
-<img src="../../assets/thumbs/blinkfield.png" width="320" height="200" alt="Square Field preview">
+<img src="../../assets/shader-previews/square-field.png" width="320" height="200" alt="Square Field preview">
 
 A floor of blinking squares rises and falls on a slow tide with a bright crest.
 

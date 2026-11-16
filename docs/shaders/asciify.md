@@ -2,7 +2,7 @@
 
 # ASCII Text
 
-<img src="../../assets/thumbs/asciify.png" width="320" height="200" alt="ASCII Text preview">
+<img src="../../assets/shader-previews/ascii-text.png" width="320" height="200" alt="ASCII Text preview">
 
 Crisp text wipes into ASCII glyphs, a scan band lights and densifies the characters it crosses, then the text wipes back.
 

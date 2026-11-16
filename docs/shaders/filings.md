@@ -2,7 +2,7 @@
 
 # Iron Filings
 
-<img src="../../assets/thumbs/filings.png" width="320" height="200" alt="Iron Filings preview">
+<img src="../../assets/shader-previews/iron-filings.png" width="320" height="200" alt="Iron Filings preview">
 
 A grid of iron filings turns to face a magnet as it sweeps, arcs and orbits. Far filings answer a beat late; a second pole repels.
 

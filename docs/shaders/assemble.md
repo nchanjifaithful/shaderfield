@@ -2,7 +2,7 @@
 
 # Particle Portrait
 
-<img src="../../assets/thumbs/assemble.png" width="320" height="200" alt="Particle Portrait preview">
+<img src="../../assets/shader-previews/particle-portrait.png" width="320" height="200" alt="Particle Portrait preview">
 
 Thousands of particles orbit in a tilted ring, then swirl in to rebuild an image, catch a sweep of light and unravel again.
 

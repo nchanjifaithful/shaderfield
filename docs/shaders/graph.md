@@ -2,7 +2,7 @@
 
 # Glyph Graph
 
-<img src="../../assets/thumbs/graph.png" width="320" height="200" alt="Glyph Graph preview">
+<img src="../../assets/shader-previews/glyph-graph.png" width="320" height="200" alt="Glyph Graph preview">
 
 Columns of glyphs rise from the floor like a chart, keep moving, then climb to fill the frame and loop.
 

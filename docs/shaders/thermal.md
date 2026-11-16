@@ -2,7 +2,7 @@
 
 # Heat Map
 
-<img src="../../assets/thumbs/thermal.png" width="320" height="200" alt="Heat Map preview">
+<img src="../../assets/shader-previews/heat-map.png" width="320" height="200" alt="Heat Map preview">
 
 Drifting heat sources merge into a banded thermal map.
 

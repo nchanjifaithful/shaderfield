@@ -2,7 +2,7 @@
 
 # Orbit Rings
 
-<img src="../../assets/thumbs/orbits.png" width="320" height="200" alt="Orbit Rings preview">
+<img src="../../assets/shader-previews/orbit-rings.png" width="320" height="200" alt="Orbit Rings preview">
 
 Tilted rings with tick marks sway round a haloed core over a faint starfield. Comets with fading tails pass behind and in front of the core.
 

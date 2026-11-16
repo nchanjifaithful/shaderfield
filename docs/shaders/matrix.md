@@ -2,7 +2,7 @@
 
 # Matrix
 
-<img src="../../assets/thumbs/matrix.png" width="320" height="200" alt="Matrix preview">
+<img src="../../assets/shader-previews/matrix.png" width="320" height="200" alt="Matrix preview">
 
 Columns of green glyph rain fall over a line of text. Each falling head lights the words it passes.
 

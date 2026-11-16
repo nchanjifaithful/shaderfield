@@ -2,7 +2,7 @@
 
 # Glow Bed
 
-<img src="../../assets/thumbs/hearth.png" width="320" height="200" alt="Glow Bed preview">
+<img src="../../assets/shader-previews/glow-bed.png" width="320" height="200" alt="Glow Bed preview">
 
 A bed of soft light breathes and sways along the bottom edge.
 

@@ -2,7 +2,7 @@
 
 # Stage Light
 
-<img src="../../assets/thumbs/stage.png" width="320" height="200" alt="Stage Light preview">
+<img src="../../assets/shader-previews/stage-light.png" width="320" height="200" alt="Stage Light preview">
 
 Light pours up from a glowing base, with soft shafts, a mirrored floor and drifting motes.
 

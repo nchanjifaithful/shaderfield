@@ -2,7 +2,7 @@
 
 # Dot Globe
 
-<img src="../../assets/thumbs/globe.png" width="320" height="200" alt="Dot Globe preview">
+<img src="../../assets/shader-previews/dot-globe.png" width="320" height="200" alt="Dot Globe preview">
 
 A globe of dots turns slowly. Land on the near side lights up and pings.
 

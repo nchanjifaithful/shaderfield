@@ -2,7 +2,7 @@
 
 # Woven Lines
 
-<img src="../../assets/thumbs/skein.png" width="320" height="200" alt="Woven Lines preview">
+<img src="../../assets/shader-previews/woven-lines.png" width="320" height="200" alt="Woven Lines preview">
 
 Woven filaments that ripple at their own pace, drift sideways and draw in from the left.
 

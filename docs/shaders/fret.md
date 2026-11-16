@@ -2,7 +2,7 @@
 
 # Circuit Arcs
 
-<img src="../../assets/thumbs/fret.png" width="320" height="200" alt="Circuit Arcs preview">
+<img src="../../assets/shader-previews/circuit-arcs.png" width="320" height="200" alt="Circuit Arcs preview">
 
 Truchet arcs that join into endless circuits, with light pulses running along every path.
 

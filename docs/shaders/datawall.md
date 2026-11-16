@@ -2,7 +2,7 @@
 
 # Cipher Wall
 
-<img src="../../assets/thumbs/datawall.png" width="320" height="200" alt="Cipher Wall preview">
+<img src="../../assets/shader-previews/cipher-wall.png" width="320" height="200" alt="Cipher Wall preview">
 
 A wall of backlog items held in cipher. Two lenses hunt across it and decode what they cross.
 

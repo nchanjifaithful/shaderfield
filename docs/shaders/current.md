@@ -2,7 +2,7 @@
 
 # Flow Streaks
 
-<img src="../../assets/thumbs/current.png" width="320" height="200" alt="Flow Streaks preview">
+<img src="../../assets/shader-previews/flow-streaks.png" width="320" height="200" alt="Flow Streaks preview">
 
 Line-integral flow streaks that speed up, heat up and bend around the cursor. Renders at half resolution because it is heavy per pixel.
 

@@ -1,7 +1,8 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-horizontal.svg">
-    <img src="assets/logo-horizontal-dark.svg" alt="Shaderfield" width="380">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/nchanjifaithful/shaderfield/main/assets/logo-wordmark-on-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/nchanjifaithful/shaderfield/main/assets/logo-wordmark-on-light.svg">
+    <img src="https://raw.githubusercontent.com/nchanjifaithful/shaderfield/main/assets/logo-wordmark-on-light.svg" alt="Shaderfield" width="380">
   </picture>
 </p>
 
@@ -15,10 +16,6 @@
   <a href="https://shaderfield.pages.dev/components.html">Component library</a> &nbsp;·&nbsp;
   <a href="docs/README.md">Documentation</a> &nbsp;·&nbsp;
   <a href="LICENSE">MIT License</a>
-</p>
-
-<p align="center">
-  <img src="assets/og-image.png" alt="Shaderfield" width="760">
 </p>
 
 ## Overview
@@ -224,7 +221,7 @@ Shaders marked with a default text draw that text themselves. Set your own with 
 <shader-field effect="assemble" src="statue.jpg"></shader-field>
 ```
 
-`src` (or `field.setSource(imgOrCanvasOrVideo)`) gives Assemble its image; without one it uses `assets/thinker.jpg` next to the script. Params with a 0 – 1 range and step 1 (`paper`, `dots`, `invert`, `magnet`) are on/off switches. `charset`: 0 ascii, 1 blocks, 2 binary. Blink `edges`: 0 none, 1 left, 2 right, 3 radial.
+`src` (or `field.setSource(imgOrCanvasOrVideo)`) gives Assemble its image; without one it uses `assets/assemble-default.jpg` next to the script. Params with a 0 – 1 range and step 1 (`paper`, `dots`, `invert`, `magnet`) are on/off switches. `charset`: 0 ascii, 1 blocks, 2 binary. Blink `edges`: 0 none, 1 left, 2 right, 3 radial.
 
 WebGL2 shaders fall back to a blank canvas where WebGL2 is unavailable.
 
@@ -353,7 +350,7 @@ shaderfield/
 ├── Components.dc.html      Editable source of components.html
 ├── support.js              Runtime for the site. Not needed for the library.
 ├── shaderfield-demos.js    Demo stages for the site. Not needed for the library.
-├── assets/                 Logos, icons, social image and shader thumbnails
+├── assets/                 Logos, icons, social preview, shader previews and Assemble's default image
 ├── examples/               Hero background, motion and frame-by-frame examples
 ├── robots.txt, sitemap.xml, site.webmanifest
 ├── LICENSE
@@ -367,5 +364,5 @@ Shaderfield is designed and built by **Nchanji Faithful** ([GitHub](https://gith
 Released under the [MIT License](LICENSE). You can use it in personal and commercial projects, modify it and redistribute it, as long as the copyright and license notice stay with the code.
 
 - **Issues and ideas.** Open an issue on GitHub with the effect id, your browser and a short description or screen recording.
-- **Contributing.** New shaders go in `shaderfield.js` with a 160 × 100 thumbnail in `assets/thumbs/` and a page in `docs/shaders/`. New motion helpers go in the `motion` export, with a demo in `shaderfield-demos.js` and a page in `docs/motion/`.
+- **Contributing.** New shaders go in `shaderfield.js` with a 160 × 100 preview in `assets/shader-previews/` (named after the shader's display name, and added to `PREVIEW` in `index.html`) and a page in `docs/shaders/`. New motion helpers go in the `motion` export, with a demo in `shaderfield-demos.js` and a page in `docs/motion/`.
 - **Versioning.** The site loads the library with a `?v=` cache key. Bump it on every release so visitors get the new file.

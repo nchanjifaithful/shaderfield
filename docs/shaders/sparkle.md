@@ -2,7 +2,7 @@
 
 # Sparkle
 
-<img src="../../assets/thumbs/sparkle.png" width="320" height="200" alt="Sparkle preview">
+<img src="../../assets/shader-previews/sparkle.png" width="320" height="200" alt="Sparkle preview">
 
 A sparkle spins in and punches through to colour, then the field closes back into a star and bursts into a twinkle of glints and sparks.
 

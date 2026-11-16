@@ -2,7 +2,7 @@
 
 # Wave Bands
 
-<img src="../../assets/thumbs/waves.png" width="320" height="200" alt="Wave Bands preview">
+<img src="../../assets/shader-previews/wave-bands.png" width="320" height="200" alt="Wave Bands preview">
 
 Rows of soft waves drift across a second colour and breathe.
 

@@ -2,7 +2,7 @@
 
 # Chord Circle
 
-<img src="../../assets/thumbs/harmonia.png" width="320" height="200" alt="Chord Circle preview">
+<img src="../../assets/shader-previews/chord-circle.png" width="320" height="200" alt="Chord Circle preview">
 
 Times-table chords on a circle. As the multiplier drifts, cardioids, nephroids and roses appear.
 

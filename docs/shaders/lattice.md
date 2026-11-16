@@ -2,7 +2,7 @@
 
 # Cube Tunnel
 
-<img src="../../assets/thumbs/lattice.png" width="320" height="200" alt="Cube Tunnel preview">
+<img src="../../assets/shader-previews/cube-tunnel.png" width="320" height="200" alt="Cube Tunnel preview">
 
 An endless lattice of slowly turning wireframe cubes flows toward the camera and fades into the dark.
 

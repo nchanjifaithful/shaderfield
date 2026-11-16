@@ -2,7 +2,7 @@
 
 # Glyph Sweep
 
-<img src="../../assets/thumbs/sweep.png" width="320" height="200" alt="Glyph Sweep preview">
+<img src="../../assets/shader-previews/glyph-sweep.png" width="320" height="200" alt="Glyph Sweep preview">
 
 A band of glyphs sweeps across the frame, tears the scanlines and swaps one line of text for the next.
 

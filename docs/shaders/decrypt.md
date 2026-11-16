@@ -2,7 +2,7 @@
 
 # Decode Lens
 
-<img src="../../assets/thumbs/decrypt.png" width="320" height="200" alt="Decode Lens preview">
+<img src="../../assets/shader-previews/decode-lens.png" width="320" height="200" alt="Decode Lens preview">
 
 Text is rebuilt from best-fit glyphs and kept scrambled. A lens with a glowing, aberrated rim decodes it as it passes.
 

@@ -2,7 +2,7 @@
 
 # Sand Text
 
-<img src="../../assets/thumbs/sand.png" width="320" height="200" alt="Sand Text preview">
+<img src="../../assets/shader-previews/sand-text.png" width="320" height="200" alt="Sand Text preview">
 
 Lines gather from fine drifting grains into crisp text, hold, then blow back to dust.
 

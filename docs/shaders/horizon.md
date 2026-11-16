@@ -2,7 +2,7 @@
 
 # Synth Valley
 
-<img src="../../assets/thumbs/horizon.png" width="320" height="200" alt="Synth Valley preview">
+<img src="../../assets/shader-previews/synth-valley.png" width="320" height="200" alt="Synth Valley preview">
 
 A striped sun rises behind a wireframe valley that flies toward the camera.
 

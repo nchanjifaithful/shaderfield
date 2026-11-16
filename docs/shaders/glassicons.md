@@ -2,7 +2,7 @@
 
 # Glass Icons
 
-<img src="../../assets/thumbs/glassicons.png" width="320" height="200" alt="Glass Icons preview">
+<img src="../../assets/shader-previews/glass-icons.png" width="320" height="200" alt="Glass Icons preview">
 
 Clear prismatic glass icons with rainbow edges spin in, settle, and match-cut to the next.
 
