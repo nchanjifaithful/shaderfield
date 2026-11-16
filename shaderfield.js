@@ -2326,6 +2326,24 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     const stop = () => { stopL(); el.removeEventListener("pointerenter", enter); el.removeEventListener("pointerleave", leave); el.removeEventListener("pointermove", move); layer.remove(); corners.forEach(c => c.remove()); };
     stop.set = v => (target = v); return stop;
   }
+  // Layered press: squeeze with a springy release, an ink wave, staggered rings, a core flash and an outer halo (Desktop Features, Closebook, Orfa Agents)
+  function pressable(el, o = {}) {
+    rel(el); el.style.overflow = el.style.overflow || "hidden";
+    const col = o.color || "rgba(255,255,255,0.6)", n = o.rings ?? 3, spread = o.spread || 2.6, depth = o.depth ?? 0.06, bs0 = el.style.boxShadow;
+    const mk = (css) => { const s = document.createElement("span"); s.setAttribute("aria-hidden", "true"); s.style.cssText = "position:absolute;border-radius:50%;pointer-events:none;box-sizing:border-box;" + css; el.appendChild(s); return s; };
+    const down = e => { const r = el.getBoundingClientRect(), x = o.center ? r.width / 2 : e.clientX - r.left, y = o.center ? r.height / 2 : e.clientY - r.top, far = Math.max(Math.hypot(x, y), Math.hypot(r.width - x, y), Math.hypot(x, r.height - y), Math.hypot(r.width - x, r.height - y));
+      if (o.fill !== false) { const fc = o.fillColor || col, w = mk(`left:${x - far}px;top:${y - far}px;width:${far * 2}px;height:${far * 2}px;background:radial-gradient(closest-side, ${withA(fc, 0.35)}, ${withA(fc, 0.12)} 70%, transparent);transform:scale(0)`);
+        play(0.65, t => { const p = t / 0.65; w.style.transform = `scale(${oCubic(Math.min(1, p / 0.7)).toFixed(4)})`; w.style.opacity = (1 - EZ.inOut(clamp((p - 0.35) / 0.65))).toFixed(3); }).then(() => w.remove()); }
+      for (let i = 0; i < n; i++) { const dl = i * 0.09, d = 0.5 + i * 0.12, s1 = spread * (1 + i * 0.45), rp = mk(`left:${x - 14}px;top:${y - 14}px;width:28px;height:28px;border:${Math.max(0.6, 1.5 - i * 0.35).toFixed(2)}px solid ${col};opacity:0`);
+        play(dl + d, t => { const p = clamp((t - dl) / d); rp.style.transform = `scale(${(0.3 + oCubic(p) * s1).toFixed(3)})`; rp.style.opacity = t < dl ? 0 : ((1 - p) * (1 - i * 0.25)).toFixed(3); }).then(() => rp.remove()); }
+      const core = mk(`left:${x - 6}px;top:${y - 6}px;width:12px;height:12px;background:${col};filter:blur(2px)`);
+      play(0.35, t => { const p = t / 0.35; core.style.transform = `scale(${(0.6 + p * 1.6).toFixed(3)})`; core.style.opacity = (1 - p).toFixed(3); }).then(() => core.remove());
+      play(0.55, t => { const k = t < 0.08 ? t / 0.08 : Math.exp(-(t - 0.08) * 11) * Math.cos((t - 0.08) * 18); el.style.transform = `scale(${(1 - depth * k).toFixed(4)})`;
+        if (o.halo !== false) { const h = clamp((t - 0.06) / 0.45), ring = h > 0 && h < 1 ? `0 0 0 ${(h * 10).toFixed(1)}px ${withA(o.haloColor || col, 0.35 * (1 - h))}` : ""; el.style.boxShadow = [ring, bs0].filter(Boolean).join(", "); } })
+        .then(() => { el.style.transform = ""; el.style.boxShadow = bs0; }); };
+    el.addEventListener("pointerdown", down); const stop = () => el.removeEventListener("pointerdown", down);
+    stop.press = (x, y) => { const r = el.getBoundingClientRect(); down({ clientX: r.left + (x ?? r.width / 2), clientY: r.top + (y ?? r.height / 2) }); }; return stop;
+  }
   // Iris close to a hairline, or a vertical shutter (Orfa Agents, Dev Agency)
   function iris(el, o = {}) {
     rel(el); const c = o.content || el.firstElementChild, acc = o.color || "#34d399", rev = !!o.open, sh = !!o.shutter, D = sh ? 0.7 : 1.05;
@@ -2477,5 +2495,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, countUp, tick, bars, focusCard, iris, drawFrame, drawLine, stripes, typeSwap, rollWords, bracketHop, pop, spectrumRing, shine, typingDots, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, countUp, tick, bars, focusCard, pressable, iris, drawFrame, drawLine, stripes, typeSwap, rollWords, bracketHop, pop, spectrumRing, shine, typingDots, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
