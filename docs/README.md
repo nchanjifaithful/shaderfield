@@ -5,8 +5,8 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 24
-  - [Text](#text) · 9
+- [Motion effects](#motion-effects) · 25
+  - [Text](#text) · 10
   - [Interface](#interface) · 8
   - [Transitions](#transitions) · 6
   - [Light](#light) · 1
@@ -119,6 +119,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Reveal words](motion/reveal-words.md) | `revealWords` | Scroll-linked word reveal. Wrap words in `*asterisks*` to accent them. |
 | [Type Swap](motion/type-swap.md) | `typeSwap` | The last word deletes, then the next one types in. |
 | [Roll Words](motion/roll-words.md) | `rollWords` | Each word pushes the last out with a per-letter roll. |
+| [Scramble Solve](motion/solve.md) | `solve` | Words roll in as scrambled glyphs, then resolve letter by letter. |
 | [Letter Pop](motion/pop.md) | `pop` | Letters rise, overshoot and sharpen out of a blur. |
 
 ### Interface
