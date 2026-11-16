@@ -1,9 +1,6 @@
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/nchanjifaithful/shaderfield/main/assets/logo-wordmark-on-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/nchanjifaithful/shaderfield/main/assets/logo-wordmark-on-light.svg">
-    <img src="https://raw.githubusercontent.com/nchanjifaithful/shaderfield/main/assets/logo-wordmark-on-light.svg" alt="Shaderfield" width="380">
-  </picture>
+  <img src="https://raw.githubusercontent.com/nchanjifaithful/shaderfield/main/assets/logo-wordmark-on-dark.svg#gh-dark-mode-only" alt="Shaderfield" width="380">
+  <img src="https://raw.githubusercontent.com/nchanjifaithful/shaderfield/main/assets/logo-wordmark-on-light.svg#gh-light-mode-only" alt="Shaderfield" width="380">
 </p>
 
 <p align="center">
