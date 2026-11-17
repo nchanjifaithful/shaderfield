@@ -2433,6 +2433,30 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       c.s.style.transform = `translateY(${(1 - pin) * 100}%)`; c.vis.style.opacity = solved ? 1 : 0.35;
       c.vis.textContent = solved || /[^a-z]/i.test(c.ch) ? c.ch : G[Math.floor(rnd(Math.floor(t * 18) + g * 13.7, 1) * G.length)]; }));
   }
+  // Lyric view: the current line lights up (whole line or word by word), the list glides to keep it in focus (Lyrics That Flow · Lyric Scroll)
+  function lyricFlow(el, lines, o = {}) {
+    rel(el); el.style.overflow = "hidden"; el.textContent = ""; const byWord = o.mode === "word", acc = o.accent || "#1ed760", dim = o.dim ?? 0.5, focus = o.focus ?? 0.38, gap = o.gap ?? "0.3em";
+    const mask = "linear-gradient(to bottom, transparent 0, #000 22%, #000 78%, transparent 100%)"; el.style.webkitMaskImage = el.style.maskImage = o.mask === false ? "" : mask;
+    const list = document.createElement("div"); list.style.cssText = `position:absolute;left:0;right:0;top:0;display:flex;flex-direction:column;gap:${gap};`; el.appendChild(list);
+    const per = o.perLine, rows = lines.map(text => { const r = document.createElement("div"); r.style.cssText = "transform-origin:0 50%;text-wrap:pretty;display:flex;flex-wrap:wrap;column-gap:0.26em;";
+      const ws = text.split(" ").map(w => { const s = document.createElement("span"); s.style.cssText = "position:relative;display:inline-block;"; const b = document.createElement("span"); b.textContent = w; b.style.opacity = dim; const f = document.createElement("span"); f.textContent = w; f.style.cssText = "position:absolute;left:0;top:0;opacity:0;"; s.append(b, f); r.appendChild(s); return { b, f, s }; });
+      list.appendChild(r); return { r, ws, d: per || 0.9 + text.length * 0.055 }; });
+    let t0 = 0; rows.forEach(r => { r.start = t0; t0 += r.d; r.end = t0; }); const total = t0;
+    return loopFx(t => {
+      const u = t % total; let idx = 0; rows.forEach((r, k) => { if (u >= r.start) idx = k; });
+      let y = rows[0].r.offsetTop; for (let k = 1; k < rows.length; k++) y += (rows[k].r.offsetTop - rows[k - 1].r.offsetTop) * EZ.inOut(clamp((u - rows[k].start + 0.25) / 0.55));
+      list.style.transform = `translateY(${el.clientHeight * focus - y}px)`;
+      rows.forEach((r, k) => { const on = k === idx, sung = k < idx, fin = EZ.inOut(clamp((u - r.start + 0.25) / 0.4)); r.r.style.transform = `scale(${on ? 1 + 0.02 * fin : 1})`;
+        const dist = Math.abs(k - idx); r.r.style.opacity = clamp(1 - Math.max(0, dist - 0.4) * 0.28);
+        const span = (r.end - r.start) * 0.72, wd = span / r.ws.length;
+        r.ws.forEach((w, i) => { let fill, hot = 0;
+          if (!byWord) fill = on ? (k === 0 ? 1 : fin) : 0;
+          else { const a = r.start + i * wd, b = a + wd; fill = sung ? 1 : on ? oCubic(clamp((u - a) / Math.max(0.12, b - a))) : 0; hot = on ? fill * (1 - oCubic(clamp((u - b - 0.15) / 0.5))) : 0; }
+          w.f.style.opacity = sung && !byWord ? 0 : fill; w.f.style.color = hot > 0.02 ? acc : ""; w.b.style.opacity = sung && !byWord ? dim - 0.2 * clamp(idx - k - 1) : dim;
+          w.s.style.transform = byWord ? `translateY(${(1 - fill) * 0.06}em)` : ""; }); });
+    });
+  }
+
   // Corner brackets hop between targets: they shrink to a spinning reticle in between, then snap open around the next one (Clause Film)
   function bracketHop(stage, targets, o = {}) {
     rel(stage); const ink = o.color || "currentColor", TR = o.travel ?? 0.5, hold = o.hold ?? 1.1, IDLE = o.idle ?? 44, PAD = o.pad ?? 10, lw = o.width ?? 3, arm = o.arm ?? 14;
@@ -2555,5 +2579,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, iris, drawFrame, drawLine, stripes, typeSwap, rollWords, solve, bracketHop, colorIndex, pop, shock, spectrumRing, shine, typingDots, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, iris, drawFrame, drawLine, stripes, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, pop, shock, spectrumRing, shine, typingDots, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

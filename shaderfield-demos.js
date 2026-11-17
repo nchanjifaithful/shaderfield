@@ -107,6 +107,11 @@
     build(el, big) { const q = stage(el, big, `<div data-t style="font-size:5.4em;font-weight:600;letter-spacing:-0.04em">Antithesis</div>`, center);
       return { play: async () => { await M().pop(q("[data-t]")); await wait(0.5); await M().pop(q("[data-t]"), { out: true }); return M().pop(q("[data-t]")); } }; } });
 
+  add({ id: "lyric-flow", name: "Lyric Flow", cat: "Text", from: "Lyrics That Flow · Lyric Scroll", desc: "The current line lights up and the list glides to keep it centred.",
+    code: `Shaderfield.motion.lyricFlow(el, lines, {\n  mode: "word",        // "line" or "word"\n  accent: "#0ea5e9", focus: 0.38\n});`,
+    build(el, big) { const q = stage(el, big, `<div data-t style="position:absolute;inset:0 2em;font-size:2.6em;font-weight:700;letter-spacing:-0.02em;line-height:1.1"></div>`);
+      return loopDemo(() => M().lyricFlow(q("[data-t]"), ["The current line stays bright", "Everything else fades back", "And the whole view glides up", "To keep your place in the song", "Thanks for watching"], { mode: "word", accent: ACC })); } });
+
   add({ id: "bracket-hop", name: "Bracket Hop", cat: "Interface", from: "Clause Film", desc: "Corner brackets spin between targets and snap open around each.",
     code: `Shaderfield.motion.bracketHop(stage, [...stage.querySelectorAll(".tile")], {\n  hold: 1.1, press: true\n});`,
     build(el, big) { const tiles = ["Formation", "Fundraising", "Contracts", "Hiring"].map(n => `<div data-k style="border:2px dashed rgba(255,255,255,0.27);padding:1em 1.2em;font-size:1.5em;font-weight:540">${n}</div>`).join("");
