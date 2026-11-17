@@ -5,8 +5,8 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 28
-  - [Text](#text) · 11
+- [Motion effects](#motion-effects) · 29
+  - [Text](#text) · 12
   - [Interface](#interface) · 10
   - [Transitions](#transitions) · 6
   - [Light](#light) · 1
@@ -122,6 +122,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Roll Words](motion/roll-words.md) | `rollWords` | Each word pushes the last out with a per-letter roll. |
 | [Scramble Solve](motion/solve.md) | `solve` | Words roll in as scrambled glyphs, then resolve letter by letter. |
 | [Letter Pop](motion/pop.md) | `pop` | Letters rise, overshoot and sharpen out of a blur. |
+| [Lyric Flow](motion/lyric-flow.md) | `lyricFlow` | The current line lights up and the list glides to keep it centred. |
 
 ### Interface
 
