@@ -34,6 +34,11 @@
     build(el, big) { const q = stage(el, big, `<div style="position:absolute;inset:0;${center}flex-direction:column;gap:1em"><div data-a style="font-family:'Geist Mono',monospace;font-size:1em;text-transform:uppercase;letter-spacing:0.15em;color:#38bdf8;padding:0.4em 0.7em">Development studio</div><div data-b style="font-size:3.8em;font-weight:600;letter-spacing:-0.05em;padding:0.15em 0.4em 0.25em">We build software.</div></div>`); const stop = M().stripes(el);
       return { play: () => Promise.all([M().cut(q("[data-a]"), { color: "#0b0b0e" }), M().cut(q("[data-b]"), { color: "#0b0b0e", delay: 0.25 })]), stop }; } });
 
+  add({ id: "type-log", name: "Type Log", cat: "Text", from: "Orfa Agents Launch", desc: "Log lines type out one by one and check off when done.",
+    code: `Shaderfield.motion.typeLines(el, [\n  "Fetching repository",\n  "Running test suite",\n  "Opening pull request"\n], { accent: "#0ea5e9" });`,
+    build(el, big) { const q = stage(el, big, `<div data-t style="font-family:'Geist Mono',monospace;font-size:1.25em;width:min(26em,80%)"></div>`, center); const lines = ["Fetching repository", "Running test suite", "Patching 3 files", "Opening pull request"];
+      const p = () => M().typeLines(q("[data-t]"), lines, { accent: ACC, perLine: 0.32, gap: 0.4 }); return { play: p }; } });
+
   add({ id: "count-up", name: "Count Up", cat: "Text", from: "Tended HR · Closebook", desc: "Numbers count up on an expo ease with steady-width digits.",
     code: `Shaderfield.motion.countUp(el, { to: 4212.5, decimals: 2, prefix: "€", duration: 1.6 });`,
     build(el, big) { const q = stage(el, big, `<div style="display:flex;flex-direction:column;align-items:center;gap:0.6em"><div style="font-size:1.1em;color:${MUTE}">Net pay · March</div><div data-t style="font-size:5em;font-weight:500;letter-spacing:-0.04em">€0.00</div></div>`, center);
