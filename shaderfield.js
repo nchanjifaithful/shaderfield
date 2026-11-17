@@ -2344,6 +2344,15 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     el.addEventListener("pointerdown", down); const stop = () => el.removeEventListener("pointerdown", down);
     stop.press = (x, y) => { const r = el.getBoundingClientRect(); down({ clientX: r.left + (x ?? r.width / 2), clientY: r.top + (y ?? r.height / 2) }); }; return stop;
   }
+  // Status bars that build in a staggered sweep (Desktop Features)
+  function signalBars(el, o = {}) {
+    const rows = o.rows || [{ label: "API", state: "Operational", color: "#34d399", filled: 24 }], n = o.count || 24, dur = o.duration || 1.8, off = o.track || "rgba(242,242,244,0.12)";
+    el.innerHTML = ""; el.style.display = "flex"; el.style.flexDirection = "column"; el.style.gap = "14px";
+    const all = rows.flatMap((r, si) => { const w = document.createElement("div"); w.innerHTML = `<div style="display:flex;justify-content:space-between;font-size:0.8em;margin-bottom:8px;color:${o.muted || "#a4a6b0"}"><span>${r.label}</span><span style="color:${r.color}">${r.state || ""}</span></div><div style="display:flex;height:${o.height || 40}px;justify-content:space-between;align-items:flex-end;gap:3px"></div>`; el.appendChild(w);
+      return Array.from({ length: n }, (_, b) => { const d = document.createElement("div"); d.style.cssText = `width:2px;border-radius:999px;background:${off}`; w.lastChild.appendChild(d); return { d, b, si, r }; }); });
+    const H = o.height || 40;
+    return play(dur, t => all.forEach(({ d, b, si, r }) => { const g = oCubic(clamp((t / dur) * 2.2 - (b + si * 6) / n)); d.style.height = H * (0.35 + 0.65 * g) + "px"; d.style.background = b + 1 <= r.filled && g > 0.5 ? r.color : off; }));
+  }
   // Iris close to a hairline, or a vertical shutter (Orfa Agents, Dev Agency)
   function iris(el, o = {}) {
     rel(el); const c = o.content || el.firstElementChild, acc = o.color || "#34d399", rev = !!o.open, sh = !!o.shutter, D = sh ? 0.7 : 1.05;
@@ -2523,5 +2532,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, countUp, tick, bars, focusCard, pressable, iris, drawFrame, drawLine, stripes, typeSwap, rollWords, solve, bracketHop, pop, shock, spectrumRing, shine, typingDots, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, countUp, tick, bars, focusCard, pressable, signalBars, iris, drawFrame, drawLine, stripes, typeSwap, rollWords, solve, bracketHop, pop, shock, spectrumRing, shine, typingDots, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

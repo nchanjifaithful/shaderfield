@@ -5,9 +5,9 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 25
+- [Motion effects](#motion-effects) · 26
   - [Text](#text) · 10
-  - [Interface](#interface) · 8
+  - [Interface](#interface) · 9
   - [Transitions](#transitions) · 6
   - [Light](#light) · 1
 
@@ -130,6 +130,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Progress Bars](motion/bars.md) | `bars` | Bars fill one after another on an expo ease. |
 | [Focus Card](motion/focus-card.md) | `focusCard` | On hover, corner brackets snap in over a dot grid and spotlight. |
 | [Press Ripple](motion/pressable.md) | `pressable` | A press squeezes the button and sends out layered ripples. |
+| [Signal Bars](motion/signal-bars.md) | `signalBars` | Thin status bars grow in a staggered sweep to show uptime. |
 | [Spring follow](motion/spring-follow.md) | `springFollow` | A label follows the cursor on a spring. Use `stop.set({ stiffness, damping })`. |
 | [Bracket Hop](motion/bracket-hop.md) | `bracketHop` | Corner brackets spin between targets and snap open around each. |
 | [Shine](motion/shine.md) | `shine` | A crisp glint sweeps across a button once. |
