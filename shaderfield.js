@@ -2293,6 +2293,12 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     return play(dl + d + 0.18 + parts.length * 0.06 + 0.55, t => { t -= dl; const w = EZ.inOut(clamp(t / d)); el.style.clipPath = `inset(-2px ${(1 - w) * 100}% -2px 0)`;
       parts.forEach((p, i) => { const k = oCubic(clamp((t - 0.18 - i * 0.06) / 0.55)); p.style.transform = `translateY(${(1 - k) * 115}%)`; }); });
   }
+  // Terminal lines that type out and check off (Orfa Agents Launch)
+  function typeLines(el, lines, o = {}) {
+    const per = o.perLine ?? 0.45, gap = o.gap ?? 0.55, acc = o.accent || "#34d399"; el.textContent = ""; el.style.display = "flex"; el.style.flexDirection = "column"; el.style.gap = "0.55em";
+    const rows = lines.map(() => { const r = document.createElement("div"); r.style.cssText = "display:flex;gap:0.6em;white-space:pre;opacity:0;"; r.innerHTML = `<span style="color:${acc}">${o.prompt ?? "›"}</span><span></span><span style="margin-left:auto;color:${acc};opacity:0">✓</span>`; el.appendChild(r); return r; });
+    return play(lines.length * gap + per, t => rows.forEach((r, j) => { const p = clamp((t - j * gap) / per); r.style.opacity = p > 0 ? 1 : 0; r.children[1].textContent = lines[j].slice(0, Math.floor(p * lines[j].length)); r.children[2].style.opacity = p >= 1 ? 1 : 0; r.style.color = p < 1 ? (o.dim || "#7d7f89") : ""; }));
+  }
   // Number tween with tabular figures (Tended HR, Closebook)
   function countUp(el, o = {}) {
     const f = o.from ?? 0, to = o.to ?? 100, d = o.duration ?? 1.6, dec = o.decimals ?? 0; el.style.fontVariantNumeric = "tabular-nums";
@@ -2549,5 +2555,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, countUp, tick, bars, focusCard, pressable, signalBars, iris, drawFrame, drawLine, stripes, typeSwap, rollWords, solve, bracketHop, colorIndex, pop, shock, spectrumRing, shine, typingDots, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, iris, drawFrame, drawLine, stripes, typeSwap, rollWords, solve, bracketHop, colorIndex, pop, shock, spectrumRing, shine, typingDots, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

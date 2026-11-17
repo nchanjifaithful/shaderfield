@@ -5,8 +5,8 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 27
-  - [Text](#text) · 10
+- [Motion effects](#motion-effects) · 28
+  - [Text](#text) · 11
   - [Interface](#interface) · 10
   - [Transitions](#transitions) · 6
   - [Light](#light) · 1
@@ -115,6 +115,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Letter Rise](motion/rise.md) | `rise` | Each letter rises through its own mask on an expo ease. |
 | [Line Rise](motion/line-rise.md) | `lineRise` | Each line rises from below its mask, then leaves upward. |
 | [Block Reveal](motion/cut.md) | `cut` | A solid block wipes open, then its words roll up. |
+| [Type Log](motion/type-lines.md) | `typeLines` | Log lines type out one by one and check off when done. |
 | [Count Up](motion/count-up.md) | `countUp` | Numbers count up on an expo ease with steady-width digits. |
 | [Reveal words](motion/reveal-words.md) | `revealWords` | Scroll-linked word reveal. Wrap words in `*asterisks*` to accent them. |
 | [Type Swap](motion/type-swap.md) | `typeSwap` | The last word deletes, then the next one types in. |
