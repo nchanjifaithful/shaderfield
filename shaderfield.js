@@ -2450,6 +2450,23 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       dot.style.transform = `translate(${r.x + r.w / 2}px,${r.y + r.h / 2}px) scale(${sc < 1 ? 0.6 : 1})`;
     });
   }
+  // A big index list steps one row at a time; the background melts between each row's colour (Color List)
+  function colorIndex(el, items, o = {}) {
+    rel(el); el.style.overflow = "hidden"; el.textContent = ""; const pitch = o.pitch ?? 1.33, step = o.step ?? 0.75, mv = o.move ?? 0.42, N = items.length, act = o.active ?? 0.43;
+    const mod = (n) => ((n % N) + N) % N, rgb = (h) => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+    const move = (t) => { t = clamp(t); return t < 0.5 ? 8 * t ** 4 : 1 - Math.pow(-2 * t + 2, 4) / 2; };
+    const rows = []; for (let r = 0; r < 12; r++) { const d = document.createElement("div"); d.style.cssText = "position:absolute;left:0;right:0;display:flex;align-items:center;gap:0.3em;white-space:nowrap;padding:0 0.55em;";
+      const nm = document.createElement("span"), bd = document.createElement("span"); bd.style.cssText = "border-radius:9999px;background:rgba(255,255,255,0.18);padding:0.12em 0.25em;font-size:0.2em;font-weight:500;"; d.append(nm, bd); el.appendChild(d); rows.push({ d, nm, bd }); }
+    return loopFx(t => {
+      const k = Math.floor(t / step), pos = k + move((t - k * step - (step - mv)) / mv), base = Math.floor(pos), frac = pos - base, A = rgb(items[mod(base)].bg), B = rgb(items[mod(base + 1)].bg);
+      el.style.background = `rgb(${A.map((v, i) => Math.round(v + (B[i] - v) * frac)).join(",")})`;
+      const lh = parseFloat(getComputedStyle(el).fontSize) * pitch, ay = el.clientHeight * act;
+      rows.forEach((r, j) => { const i = base - 4 + j, it = items[mod(i)], w = clamp(1 - Math.abs(i - pos) * 1.8);
+        if (r.nm.textContent !== it.name) { r.nm.textContent = it.name; r.bd.textContent = it.badge || ""; r.bd.style.display = it.badge ? "" : "none"; }
+        r.d.style.top = (ay + (i - pos) * lh - lh / 2) + "px"; r.d.style.height = lh + "px"; r.d.style.opacity = 0.2 + 0.8 * w; });
+    });
+  }
+
   const exIn = (t) => (t <= 0 ? 0 : Math.pow(2, 10 * clamp(t) - 10));
   const ob21 = (t) => { t = clamp(t); const c1 = 2.1, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); };
   // Per-letter pop: rise, overshoot scale and de-blur; out flies them up and away (Product Video)
@@ -2532,5 +2549,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, countUp, tick, bars, focusCard, pressable, signalBars, iris, drawFrame, drawLine, stripes, typeSwap, rollWords, solve, bracketHop, pop, shock, spectrumRing, shine, typingDots, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, countUp, tick, bars, focusCard, pressable, signalBars, iris, drawFrame, drawLine, stripes, typeSwap, rollWords, solve, bracketHop, colorIndex, pop, shock, spectrumRing, shine, typingDots, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

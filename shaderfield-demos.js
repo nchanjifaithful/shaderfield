@@ -108,6 +108,11 @@
       const q = stage(el, big, `<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.6em">${tiles}</div>`, center + "background:#0a1210;");
       return loopDemo(() => M().bracketHop(el, [...el.querySelectorAll("[data-k]")], { press: true })); } });
 
+  add({ id: "color-index", name: "Color Index", cat: "Interface", from: "Color List", desc: "A project list steps row by row as the background changes colour.",
+    code: `Shaderfield.motion.colorIndex(el, [\n  { name: "Aarzoo", badge: "Print Design", bg: "#ff0000" },\n  { name: "Eternal Echoes", badge: "Typography", bg: "#8b5cf6" }\n]);`,
+    build(el, big) { const q = stage(el, big, `<div data-t style="position:absolute;inset:0;font-size:4.4em;letter-spacing:-0.05em;color:#000"></div>`);
+      return loopDemo(() => M().colorIndex(q("[data-t]"), [{ name: "Aarzoo", badge: "Print Design", bg: "#ff0000" }, { name: "Lost Horizons", badge: "Concept Art", bg: "#ffffff" }, { name: "Eternal Echoes", badge: "Typography", bg: "#8b5cf6" }, { name: "Abstract Dimensions", badge: "Experimental Media", bg: "#e5389b" }, { name: "Silent Stories", badge: "Photography", bg: "#06b6d4" }, { name: "Fading Memories", badge: "Editorial Design", bg: "#10b981" }, { name: "Weekend", badge: "Sound Design", bg: "#adcaba" }])); } });
+
   add({ id: "shine", name: "Shine", cat: "Interface", from: "Product Video", desc: "A crisp glint sweeps across a button once.",
     code: `Shaderfield.motion.shine(button, { duration: 0.75 });`,
     build(el, big) { const q = stage(el, big, `<div data-b style="padding:0.8em 1.6em;border-radius:999px;background:${ACC};color:#06140d;font-size:1.8em;font-weight:600">Try it free</div>`, center);

@@ -5,9 +5,9 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 26
+- [Motion effects](#motion-effects) · 27
   - [Text](#text) · 10
-  - [Interface](#interface) · 9
+  - [Interface](#interface) · 10
   - [Transitions](#transitions) · 6
   - [Light](#light) · 1
 
@@ -133,6 +133,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Signal Bars](motion/signal-bars.md) | `signalBars` | Thin status bars grow in a staggered sweep to show uptime. |
 | [Spring follow](motion/spring-follow.md) | `springFollow` | A label follows the cursor on a spring. Use `stop.set({ stiffness, damping })`. |
 | [Bracket Hop](motion/bracket-hop.md) | `bracketHop` | Corner brackets spin between targets and snap open around each. |
+| [Color Index](motion/color-index.md) | `colorIndex` | A project list steps row by row as the background changes colour. |
 | [Shine](motion/shine.md) | `shine` | A crisp glint sweeps across a button once. |
 | [Typing Dots](motion/typing-dots.md) | `typingDots` | Three dots bounce in a wave while a reply is coming. |
 
