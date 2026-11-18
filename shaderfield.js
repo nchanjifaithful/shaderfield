@@ -2359,6 +2359,17 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     const H = o.height || 40;
     return play(dur, t => all.forEach(({ d, b, si, r }) => { const g = oCubic(clamp((t / dur) * 2.2 - (b + si * 6) / n)); d.style.height = H * (0.35 + 0.65 * g) + "px"; d.style.background = b + 1 <= r.filled && g > 0.5 ? r.color : off; }));
   }
+  // Icon tabs where the active one springs open to show its label (App Features)
+  function tabMorph(el, o = {}) {
+    const tabs = o.tabs || ["Home", "Inbox", "Settings"], ink = o.ink || "#f2f2f4", mute = o.muted || "#8e909a";
+    el.innerHTML = ""; Object.assign(el.style, { display: "inline-flex", gap: "4px", padding: "6px", borderRadius: "999px", background: o.background || "#1b1b20" });
+    const items = tabs.map((t, i) => { const b = document.createElement("button"); b.type = "button"; b.style.cssText = "all:unset;cursor:pointer;display:flex;align-items:center;gap:8px;height:36px;padding:0 10px;border-radius:999px;overflow:hidden;white-space:nowrap;box-sizing:border-box;"; b.innerHTML = `<span style="flex-shrink:0;width:12px;height:12px;border-radius:50%;border:1.5px solid currentColor;box-sizing:border-box"></span><span>${t}</span>`; b.addEventListener("click", () => { stop.user = true; set(i); }); el.appendChild(b); return b; });
+    const lw = items.map(b => b.lastChild.scrollWidth); let cur = o.active || 0, prev = cur, t0 = -9;
+    const W = (k, j) => (k === j ? 40 + lw[k] : 32);
+    const set = k => { if (k === cur) return; prev = cur; cur = k; t0 = now(); };
+    const stopL = loopFx(() => { const p = EZ.spring(now() - t0); items.forEach((b, k) => { b.style.width = W(k, prev) + (W(k, cur) - W(k, prev)) * p + "px"; const on = prev === cur ? (k === cur ? 1 : 0) : k === cur ? p : k === prev ? 1 - p : 0; b.style.background = `rgba(255,255,255,${0.09 * on})`; b.style.color = on > 0.5 ? ink : mute; b.lastChild.style.opacity = on; }); });
+    const stop = () => stopL(); stop.set = set; stop.next = () => set((cur + 1) % tabs.length); return stop;
+  }
   // Iris close to a hairline, or a vertical shutter (Orfa Agents, Dev Agency)
   function iris(el, o = {}) {
     rel(el); const c = o.content || el.firstElementChild, acc = o.color || "#34d399", rev = !!o.open, sh = !!o.shutter, D = sh ? 0.7 : 1.05;
@@ -2609,5 +2620,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, iris, drawFrame, drawLine, stripes, cameraPush, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, iris, drawFrame, drawLine, stripes, cameraPush, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

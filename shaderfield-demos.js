@@ -70,6 +70,11 @@
     build(el, big) { const q = stage(el, big, `<div data-t style="width:min(28em,82%);font-size:1.05em"></div>`, center); const n = big ? 40 : 28;
       return { play: () => M().signalBars(q("[data-t]"), { count: n, height: big ? 30 : 22, rows: [{ label: "API", state: "Operational", color: ACC, filled: n }, { label: "Database", state: "Degraded", color: "#fbbf24", filled: Math.round(n * 0.7) }, { label: "Storage", state: "Operational", color: ACC, filled: n }] }) }; } });
 
+  add({ id: "tab-morph", name: "Tab Morph", cat: "Interface", from: "App Features Video", desc: "The active icon tab springs open to show its label.",
+    code: `const tabs = Shaderfield.motion.tabMorph(el, { tabs: ["Dashboard", "Notifications", "Settings"] });\ntabs.set(2);`,
+    build(el, big) { const q = stage(el, big, `<div data-t style="font-size:${big ? 14 : 11}px"></div>`, center); const stop = M().tabMorph(q("[data-t]"), { tabs: ["Dashboard", "Notifications", "Settings", "Changelog", "Security"] });
+      const iv = setInterval(() => { if (!stop.user) stop.next(); }, 1600); return { play: () => stop.next(), stop: () => { clearInterval(iv); stop(); } }; } });
+
   add({ id: "iris", name: "Iris Close", cat: "Transitions", from: "Orfa Agents · Dev Agency", desc: "A card closes to a hairline, pinches to the centre, then reopens.",
     code: `await Shaderfield.motion.iris(card, { content: scene, color: "#0ea5e9" });\nawait Shaderfield.motion.iris(card, { content: scene, open: true });\n// Shaderfield.motion.iris(card, { shutter: true });`,
     build(el, big) { const q = stage(el, big, `<div data-f style="position:absolute;inset:14% 16%;border-radius:0.8em;overflow:hidden;background:#0a0a0c;outline:1px solid rgba(242,242,244,0.14)"><div data-c style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:1px;background:rgba(242,242,244,0.1)">${["Triage inbox", "Refactor auth", "Write release notes", "Fix flaky test", "Update pricing", "Migrate DB"].map(t => `<div style="background:#0a0a0a;padding:0.8em;font-size:1em;display:flex;align-items:flex-end">${t}</div>`).join("")}</div></div>`);
