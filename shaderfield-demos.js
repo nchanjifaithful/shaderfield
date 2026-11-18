@@ -85,6 +85,11 @@
     build(el, big) { stage(el, big, `<div style="position:absolute;inset:0;${center}"><div style="font-family:'Geist Mono',monospace;font-size:1.3em;letter-spacing:0.04em;color:${MUTE};background:#0b0b0e;padding:0.5em 0.8em">Software for teams that ship</div></div>`); let stop = M().stripes(el);
       return { play: () => { stop(); stop = M().stripes(el); }, stop: () => stop() }; } });
 
+  add({ id: "camera-push", name: "Camera Push", cat: "Transitions", from: "Orfa Agents · Closebook · Desktop Features", desc: "The layout scales and pans until one element fills the frame.",
+    code: `await Shaderfield.motion.cameraPush(world, targetCard, { scale: 2.4, back: true });`,
+    build(el, big) { const q = stage(el, big, `<div data-w style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:0.8em;padding:1.2em;box-sizing:border-box">${["Triage inbox", "Refactor auth", "Release notes", "Fix flaky test", "Update pricing", "Migrate DB"].map((t, i) => `<div ${i === 4 ? "data-target" : ""} style="background:#121216;border-radius:0.6em;padding:0.9em;font-size:1.1em;display:flex;flex-direction:column;justify-content:space-between;outline:1px solid ${i === 4 ? ACC : "rgba(242,242,244,0.08)"}"><span style="color:${MUTE};font-size:0.8em">agt_0${i + 1}</span><span>${t}</span></div>`).join("")}</div>`);
+      return { play: () => M().cameraPush(q("[data-w]"), q("[data-target]"), { scale: 2.2, back: true }) }; } });
+
   const loopDemo = (start) => { let s = null; return { play: () => { if (!s) s = start(); return wait(2.5); }, stop: () => { s && s(); s = null; } }; };
 
   add({ id: "type-swap", name: "Type Swap", cat: "Text", from: "Signpost Typewriter", desc: "The last word deletes, then the next one types in.",

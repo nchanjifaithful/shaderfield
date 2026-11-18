@@ -2383,6 +2383,14 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     const stopL = loopFx(t => { wrap.style.clipPath = `inset(0 ${(1 - EZ.inOut(clamp(t / (o.duration || 1.1)))) * 100}% 0 0)`; s.style.transform = `translateX(${((t * (o.drift ?? 10)) % px).toFixed(2)}px)`; });
     return () => { stopL(); wrap.remove(); };
   }
+  // Camera push into a target element and back (Orfa Agents, Closebook, Desktop Features)
+  function cameraPush(world, target, o = {}) {
+    const k1 = o.scale || 2.4, d = o.duration || 1.3; world.style.transform = ""; world.style.transformOrigin = "0 0";
+    const vp = world.parentElement.getBoundingClientRect(), wr = world.getBoundingClientRect(), r = target.getBoundingClientRect();
+    const cx = r.left + r.width / 2 - wr.left, cy = r.top + r.height / 2 - wr.top, sw = vp.width / 2 - (wr.left - vp.left), sh = vp.height / 2 - (wr.top - vp.top);
+    const apply = k => { const zp = (k - 1) / (k1 - 1), fx = sw + (cx - sw) * zp, fy = sh + (cy - sh) * zp; world.style.transform = `translate(${sw - fx * k}px,${sh - fy * k}px) scale(${k})`; };
+    return play(d, t => apply(1 + (k1 - 1) * EZ.inOut(t / d))).then(() => o.back ? new Promise(r2 => setTimeout(r2, (o.hold ?? 0.8) * 1000)).then(() => play(d, t => apply(k1 - (k1 - 1) * EZ.inOut(t / d)))) : null);
+  }
   const bez = (x1, y1, x2, y2) => { const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx, cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
     const X = (t) => ((ax * t + bx) * t + cx) * t, Y = (t) => ((ay * t + by) * t + cy) * t, dX = (t) => (3 * ax * t + 2 * bx) * t + cx;
     return (x) => { x = clamp(x); let t = x; for (let i = 0; i < 8; i++) { const d = dX(t); if (Math.abs(d) < 1e-6) break; t -= (X(t) - x) / d; } return Y(clamp(t)); }; };
@@ -2579,5 +2587,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, iris, drawFrame, drawLine, stripes, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, pop, shock, spectrumRing, shine, typingDots, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, iris, drawFrame, drawLine, stripes, cameraPush, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, pop, shock, spectrumRing, shine, typingDots, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
