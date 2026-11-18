@@ -2505,6 +2505,28 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     });
   }
 
+  // A stack of tilted discs: on each step the top disc lifts away and returns at the bottom while the rest glide up (Cryptar Launch)
+  function discStack(el, faces, o = {}) {
+    rel(el); el.textContent = ""; const N = faces.length, S = o.size ?? Math.min(el.clientWidth, el.clientHeight) * 0.55, GAP = S * 0.11, LIFT = GAP * 0.5, TD = o.duration ?? 0.55, hold = o.hold ?? 1.6, TH = Math.max(4, S * 0.018), ring = o.ring || "#000", surf = o.surface || "#fff";
+    const mod = (a) => ((a % N) + N) % N, slotY = (k) => (k - (N - 1) / 2) * GAP + LIFT / 2, restY = (k) => slotY(k) - (k === 0 ? LIFT : 0);
+    const glide = (t) => { t = clamp(t); return t < 0.5 ? 8 * t ** 4 : 1 - Math.pow(-2 * t + 2, 4) / 2; };
+    const host = document.createElement("div"); host.style.cssText = "position:absolute;left:50%;top:50%;width:0;height:0;"; el.appendChild(host);
+    const discs = faces.map(f => { const d = document.createElement("div"); d.style.cssText = `position:absolute;left:${-S / 2}px;top:${-S / 2}px;width:${S}px;height:${S}px;transform-style:preserve-3d;`;
+      const c = (x) => `position:absolute;inset:0;border-radius:50%;background:${surf};border:1px solid ${ring};box-sizing:border-box;${x}`;
+      const back = document.createElement("div"); back.style.cssText = c(`transform:translateZ(-${TH}px);`); const top = document.createElement("div"); top.style.cssText = c("overflow:hidden;");
+      const ins = S * 0.035, face = document.createElement("div"); face.style.cssText = `position:absolute;left:${ins}px;top:${ins}px;right:${ins}px;bottom:${ins}px;border-radius:50%;border:1px solid ${ring};box-sizing:border-box;background:${/^(#|rgb|hsl|oklch|linear-gradient|radial-gradient|conic-gradient)/.test(f) ? f : `center/cover url("${f}")`};`;
+      top.appendChild(face); d.append(back, top); host.appendChild(d); return d; });
+    const per = TD + hold;
+    return loopFx(t => {
+      const k = Math.floor(t / per), p = (t - k * per) / TD; host.style.transform = `scale(${1 + 0.02 * Math.sin(t * 1.2)})`;
+      discs.forEach((d, i) => { const to = mod(i - k), from = mod(i - (k - 1)); let y = restY(to), op = 1, z = N - to;
+        if (k === 0) { const q = (t - 0.1 - (N - 1 - to) * 0.18) / 0.55; y = lerp(restY(to) - S * 1.2, restY(to), EZ.back(clamp(q))); op = oCubic(clamp(q / 0.35)); }
+        else if (p < 1) { if (from === 0) { if (p < 0.5) { const q = EZ.in(p / 0.5); y = lerp(restY(0), restY(0) - GAP * 2.2, q); op = 1 - q; z = N * 2; } else { const q = oCubic((p - 0.5) / 0.5); y = lerp(slotY(N - 1) + GAP, slotY(N - 1), q); op = q; } }
+          else y = lerp(restY(from), restY(to), glide(p)); }
+        d.style.zIndex = z; d.style.opacity = op; d.style.transform = `perspective(${S * 3}px) translateY(${y}px) rotateX(${o.tilt ?? 60}deg)`; });
+    });
+  }
+
   const exIn = (t) => (t <= 0 ? 0 : Math.pow(2, 10 * clamp(t) - 10));
   const ob21 = (t) => { t = clamp(t); const c1 = 2.1, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); };
   // Per-letter pop: rise, overshoot scale and de-blur; out flies them up and away (Product Video)
@@ -2587,5 +2609,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, iris, drawFrame, drawLine, stripes, cameraPush, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, pop, shock, spectrumRing, shine, typingDots, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, iris, drawFrame, drawLine, stripes, cameraPush, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

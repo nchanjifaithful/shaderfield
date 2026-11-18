@@ -128,6 +128,12 @@
     build(el, big) { const q = stage(el, big, `<div data-t style="position:absolute;inset:0;font-size:4.4em;letter-spacing:-0.05em;color:#000"></div>`);
       return loopDemo(() => M().colorIndex(q("[data-t]"), [{ name: "Aarzoo", badge: "Print Design", bg: "#ff0000" }, { name: "Lost Horizons", badge: "Concept Art", bg: "#ffffff" }, { name: "Eternal Echoes", badge: "Typography", bg: "#8b5cf6" }, { name: "Abstract Dimensions", badge: "Experimental Media", bg: "#e5389b" }, { name: "Silent Stories", badge: "Photography", bg: "#06b6d4" }, { name: "Fading Memories", badge: "Editorial Design", bg: "#10b981" }, { name: "Weekend", badge: "Sound Design", bg: "#adcaba" }])); } });
 
+  add({ id: "disc-stack", name: "Disc Stack", cat: "Interface", from: "Cryptar Launch Portrait", desc: "Tilted discs cycle: the top one lifts away and returns at the back.",
+    code: `Shaderfield.motion.discStack(el, ["a.jpg", "b.jpg", "#0ea5e9"], {\n  tilt: 58, hold: 1.1, surface: "#17171b", ring: "rgba(242,242,244,0.18)"\n});`,
+    build(el, big) { stage(el, big, "", "background:radial-gradient(120% 90% at 50% 40%, #16161b, #09090b 70%);");
+      const faces = [`radial-gradient(circle at 35% 30%, #ffffff66, transparent 45%), ${ACC}`, `radial-gradient(circle at 35% 30%, #ffffff66, transparent 45%), #facc15`, `radial-gradient(circle at 35% 30%, #ffffff66, transparent 45%), #ef4444`, `radial-gradient(circle at 35% 30%, #ffffff66, transparent 45%), #a855f7`];
+      return loopDemo(() => M().discStack(el, faces, { size: Math.min(el.clientWidth, el.clientHeight) * 0.62, tilt: 58, hold: 1.1, surface: "#17171b", ring: "rgba(242,242,244,0.18)" })); } });
+
   add({ id: "shine", name: "Shine", cat: "Interface", from: "Product Video", desc: "A crisp glint sweeps across a button once.",
     code: `Shaderfield.motion.shine(button, { duration: 0.75 });`,
     build(el, big) { const q = stage(el, big, `<div data-b style="padding:0.8em 1.6em;border-radius:999px;background:${ACC};color:#06140d;font-size:1.8em;font-weight:600">Try it free</div>`, center);
