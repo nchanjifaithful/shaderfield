@@ -5,9 +5,9 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 32
+- [Motion effects](#motion-effects) · 33
   - [Text](#text) · 12
-  - [Interface](#interface) · 12
+  - [Interface](#interface) · 13
   - [Transitions](#transitions) · 7
   - [Light](#light) · 1
 
@@ -136,6 +136,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Tab Morph](motion/tab-morph.md) | `tabMorph` | The active icon tab springs open to show its label. |
 | [Spring follow](motion/spring-follow.md) | `springFollow` | A label follows the cursor on a spring. Use `stop.set({ stiffness, damping })`. |
 | [Bracket Hop](motion/bracket-hop.md) | `bracketHop` | Corner brackets spin between targets and snap open around each. |
+| [Bracket Cursor](motion/bracket-cursor.md) | `bracketCursor` | The pointer becomes a reticle that snaps around links. |
 | [Color Index](motion/color-index.md) | `colorIndex` | A project list steps row by row as the background changes colour. |
 | [Disc Stack](motion/disc-stack.md) | `discStack` | Tilted discs cycle: the top one lifts away and returns at the back. |
 | [Shine](motion/shine.md) | `shine` | A crisp glint sweeps across a button once. |

@@ -2582,6 +2582,33 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     return loopFx(t => ds.forEach((d, i) => (d.style.transform = `translateY(${(-Math.max(0, Math.sin(t * 9 - i * 0.9)) * sz * 0.8).toFixed(1)}px)`)));
   }
 
+  // Bracket cursor: a spinning reticle that springs open around any [data-magnetic] element under the pointer (Clause Legal)
+  function bracketCursor(root, o = {}) {
+    root = root || document.body; rel(root); const IDLE = o.idle ?? 44, PAD = o.pad ?? 5, PRESS = o.press ?? 0.9, PULL = o.pull ?? 0.08, SPIN = o.spin ?? 90, col = o.color || "#fff", sel = o.selector || "[data-magnetic]";
+    const sp = (v, k = 500, c = 40) => ({ v, t: v, vel: 0, k, c }), s = { x: sp(0), y: sp(0), w: sp(IDLE), h: sp(IDLE), scale: sp(1, 600, 30), rot: sp(0, 300, 30) };
+    const step = (q, dt) => { const f = -q.k * (q.v - q.t) - q.c * q.vel; q.vel += f * dt; q.v += q.vel * dt; };
+    const f = document.createElement("div"), d = document.createElement("div"); f.setAttribute("aria-hidden", "true"); d.setAttribute("aria-hidden", "true");
+    f.style.cssText = "position:absolute;top:0;left:0;pointer-events:none;z-index:9999;opacity:0;transition:opacity .2s;transform-origin:0 0;";
+    [["top", "left"], ["top", "right"], ["bottom", "left"], ["bottom", "right"]].forEach(([v, h]) => { const c = document.createElement("span"); c.style.cssText = `position:absolute;${v}:0;${h}:0;width:8px;height:8px;border-${v}:2px solid ${col};border-${h}:2px solid ${col};`; f.appendChild(c); });
+    d.style.cssText = `position:absolute;top:0;left:0;width:4px;height:4px;margin:-2px 0 0 -2px;border-radius:50%;background:${col};pointer-events:none;z-index:9999;opacity:0;transition:opacity .2s;`; root.append(f, d);
+    let px = 0, py = 0, target = null, pressed = false, seen = false, angle = 0, last = now();
+    const show = (on) => { f.style.opacity = d.style.opacity = on ? 1 : 0; }, local = (e) => { const r = root.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+    const mv = (e) => { [px, py] = local(e); if (!seen) { seen = true; s.x.v = px - IDLE / 2; s.y.v = py - IDLE / 2; show(true); } const el = e.target.closest && e.target.closest(sel); if (el !== target) { if (!el && target) angle = s.rot.v; target = el; } };
+    const lv = () => { show(false); seen = false; target = null; }, dn = () => (pressed = true), up = () => (pressed = false);
+    root.addEventListener("pointermove", mv); root.addEventListener("pointerleave", lv); root.addEventListener("pointerdown", dn); addEventListener("pointerup", up);
+    if (o.hideCursor !== false) root.style.cursor = "none";
+    const stop = loopFx(() => {
+      const tn = now(), dt = Math.min(tn - last, 1 / 30); last = tn;
+      if (target && target.isConnected) { const a = target.getBoundingClientRect(), b = root.getBoundingClientRect(), l = a.left - b.left, tp = a.top - b.top;
+        s.x.t = l - PAD + (px - (l + a.width / 2)) * PULL; s.y.t = tp - PAD + (py - (tp + a.height / 2)) * PULL; s.w.t = a.width + PAD * 2; s.h.t = a.height + PAD * 2; s.rot.t = Math.round(s.rot.v / 180) * 180; }
+      else { s.x.t = px - IDLE / 2; s.y.t = py - IDLE / 2; s.w.t = IDLE; s.h.t = IDLE; if (!reduced) angle += SPIN * dt; s.rot.t = s.rot.v = angle; s.rot.vel = 0; }
+      s.scale.t = pressed ? PRESS : 1; for (const k in s) if (k !== "rot" || target) step(s[k], dt);
+      const w = s.w.v, h = s.h.v; f.style.width = w + "px"; f.style.height = h + "px";
+      f.style.transform = `translate(${s.x.v + w / 2}px,${s.y.v + h / 2}px) rotate(${s.rot.v}deg) scale(${s.scale.v}) translate(${-w / 2}px,${-h / 2}px)`; d.style.transform = `translate(${px}px,${py}px) scale(${pressed ? 0.6 : 1})`;
+    });
+    return () => { stop(); root.removeEventListener("pointermove", mv); root.removeEventListener("pointerleave", lv); root.removeEventListener("pointerdown", dn); removeEventListener("pointerup", up); f.remove(); d.remove(); root.style.cursor = ""; };
+  }
+
   // ── Document AI Teaser: glows, cursors, scans and light ──
   const withA = (col, a) => { a = +clamp(a).toFixed(3); const m = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(col || ""); if (!m) return `color-mix(in srgb, ${col} ${Math.round(a * 100)}%, transparent)`;
     let h = m[1]; if (h.length === 3) h = h.split("").map(x => x + x).join(""); const n = parseInt(h, 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`; };
@@ -2620,5 +2647,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, iris, drawFrame, drawLine, stripes, cameraPush, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, iris, drawFrame, drawLine, stripes, cameraPush, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

@@ -128,6 +128,11 @@
       const q = stage(el, big, `<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.6em">${tiles}</div>`, center + "background:#0a1210;");
       return loopDemo(() => M().bracketHop(el, [...el.querySelectorAll("[data-k]")], { press: true })); } });
 
+  add({ id: "bracket-cursor", name: "Bracket Cursor", cat: "Interface", from: "Clause Legal", desc: "The pointer becomes a reticle that snaps around links.",
+    code: `<a href="#" data-magnetic>Book a call</a>\n\nconst stop = Shaderfield.motion.bracketCursor(document.body, {\n  spin: 90, pull: 0.08\n});`,
+    build(el, big) { const q = stage(el, big, `<div style="display:flex;flex-direction:column;align-items:center;gap:1.6em"><div style="display:flex;align-items:center;gap:0.4em;font-size:1.25em;font-weight:540"><span data-magnetic style="padding:0.45em 0.8em">Services</span><span data-magnetic style="padding:0.45em 0.8em">Pricing</span><span data-magnetic style="padding:0.45em 0.9em;border-radius:999px;outline:1px solid rgba(255,255,255,0.3)">Book a call</span></div><div style="color:#7d7f89;font-size:1.05em">Move over the links</div></div>`, center + "background:#0a1210;");
+      return loopDemo(() => M().bracketCursor(el)); } });
+
   add({ id: "color-index", name: "Color Index", cat: "Interface", from: "Color List", desc: "A project list steps row by row as the background changes colour.",
     code: `Shaderfield.motion.colorIndex(el, [\n  { name: "Aarzoo", badge: "Print Design", bg: "#ff0000" },\n  { name: "Eternal Echoes", badge: "Typography", bg: "#8b5cf6" }\n]);`,
     build(el, big) { const q = stage(el, big, `<div data-t style="position:absolute;inset:0;font-size:4.4em;letter-spacing:-0.05em;color:#000"></div>`);
