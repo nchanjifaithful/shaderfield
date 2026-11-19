@@ -2444,6 +2444,12 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     const stop = () => { stopL(); el.removeEventListener("pointermove", move); el.removeEventListener("pointerleave", leave); cv.remove(); };
     stop.reset = () => (maxX = 0); return stop;
   }
+  // Page lifts away to reveal the footer underneath (Dev Agency Services)
+  function underlayReveal(page, under, o = {}) {
+    const d = o.duration || 1.5, dist = o.distance ?? under.offsetHeight, rv = !!o.reverse;
+    return play(d, t => { const p = rv ? 1 - EZ.inOut(t / d) : EZ.inOut(t / d); page.style.transform = `translateY(${-p * dist}px)`; page.style.boxShadow = `0 30px 60px rgba(0,0,0,${0.5 * (1 - p)})`; under.style.transform = `translateY(${-40 * (1 - p)}px) scale(${0.92 + 0.08 * p})`; under.style.opacity = p; });
+  }
+
   const bez = (x1, y1, x2, y2) => { const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx, cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
     const X = (t) => ((ax * t + bx) * t + cx) * t, Y = (t) => ((ay * t + by) * t + cy) * t, dX = (t) => (3 * ax * t + 2 * bx) * t + cx;
     return (x) => { x = clamp(x); let t = x; for (let i = 0; i < 8; i++) { const d = dX(t); if (Math.abs(d) < 1e-6) break; t -= (X(t) - x) / d; } return Y(clamp(t)); }; };
@@ -2689,5 +2695,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
