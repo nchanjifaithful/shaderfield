@@ -2677,6 +2677,35 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     const stop = loopFx(t => (st.backgroundPosition = `${(-(t / per) * band / 2).toFixed(3)}em 0`));
     return () => { stop(); st.cssText = prev; };
   }
+  // Click cursor: a pointer arcs onto a target, squashes on the press and throws three sparks, a ripple and a flash
+  function clickCursor(stage, target, o = {}) {
+    rel(stage); const sr = stage.getBoundingClientRect(), col = o.color || "#34d399", ink = o.ink || "#f6f4ef", sz = o.size ?? 28, s = sz / 50, d = o.duration ?? 0.7, isEl = !!(target && target.getBoundingClientRect);
+    let x1 = target.x, y1 = target.y; if (isEl) { const r = target.getBoundingClientRect(), at = o.at || [0.55, 0.56]; x1 = r.left - sr.left + r.width * at[0]; y1 = r.top - sr.top + r.height * at[1]; }
+    const x0 = o.from ? o.from.x : x1 + sz * 5.4, y0 = o.from ? o.from.y : y1 + sz * 4.3;
+    const svg = svgEl("svg", { viewBox: "-40 -40 120 120", "aria-hidden": "true" }); svg.style.cssText = `position:absolute;left:0;top:0;width:${120 * s}px;height:${120 * s}px;overflow:visible;pointer-events:none;z-index:30;opacity:0;`;
+    const lines = [0, 1, 2].map(() => svg.appendChild(svgEl("line", { stroke: col, "stroke-width": 4.5, "stroke-linecap": "round", opacity: 0 })));
+    const ring = svg.appendChild(svgEl("circle", { fill: "none", stroke: col, opacity: 0 })), dot = svg.appendChild(svgEl("circle", { fill: col, opacity: 0 }));
+    const g = svg.appendChild(svgEl("g", {})), path = g.appendChild(svgEl("path", { d: "M0,0 L50,24 L27,31 L15,54 Z", "stroke-width": 7, "stroke-linejoin": "round" }));
+    stage.appendChild(svg);
+    if (o.label) { const tg = svg.appendChild(svgEl("g", { transform: "translate(40 52)" })), rc = tg.appendChild(svgEl("rect", { rx: 13, height: 30, fill: o.labelColor || col })), tx = tg.appendChild(svgEl("text", { x: 12, y: 21, fill: o.labelInk || "#fff", "font-size": 18, "font-weight": 700 })); tx.style.fontFamily = "inherit"; tx.textContent = o.label; rc.setAttribute("width", (tx.getComputedTextLength() || o.label.length * 10) + 24); }
+    const tc = d + 0.08, stay = !!o.stay, linger = o.linger ?? 0.5, pressT = isEl && o.press !== false, tf0 = pressT ? target.style.transform : ""; let fired = false;
+    return play(tc + 0.6 + (stay ? 0 : linger + 0.4), t => {
+      const mv = EZ.inOut(clamp(t / d)), arc = Math.sin(mv * Math.PI), cx = lerp(x0, x1, mv) + arc * 40 * s, cy = lerp(y0, y1, mv) + arc * 30 * s, dt = t - tc;
+      const press = oCubic(clamp((dt + 0.12) / 0.12)) * (dt > 0 ? Math.exp(-dt * 9) * Math.cos(dt * 22) : 1);
+      if (dt >= 0 && !fired) { fired = true; o.onClick && o.onClick(); }
+      svg.style.opacity = (oCubic(clamp(t / (d * 0.75))) * (stay ? 1 : 1 - EZ.in(clamp((dt - 0.6 - linger) / 0.4)))).toFixed(3);
+      svg.style.transform = `translate(${(cx - 40 * s).toFixed(1)}px,${(cy - 40 * s).toFixed(1)}px)`;
+      g.setAttribute("transform", `translate(${(3 * press).toFixed(2)} ${(3 * press).toFixed(2)}) rotate(${(-6 * press).toFixed(2)}) scale(${(1 - 0.18 * press).toFixed(4)})`);
+      g.style.filter = `drop-shadow(0 ${(6 - 4 * press).toFixed(1)}px ${(14 - 8 * press).toFixed(1)}px rgba(0,0,0,0.55))`;
+      const fl = dt > 0 ? Math.exp(-dt * 6) * 0.6 : 0, fc = fl > 0.02 ? `color-mix(in srgb, ${col} ${Math.round(fl * 100)}%, ${ink})` : ink; path.style.fill = fc; path.style.stroke = fc;
+      const b = clamp(dt / 0.45), bE = oCubic(b), r0 = lerp(12, 20, bE), r1 = lerp(16, 34, bE);
+      lines.forEach((l, i) => { const a = ([-78, -128, -176][i] * Math.PI) / 180; l.setAttribute("x1", (Math.cos(a) * r0).toFixed(2)); l.setAttribute("y1", (Math.sin(a) * r0).toFixed(2)); l.setAttribute("x2", (Math.cos(a) * r1).toFixed(2)); l.setAttribute("y2", (Math.sin(a) * r1).toFixed(2)); l.setAttribute("opacity", b > 0 && b < 1 ? (1 - EZ.in(b)).toFixed(3) : 0); });
+      const rp = clamp(dt / 0.6), rE = oCubic(rp), on = rp > 0 && rp < 1;
+      ring.setAttribute("r", lerp(4, 44, rE).toFixed(2)); ring.setAttribute("stroke-width", lerp(3, 0.8, rE).toFixed(2)); ring.setAttribute("opacity", on ? (0.9 * (1 - rp)).toFixed(3) : 0);
+      dot.setAttribute("r", lerp(2, 16, rE).toFixed(2)); dot.setAttribute("opacity", on ? (0.35 * (1 - rp)).toFixed(3) : 0);
+      if (pressT) target.style.transform = (tf0 ? tf0 + " " : "") + `scale(${(1 - 0.03 * Math.exp(-Math.pow(dt / 0.08, 2))).toFixed(4)})`;
+    }).then(() => { if (pressT) target.style.transform = tf0; if (!stay) svg.remove(); return svg; });
+  }
   // Wire draw: a cubic connector draws between two elements with a bright head riding its tip
   const SIDE_OPP = { left: "right", right: "left", top: "bottom", bottom: "top" };
   const anchorOf = (n, sr, side) => { if (!n.getBoundingClientRect) return [n.x, n.y]; const r = n.getBoundingClientRect(), x = r.left - sr.left, y = r.top - sr.top;
@@ -2695,5 +2724,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, clickCursor, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

@@ -193,6 +193,11 @@
     build(el, big) { const q = stage(el, big, `<div style="font-size:4.6em;font-weight:600;letter-spacing:-0.04em;line-height:1.1;text-align:center;padding:0 0.6em">Stays <span data-t>private</span></div>`, center);
       return loopDemo(() => M().glowText(q("[data-t]"), { colors: [ACC, ACC2], glow: big ? 16 : 10 })); } });
 
+  add({ id: "click-cursor", name: "Click Cursor", cat: "Interface", from: "Document AI Teaser", desc: "A pointer arcs in, clicks, and fires sparks and a ripple.",
+    code: `await Shaderfield.motion.clickCursor(stage, button, {\n  color: "#0ea5e9", size: 28,\n  onClick: () => {}   // runs on the press\n});`,
+    build(el, big) { const q = stage(el, big, `<div data-b style="display:flex;align-items:center;gap:0.6em;padding:0.85em 1.7em;border-radius:999px;background:${ACC};color:#09090b;font-size:1.7em;font-weight:600;box-shadow:0 0 2.2em rgba(14,165,233,0.35)">Book a demo<span>→</span></div>`, center);
+      return { play: once(async () => { await wait(0.15); const b = q("[data-b]"); return M().clickCursor(el, b, { color: ACC, size: big ? 30 : 20 }); }) }; } });
+
   // ── Motion Tryouts ──
   const TILE = [["#2c2f36", "#141619", 18, 48], ["#202329", "#0f1114", 82, 26], ["#32353c", "#18191d", 42, 38], ["#25282e", "#121418", 90, 18], ["#2e3138", "#151619", 8, 56], ["#22252a", "#101113", 62, 32]];
   const tileBg = (i) => { const [a, b, x, k] = TILE[i % TILE.length]; return `radial-gradient(120% 85% at ${x}% 0%, color-mix(in srgb, ${ACC} ${k}%, transparent) 0%, transparent 62%), linear-gradient(170deg, ${a} 0%, ${b} 100%)`; };

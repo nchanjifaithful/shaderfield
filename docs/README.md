@@ -5,9 +5,9 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 38
+- [Motion effects](#motion-effects) · 39
   - [Text](#text) · 12
-  - [Interface](#interface) · 15
+  - [Interface](#interface) · 16
   - [Transitions](#transitions) · 10
   - [Light](#light) · 1
 
@@ -143,6 +143,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Disc Stack](motion/disc-stack.md) | `discStack` | Tilted discs cycle: the top one lifts away and returns at the back. |
 | [Shine](motion/shine.md) | `shine` | A crisp glint sweeps across a button once. |
 | [Typing Dots](motion/typing-dots.md) | `typingDots` | Three dots bounce in a wave while a reply is coming. |
+| [Click Cursor](motion/click-cursor.md) | `clickCursor` | A pointer arcs in, clicks, and fires sparks and a ripple. |
 
 ### Transitions
 
