@@ -75,6 +75,12 @@
     build(el, big) { const q = stage(el, big, `<div data-t style="font-size:${big ? 14 : 11}px"></div>`, center); const stop = M().tabMorph(q("[data-t]"), { tabs: ["Dashboard", "Notifications", "Settings", "Changelog", "Security"] });
       const iv = setInterval(() => { if (!stop.user) stop.next(); }, 1600); return { play: () => stop.next(), stop: () => { clearInterval(iv); stop(); } }; } });
 
+  add({ id: "masked-scroll", name: "Masked Scroll", cat: "Interface", from: "Desktop Features · App Features", desc: "A list glides under a fade mask so rows dissolve at the edge.",
+    code: `<div id="viewport" style="height:220px"><div>…rows…</div></div>\n\nconst stop = Shaderfield.motion.maskedScroll(viewport, { duration: 2, hold: 1.2 });`,
+    build(el, big) { const rows = ["Deploy finished", "New comment on PR #42", "Invoice paid", "Agent 02 done", "Weekly report ready", "2 new sign-ups", "Backup complete", "Storage at 80%", "Payout scheduled", "New device sign-in"];
+      const q = stage(el, big, `<div data-v style="height:68%;width:min(24em,80%)"><div style="display:flex;flex-direction:column;gap:0.3em">${rows.map(r => `<div style="padding:0.7em 0.8em;border-radius:0.6em;background:#141418;font-size:1.15em">${r}</div>`).join("")}</div></div>`, center);
+      const stop = M().maskedScroll(q("[data-v]")); return { play: () => {}, stop }; } });
+
   add({ id: "iris", name: "Iris Close", cat: "Transitions", from: "Orfa Agents · Dev Agency", desc: "A card closes to a hairline, pinches to the centre, then reopens.",
     code: `await Shaderfield.motion.iris(card, { content: scene, color: "#0ea5e9" });\nawait Shaderfield.motion.iris(card, { content: scene, open: true });\n// Shaderfield.motion.iris(card, { shutter: true });`,
     build(el, big) { const q = stage(el, big, `<div data-f style="position:absolute;inset:14% 16%;border-radius:0.8em;overflow:hidden;background:#0a0a0c;outline:1px solid rgba(242,242,244,0.14)"><div data-c style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:1px;background:rgba(242,242,244,0.1)">${["Triage inbox", "Refactor auth", "Write release notes", "Fix flaky test", "Update pricing", "Migrate DB"].map(t => `<div style="background:#0a0a0a;padding:0.8em;font-size:1em;display:flex;align-items:flex-end">${t}</div>`).join("")}</div></div>`);

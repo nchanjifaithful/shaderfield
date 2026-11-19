@@ -2370,6 +2370,12 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     const stopL = loopFx(() => { const p = EZ.spring(now() - t0); items.forEach((b, k) => { b.style.width = W(k, prev) + (W(k, cur) - W(k, prev)) * p + "px"; const on = prev === cur ? (k === cur ? 1 : 0) : k === cur ? p : k === prev ? 1 - p : 0; b.style.background = `rgba(255,255,255,${0.09 * on})`; b.style.color = on > 0.5 ? ink : mute; b.lastChild.style.opacity = on; }); });
     const stop = () => stopL(); stop.set = set; stop.next = () => set((cur + 1) % tabs.length); return stop;
   }
+  // List that glides up and back under a bottom fade mask (Desktop Features)
+  function maskedScroll(el, o = {}) {
+    el.style.overflow = "hidden"; el.style.webkitMaskImage = el.style.maskImage = "linear-gradient(#000 calc(100% - 40px), transparent)";
+    const inner = el.firstElementChild, d = o.duration || 2, h = o.hold || 1.2, per = 2 * (d + h);
+    return loopFx(t => { const dist = o.distance ?? Math.max(0, inner.scrollHeight - el.clientHeight + 40), u = t % per; const p = u < h ? 0 : u < h + d ? EZ.inOut((u - h) / d) : u < 2 * h + d ? 1 : 1 - EZ.inOut((u - 2 * h - d) / d); inner.style.transform = `translateY(${-p * dist}px)`; });
+  }
   // Iris close to a hairline, or a vertical shutter (Orfa Agents, Dev Agency)
   function iris(el, o = {}) {
     rel(el); const c = o.content || el.firstElementChild, acc = o.color || "#34d399", rev = !!o.open, sh = !!o.shutter, D = sh ? 0.7 : 1.05;
@@ -2654,5 +2660,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, iris, drawFrame, drawLine, stripes, cameraPush, flash, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

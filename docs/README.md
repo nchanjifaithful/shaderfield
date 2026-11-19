@@ -5,9 +5,9 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 34
+- [Motion effects](#motion-effects) · 35
   - [Text](#text) · 12
-  - [Interface](#interface) · 13
+  - [Interface](#interface) · 14
   - [Transitions](#transitions) · 8
   - [Light](#light) · 1
 
@@ -134,6 +134,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Press Ripple](motion/pressable.md) | `pressable` | A press squeezes the button and sends out layered ripples. |
 | [Signal Bars](motion/signal-bars.md) | `signalBars` | Thin status bars grow in a staggered sweep to show uptime. |
 | [Tab Morph](motion/tab-morph.md) | `tabMorph` | The active icon tab springs open to show its label. |
+| [Masked Scroll](motion/masked-scroll.md) | `maskedScroll` | A list glides under a fade mask so rows dissolve at the edge. |
 | [Spring follow](motion/spring-follow.md) | `springFollow` | A label follows the cursor on a spring. Use `stop.set({ stiffness, damping })`. |
 | [Bracket Hop](motion/bracket-hop.md) | `bracketHop` | Corner brackets spin between targets and snap open around each. |
 | [Bracket Cursor](motion/bracket-cursor.md) | `bracketCursor` | The pointer becomes a reticle that snaps around links. |
