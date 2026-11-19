@@ -2423,6 +2423,27 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     kids.forEach((kd, i) => { const k = kd[0], b = k.getBoundingClientRect(), dx = b.left + b.width / 2 - cx, dy = b.top + b.height / 2 - cy; let d = sq ? Math.max(Math.abs(dx) / (r.width / 2 || 1), Math.abs(dy) / (r.height / 2 || 1)) : kd[1]; kd[1] = out ? rnd(i, 21) : d * (1 - jt) + rnd(i, 21) * jt; });
     return play(dur, t => { const rv = oCubic(t / dur) * (1 + sp); kids.forEach(([k, d]) => { const v = clamp((rv - d) / sp), w = out ? 1 - v : v; k.style.opacity = w; k.style.transform = `scale(${0.6 + 0.4 * w})`; }); });
   }
+  // Fading pen trail that follows the pointer and reveals text behind it (Drawing Cursor Film)
+  function penTrail(el, o = {}) {
+    rel(el); const cv = document.createElement("canvas"); cv.style.cssText = "position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5"; el.appendChild(cv);
+    const ctx = cv.getContext("2d"), pts = [], ink = o.color || "#34d399", lw = o.width || 6, fade = o.fade || 0.9; let inside = false, px = 0, py = 0, maxX = 0;
+    const move = e => { const r = el.getBoundingClientRect(); px = e.clientX - r.left; py = e.clientY - r.top; inside = true; }, leave = () => (inside = false);
+    el.addEventListener("pointermove", move); el.addEventListener("pointerleave", leave);
+    const stopL = loopFx(t => {
+      const dpr = Math.min(2, window.devicePixelRatio || 1), w = el.clientWidth, h = el.clientHeight;
+      if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+      let x = px, y = py;
+      if (!inside) { const u = t * 0.62 + 0.4; x = w / 2 + Math.sin(u * 0.9) * w * 0.29 + Math.sin(u * 2.3 + 1.1) * w * 0.08 + Math.cos(u * 5.1) * w * 0.016; y = h / 2 + Math.sin(u * 1.3 + 0.6) * h * 0.28 + Math.cos(u * 3.1) * h * 0.08; }
+      if (inside || o.auto !== false) pts.push({ x, y, t }); while (pts.length && t - pts[0].t > fade) pts.shift();
+      if (o.reveal) { maxX = Math.max(maxX, x); const m = `linear-gradient(90deg,#000 ${maxX - 140}px,transparent ${maxX}px)`; o.reveal.style.webkitMaskImage = o.reveal.style.maskImage = m; }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h); ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = ctx.fillStyle = ink;
+      for (let i = 1; i < pts.length; i++) { const a = clamp(1 - (t - pts[i].t) / fade); ctx.globalAlpha = a; ctx.lineWidth = lw * (0.2 + 0.8 * a); ctx.beginPath(); ctx.moveTo(pts[i - 1].x, pts[i - 1].y); ctx.lineTo(pts[i].x, pts[i].y); ctx.stroke(); }
+      if (pts.length) { const c = pts[pts.length - 1]; ctx.globalAlpha = 1; ctx.beginPath(); ctx.arc(c.x, c.y, lw * 2.4, 0, 6.2832); ctx.fill(); ctx.globalAlpha = 0.35; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(c.x, c.y, lw * 2.4 + 10, 0, 6.2832); ctx.stroke(); }
+      ctx.globalAlpha = 1;
+    });
+    const stop = () => { stopL(); el.removeEventListener("pointermove", move); el.removeEventListener("pointerleave", leave); cv.remove(); };
+    stop.reset = () => (maxX = 0); return stop;
+  }
   const bez = (x1, y1, x2, y2) => { const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx, cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
     const X = (t) => ((ax * t + bx) * t + cx) * t, Y = (t) => ((ay * t + by) * t + cy) * t, dX = (t) => (3 * ax * t + 2 * bx) * t + cx;
     return (x) => { x = clamp(x); let t = x; for (let i = 0; i < 8; i++) { const d = dX(t); if (Math.abs(d) < 1e-6) break; t -= (X(t) - x) / d; } return Y(clamp(t)); }; };
@@ -2668,5 +2689,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

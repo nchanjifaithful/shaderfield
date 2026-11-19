@@ -81,6 +81,11 @@
       const q = stage(el, big, `<div data-v style="height:68%;width:min(24em,80%)"><div style="display:flex;flex-direction:column;gap:0.3em">${rows.map(r => `<div style="padding:0.7em 0.8em;border-radius:0.6em;background:#141418;font-size:1.15em">${r}</div>`).join("")}</div></div>`, center);
       const stop = M().maskedScroll(q("[data-v]")); return { play: () => {}, stop }; } });
 
+  add({ id: "pen-trail", name: "Pen Trail", cat: "Interface", from: "Drawing Cursor Film", desc: "A pen leaves a fading, tapering stroke and reveals a wordmark.",
+    code: `const stop = Shaderfield.motion.penTrail(stage, {\n  color: "#0ea5e9", width: 6, fade: 0.9,\n  reveal: wordmark        // optional: masked in behind the pen\n});`,
+    build(el, big) { const q = stage(el, big, `<div data-w style="position:absolute;inset:0;${center}font-size:5em;letter-spacing:-0.05em;white-space:nowrap">Shaderfield</div>`, "background:#0b0b0e;color:#fff;cursor:none;");
+      const stop = M().penTrail(el, { color: ACC, width: big ? 6 : 3.5, reveal: q("[data-w]") }); return { play: () => stop.reset(), stop }; } });
+
   add({ id: "iris", name: "Iris Close", cat: "Transitions", from: "Orfa Agents · Dev Agency", desc: "A card closes to a hairline, pinches to the centre, then reopens.",
     code: `await Shaderfield.motion.iris(card, { content: scene, color: "#0ea5e9" });\nawait Shaderfield.motion.iris(card, { content: scene, open: true });\n// Shaderfield.motion.iris(card, { shutter: true });`,
     build(el, big) { const q = stage(el, big, `<div data-f style="position:absolute;inset:14% 16%;border-radius:0.8em;overflow:hidden;background:#0a0a0c;outline:1px solid rgba(242,242,244,0.14)"><div data-c style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:1px;background:rgba(242,242,244,0.1)">${["Triage inbox", "Refactor auth", "Write release notes", "Fix flaky test", "Update pricing", "Migrate DB"].map(t => `<div style="background:#0a0a0a;padding:0.8em;font-size:1em;display:flex;align-items:flex-end">${t}</div>`).join("")}</div></div>`);
