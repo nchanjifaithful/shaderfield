@@ -117,6 +117,11 @@
     build(el, big) { const n = big ? 24 : 16, m = big ? 12 : 9; const q = stage(el, big, `<div data-g style="position:absolute;inset:8%;display:grid;grid-template-columns:repeat(${n},1fr);grid-template-rows:repeat(${m},1fr);place-items:center">${Array.from({ length: n * m }, () => `<span style="width:4px;height:4px;border-radius:50%;background:${ACC};opacity:0"></span>`).join("")}</div>`);
       return { play: () => M().radialReveal(q("[data-g]")) }; } });
 
+  add({ id: "footer-reveal", name: "Footer Reveal", cat: "Transitions", from: "Dev Agency Services", desc: "The page lifts away to reveal the footer underneath.",
+    code: `Shaderfield.motion.underlayReveal(page, footer, { duration: 1.5 });\nShaderfield.motion.underlayReveal(page, footer, { reverse: true });`,
+    build(el, big) { const q = stage(el, big, `<div data-u style="position:absolute;left:0;right:0;bottom:0;height:62%;background:${ACC};color:#0a0c0d;padding:1.4em;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;opacity:0"><div style="font-size:2em;font-weight:600;letter-spacing:-0.035em">Have something to build?</div><div style="font-size:4.4em;font-weight:600;letter-spacing:-0.06em;line-height:0.8">Studio</div></div><div data-p style="position:absolute;inset:0;background:#0b0b0e;${center}"><div style="font-size:2.6em;font-weight:600;letter-spacing:-0.04em">We build software.</div></div>`);
+      return { play: async () => { await M().underlayReveal(q("[data-p]"), q("[data-u]"), { distance: el.clientHeight * 0.62 }); await wait(1); return M().underlayReveal(q("[data-p]"), q("[data-u]"), { distance: el.clientHeight * 0.62, reverse: true }); } }; } });
+
   const loopDemo = (start) => { let s = null; return { play: () => { if (!s) s = start(); return wait(2.5); }, stop: () => { s && s(); s = null; } }; };
 
   add({ id: "type-swap", name: "Type Swap", cat: "Text", from: "Signpost Typewriter", desc: "The last word deletes, then the next one types in.",
