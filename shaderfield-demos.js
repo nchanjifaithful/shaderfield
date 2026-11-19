@@ -107,6 +107,11 @@
       let on = true; const run = async () => { await wait(0.4); while (on) { const t = q("[data-t]"); t.style.transform = "scale(1.06)"; M().play(0.5, s => { t.style.transform = `scale(${(1.06 - 0.06 * M().ease.out(s / 0.5)).toFixed(4)})`; }); await M().flash(el, { peak: 0.85 }); await wait(0.8); } }; run();
       return { play: () => wait(0.1), stop: () => { on = false; } }; } });
 
+  add({ id: "radial-reveal", name: "Radial Reveal", cat: "Transitions", from: "Kinetic Opening", desc: "Elements appear in a ring that grows from the centre.",
+    code: `Shaderfield.motion.radialReveal(grid, { duration: 1.4, spread: 0.25 });`,
+    build(el, big) { const n = big ? 24 : 16, m = big ? 12 : 9; const q = stage(el, big, `<div data-g style="position:absolute;inset:8%;display:grid;grid-template-columns:repeat(${n},1fr);grid-template-rows:repeat(${m},1fr);place-items:center">${Array.from({ length: n * m }, () => `<span style="width:4px;height:4px;border-radius:50%;background:${ACC};opacity:0"></span>`).join("")}</div>`);
+      return { play: () => M().radialReveal(q("[data-g]")) }; } });
+
   const loopDemo = (start) => { let s = null; return { play: () => { if (!s) s = start(); return wait(2.5); }, stop: () => { s && s(); s = null; } }; };
 
   add({ id: "type-swap", name: "Type Swap", cat: "Text", from: "Signpost Typewriter", desc: "The last word deletes, then the next one types in.",
