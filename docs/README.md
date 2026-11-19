@@ -5,10 +5,10 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 33
+- [Motion effects](#motion-effects) · 34
   - [Text](#text) · 12
   - [Interface](#interface) · 13
-  - [Transitions](#transitions) · 7
+  - [Transitions](#transitions) · 8
   - [Light](#light) · 1
 
 ## Shaders
@@ -152,6 +152,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Line Draw](motion/draw-line.md) | `drawLine` | A hairline frame and an underline draw themselves in. |
 | [Block Reveal](motion/stripes.md) | `stripes` | A solid block wipes open, then its words roll up. |
 | [Camera Push](motion/camera-push.md) | `cameraPush` | The layout scales and pans until one element fills the frame. |
+| [Light Flash](motion/flash.md) | `flash` | The frame snaps to light on a hit, then falls off fast. |
 | [Shock Ring](motion/shock.md) | `shock` | A thin glowing ring bursts out from a point. |
 
 ### Light
