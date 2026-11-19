@@ -95,6 +95,12 @@
     build(el, big) { const q = stage(el, big, `<div data-w style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:0.8em;padding:1.2em;box-sizing:border-box">${["Triage inbox", "Refactor auth", "Release notes", "Fix flaky test", "Update pricing", "Migrate DB"].map((t, i) => `<div ${i === 4 ? "data-target" : ""} style="background:#121216;border-radius:0.6em;padding:0.9em;font-size:1.1em;display:flex;flex-direction:column;justify-content:space-between;outline:1px solid ${i === 4 ? ACC : "rgba(242,242,244,0.08)"}"><span style="color:${MUTE};font-size:0.8em">agt_0${i + 1}</span><span>${t}</span></div>`).join("")}</div>`);
       return { play: () => M().cameraPush(q("[data-w]"), q("[data-target]"), { scale: 2.2, back: true }) }; } });
 
+  add({ id: "flash", name: "Light Flash", cat: "Transitions", from: "Blastlabs Flow", desc: "The frame snaps to light on a hit, then falls off fast.",
+    code: `Shaderfield.motion.flash(stage, { peak: 0.8, duration: 0.9 });`,
+    build(el, big) { const q = stage(el, big, `<div data-s style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 60%, ${ACC} 0%, #1e3a8a 45%, #050816 100%)"></div><div data-t style="position:absolute;inset:0;${center}font-size:6em;font-weight:600;letter-spacing:-0.05em">Blast</div>`);
+      let on = true; const run = async () => { await wait(0.4); while (on) { const t = q("[data-t]"); t.style.transform = "scale(1.06)"; M().play(0.5, s => { t.style.transform = `scale(${(1.06 - 0.06 * M().ease.out(s / 0.5)).toFixed(4)})`; }); await M().flash(el, { peak: 0.85 }); await wait(0.8); } }; run();
+      return { play: () => wait(0.1), stop: () => { on = false; } }; } });
+
   const loopDemo = (start) => { let s = null; return { play: () => { if (!s) s = start(); return wait(2.5); }, stop: () => { s && s(); s = null; } }; };
 
   add({ id: "type-swap", name: "Type Swap", cat: "Text", from: "Signpost Typewriter", desc: "The last word deletes, then the next one types in.",

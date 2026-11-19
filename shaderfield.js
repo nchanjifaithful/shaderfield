@@ -2402,6 +2402,13 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     const apply = k => { const zp = (k - 1) / (k1 - 1), fx = sw + (cx - sw) * zp, fy = sh + (cy - sh) * zp; world.style.transform = `translate(${sw - fx * k}px,${sh - fy * k}px) scale(${k})`; };
     return play(d, t => apply(1 + (k1 - 1) * EZ.inOut(t / d))).then(() => o.back ? new Promise(r2 => setTimeout(r2, (o.hold ?? 0.8) * 1000)).then(() => play(d, t => apply(k1 - (k1 - 1) * EZ.inOut(t / d)))) : null);
   }
+  // Light flash: the whole frame snaps to light on the hit, then falls off fast (Blastlabs Flow)
+  function flash(el, o = {}) {
+    rel(el); const f = document.createElement("div"), pk = o.peak ?? 0.8, col = o.color || "#fff", d = o.duration ?? 0.9, atk = o.attack ?? 0.05;
+    f.style.cssText = `position:absolute;inset:0;pointer-events:none;background:${col};mix-blend-mode:${o.blend || "screen"};opacity:0;z-index:30`;
+    el.appendChild(f);
+    return play(d, t => { const k = t < atk ? t / atk : Math.exp(-((t - atk) / (d - atk)) * 4.6); f.style.opacity = (pk * k).toFixed(3); }).then(() => f.remove());
+  }
   const bez = (x1, y1, x2, y2) => { const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx, cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
     const X = (t) => ((ax * t + bx) * t + cx) * t, Y = (t) => ((ay * t + by) * t + cy) * t, dX = (t) => (3 * ax * t + 2 * bx) * t + cx;
     return (x) => { x = clamp(x); let t = x; for (let i = 0; i < 8; i++) { const d = dX(t); if (Math.abs(d) < 1e-6) break; t -= (X(t) - x) / d; } return Y(clamp(t)); }; };
@@ -2647,5 +2654,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, iris, drawFrame, drawLine, stripes, cameraPush, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, iris, drawFrame, drawLine, stripes, cameraPush, flash, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
