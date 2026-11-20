@@ -5,10 +5,10 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 40
+- [Motion effects](#motion-effects) · 41
   - [Text](#text) · 13
   - [Interface](#interface) · 16
-  - [Transitions](#transitions) · 10
+  - [Transitions](#transitions) · 11
   - [Light](#light) · 1
 
 ## Shaders
@@ -160,6 +160,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Radial Reveal](motion/radial-reveal.md) | `radialReveal` | Elements appear in a ring that grows from the centre. |
 | [Footer Reveal](motion/underlay-reveal.md) | `underlayReveal` | The page lifts away to reveal the footer underneath. |
 | [Shock Ring](motion/shock.md) | `shock` | A thin glowing ring bursts out from a point. |
+| [Push Through](motion/push-through.md) | `pushThrough` | The scene zooms toward one point while it blurs away. |
 
 ### Light
 
