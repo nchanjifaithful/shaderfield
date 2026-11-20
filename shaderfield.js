@@ -2692,6 +2692,20 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       else { const last = ch[N - 1], a = u - T; if (last.nextSibling !== caret) last.parentNode.appendChild(caret); caret.style.opacity = a > hold ? clamp(1 - (a - hold) / 0.3) : Math.floor(a * 2.4) % 2 === 0 ? 1 : 0; }
     }).then(() => caret.remove());
   }
+  // Focus pull: a line racks into focus out of a blur, or its letters drift in one by one
+  function focusPull(el, o = {}) {
+    const out = !!o.out, dl = o.delay || 0;
+    if (o.by === "char") {
+      const sp = el._sfChars && el._sfChars[0] && el.contains(el._sfChars[0]) ? el._sfChars : (el._sfChars = splitChars(el, true)), n = sp.length, spread = o.spread ?? 0.3, d = o.duration ?? 0.5, px = o.blur ?? 12;
+      el.style.opacity = 1; el.style.filter = "none"; el.style.transform = "";
+      return play(dl + spread + d, t => sp.forEach((s, j) => { const k = E3.sine((t - dl - (j / Math.max(1, n - 1)) * spread) / d), f = out ? 1 - k : k;
+        s.style.opacity = f.toFixed(3); s.style.filter = f > 0.995 ? "none" : `blur(${((1 - f) * px).toFixed(2)}px)`; }));
+    }
+    if (el._sfChars) el._sfChars.forEach(s => { s.style.opacity = 1; s.style.filter = "none"; });
+    const d = o.duration ?? (out ? 0.55 : 0.7), px = o.blur ?? (out ? 18 : 24), s0 = o.scale ?? 1.06;
+    return play(dl + d, t => { const p = clamp((t - dl) / d), k = out ? EZ.inOut(p) : oCubic(p), f = out ? 1 - k : k;
+      el.style.opacity = f.toFixed(3); el.style.filter = f > 0.995 ? "none" : `blur(${((out ? k : 1 - k) * px).toFixed(2)}px)`; el.style.transform = `scale(${(out ? 1 - 0.03 * k : lerp(s0, 1, k)).toFixed(4)})`; });
+  }
   // Click cursor: a pointer arcs onto a target, squashes on the press and throws three sparks, a ripple and a flash
   function clickCursor(stage, target, o = {}) {
     rel(stage); const sr = stage.getBoundingClientRect(), col = o.color || "#34d399", ink = o.ink || "#f6f4ef", sz = o.size ?? 28, s = sz / 50, d = o.duration ?? 0.7, isEl = !!(target && target.getBoundingClientRect);
@@ -2765,5 +2779,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, clickCursor, scanBeam, pushThrough, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, clickCursor, scanBeam, pushThrough, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

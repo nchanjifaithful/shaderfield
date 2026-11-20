@@ -203,6 +203,11 @@
     build(el, big) { const q = stage(el, big, `<div data-t style="font-size:2.6em;font-weight:600;letter-spacing:-0.035em;line-height:1.1;text-align:center;max-width:76%;text-wrap:balance">Ship your next release</div>`, center);
       return { play: once(() => M().neonType(q("[data-t]"), { glowColor: ACC, cps: 34, hold: 0.6 })) }; } });
 
+  add({ id: "focus-pull", name: "Focus Pull", cat: "Text", from: "Document AI Teaser", desc: "Text racks into focus out of a blur, by line or by letter.",
+    code: `await Shaderfield.motion.focusPull(el);\nawait Shaderfield.motion.focusPull(el, { out: true });\nShaderfield.motion.focusPull(el, { by: "char", spread: 0.3 });`,
+    build(el, big) { const q = stage(el, big, `<div data-t style="font-size:3.4em;font-weight:600;letter-spacing:-0.04em;white-space:nowrap">Automatically.</div>`, center);
+      return { play: once(async () => { const t = q("[data-t]"); await M().focusPull(t); await wait(0.4); await M().focusPull(t, { out: true }); await M().focusPull(t, { by: "char" }); }) }; } });
+
   add({ id: "click-cursor", name: "Click Cursor", cat: "Interface", from: "Document AI Teaser", desc: "A pointer arcs in, clicks, and fires sparks and a ripple.",
     code: `await Shaderfield.motion.clickCursor(stage, button, {\n  color: "#0ea5e9", size: 28,\n  onClick: () => {}   // runs on the press\n});`,
     build(el, big) { const q = stage(el, big, `<div data-b style="display:flex;align-items:center;gap:0.6em;padding:0.85em 1.7em;border-radius:999px;background:${ACC};color:#09090b;font-size:1.7em;font-weight:600;box-shadow:0 0 2.2em rgba(14,165,233,0.35)">Book a demo<span>→</span></div>`, center);
