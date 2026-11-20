@@ -5,8 +5,8 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 39
-  - [Text](#text) · 12
+- [Motion effects](#motion-effects) · 40
+  - [Text](#text) · 13
   - [Interface](#interface) · 16
   - [Transitions](#transitions) · 10
   - [Light](#light) · 1
@@ -123,6 +123,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Scramble Solve](motion/solve.md) | `solve` | Words roll in as scrambled glyphs, then resolve letter by letter. |
 | [Letter Pop](motion/pop.md) | `pop` | Letters rise, overshoot and sharpen out of a blur. |
 | [Lyric Flow](motion/lyric-flow.md) | `lyricFlow` | The current line lights up and the list glides to keep it centred. |
+| [Neon Type](motion/neon-type.md) | `neonType` | Letters type on and flicker like neon before they hold. |
 
 ### Interface
 

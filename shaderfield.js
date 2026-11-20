@@ -2677,6 +2677,21 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     const stop = loopFx(t => (st.backgroundPosition = `${(-(t / per) * band / 2).toFixed(3)}em 0`));
     return () => { stop(); st.cssText = prev; };
   }
+  // Neon type: letters type on behind a caret and flicker like a tube catching before they hold
+  function neonType(el, o = {}) {
+    const ch = splitChars(el, false), N = ch.length, cps = o.cps ?? 26, gl = o.glow ?? 18, gc = o.glowColor || "#34d399", hold = o.hold ?? 1.2, dl = o.delay || 0, T = N / cps, useCaret = o.caret !== false && N > 0;
+    ch.forEach(s => (s.style.opacity = 0));
+    const caret = document.createElement("span"); caret.setAttribute("aria-hidden", "true");
+    caret.style.cssText = `display:inline-block;width:0.06em;height:0.9em;margin-left:0.04em;vertical-align:-0.08em;background:${o.caretColor || gc};`;
+    return play(dl + T + hold + 0.3, t => {
+      const u = t - dl, n = Math.floor(clamp(u * cps, 0, N)), fr = Math.floor(t * 20);
+      ch.forEach((s, i) => { if (i >= n) { s.style.opacity = 0; return; } const k = u - i / cps < 0.35 ? (rnd(i, fr) < 0.5 ? 0.25 : 1) : 1;
+        s.style.opacity = k; s.style.textShadow = gl ? `0 0 ${(gl * k).toFixed(1)}px ${withA(gc, 0.45 * k)}` : ""; });
+      if (!useCaret) return;
+      if (n < N) { if (caret.nextSibling !== ch[n]) ch[n].parentNode.insertBefore(caret, ch[n]); caret.style.opacity = 1; }
+      else { const last = ch[N - 1], a = u - T; if (last.nextSibling !== caret) last.parentNode.appendChild(caret); caret.style.opacity = a > hold ? clamp(1 - (a - hold) / 0.3) : Math.floor(a * 2.4) % 2 === 0 ? 1 : 0; }
+    }).then(() => caret.remove());
+  }
   // Click cursor: a pointer arcs onto a target, squashes on the press and throws three sparks, a ripple and a flash
   function clickCursor(stage, target, o = {}) {
     rel(stage); const sr = stage.getBoundingClientRect(), col = o.color || "#34d399", ink = o.ink || "#f6f4ef", sz = o.size ?? 28, s = sz / 50, d = o.duration ?? 0.7, isEl = !!(target && target.getBoundingClientRect);
@@ -2724,5 +2739,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, clickCursor, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, clickCursor, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
