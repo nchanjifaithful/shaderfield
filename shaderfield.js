@@ -2721,6 +2721,23 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       if (pressT) target.style.transform = (tf0 ? tf0 + " " : "") + `scale(${(1 - 0.03 * Math.exp(-Math.pow(dt / 0.08, 2))).toFixed(4)})`;
     }).then(() => { if (pressT) target.style.transform = tf0; if (!stay) svg.remove(); return svg; });
   }
+  // Scan beam: a glowing scanline sweeps the element and lights each [data-scan] item as it crosses
+  function scanBeam(el, o = {}) {
+    rel(el); const col = o.color || "#34d399", d = o.duration ?? 0.9, dl = o.delay || 0, hold = o.hold ?? 0.5, keep = !!o.keep, trail = o.trail ?? 36, up = o.direction === "up", H = el.clientHeight, er = el.getBoundingClientRect(), bx = el.clientLeft, by = el.clientTop, pad = o.pad ?? 4;
+    const ov = document.createElement("div"); ov.setAttribute("aria-hidden", "true"); ov.style.cssText = "position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none;z-index:6;";
+    const hits = [...el.querySelectorAll(o.targets || "[data-scan]")].map(n => { const r = n.getBoundingClientRect(), b = document.createElement("div"), c = (r.top - er.top - by + r.height / 2) / H;
+      b.style.cssText = `position:absolute;left:${r.left - er.left - bx - pad}px;top:${r.top - er.top - by - pad}px;width:${r.width + pad * 2}px;height:${r.height + pad * 2}px;border-radius:${o.radius ?? 6}px;opacity:0;background:${withA(col, 0.16)};box-shadow:inset 0 0 0 1px ${withA(col, 0.75)},0 0 16px ${withA(col, 0.22)};`;
+      ov.appendChild(b); return { n, b, at: up ? 1 - c : c, tf: -1 }; });
+    const beam = document.createElement("div"); beam.style.cssText = `position:absolute;left:0;right:0;top:0;height:${trail}px;opacity:0;background:linear-gradient(${up ? "to top" : "to bottom"}, ${withA(col, 0)}, ${withA(col, 0.12)} 60%, ${withA(col, 0.24)});`;
+    beam.innerHTML = `<div style="position:absolute;left:0;right:0;${up ? "top" : "bottom"}:-1px;height:2px;background:${col};box-shadow:0 0 12px 1px ${withA(col, 0.9)}"></div>`;
+    ov.appendChild(beam); el.appendChild(ov);
+    return play(dl + d + hold + 0.5, t => {
+      const u = clamp((t - dl) / d), pos = E3.sine(u), y = (up ? 1 - pos : pos) * H;
+      beam.style.opacity = t < dl ? 0 : Math.min(1, u * 8, (1 - u) * 8).toFixed(3); beam.style.transform = `translateY(${(up ? y : y - trail).toFixed(1)}px)`;
+      hits.forEach((h, i) => { if (h.tf < 0 && t >= dl && pos >= h.at) { h.tf = t; o.onHit && o.onHit(h.n, i); }
+        const a = t - h.tf, lit = h.tf < 0 ? 0 : q4(a / 0.13) - 0.6 * q4((a - 0.3) / 0.35), end = keep ? 1 : 1 - EZ.inOut(clamp((t - dl - d - hold) / 0.5)); h.b.style.opacity = (lit * end).toFixed(3); });
+    }).then(() => { if (!keep) ov.remove(); return ov; });
+  }
   // Wire draw: a cubic connector draws between two elements with a bright head riding its tip
   const SIDE_OPP = { left: "right", right: "left", top: "bottom", bottom: "top" };
   const anchorOf = (n, sr, side) => { if (!n.getBoundingClientRect) return [n.x, n.y]; const r = n.getBoundingClientRect(), x = r.left - sr.left, y = r.top - sr.top;
@@ -2748,5 +2765,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, clickCursor, pushThrough, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, clickCursor, scanBeam, pushThrough, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

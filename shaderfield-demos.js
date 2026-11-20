@@ -208,6 +208,12 @@
     build(el, big) { const q = stage(el, big, `<div data-b style="display:flex;align-items:center;gap:0.6em;padding:0.85em 1.7em;border-radius:999px;background:${ACC};color:#09090b;font-size:1.7em;font-weight:600;box-shadow:0 0 2.2em rgba(14,165,233,0.35)">Book a demo<span>→</span></div>`, center);
       return { play: once(async () => { await wait(0.15); const b = q("[data-b]"); return M().clickCursor(el, b, { color: ACC, size: big ? 30 : 20 }); }) }; } });
 
+  add({ id: "scan-beam", name: "Scan Beam", cat: "Interface", from: "Document AI Teaser", desc: "A glowing scanline sweeps a card and lights up each field.",
+    code: `<div id="doc">\n  <span data-scan>INV-2048</span>\n  …\n</div>\n\nawait Shaderfield.motion.scanBeam(doc, {\n  color: "#0ea5e9", duration: 0.9,\n  onHit: (item, i) => {}\n});`,
+    build(el, big) { const rows = [["Vendor", "Harbor & Co"], ["Invoice no.", "INV-2048"], ["Date", "12 Mar 2026"], ["Total", "€504.00"]].map(([k, v]) => `<div style="display:flex;justify-content:space-between;gap:1.6em"><span style="color:#7d7f89">${k}</span><span data-scan style="color:#f2f2f4">${v}</span></div>`).join("");
+      const q = stage(el, big, `<div data-d style="width:16em;padding:1.2em 1.3em;box-sizing:border-box;display:flex;flex-direction:column;gap:0.8em;font-size:1.2em;${card("border-radius:0.8em;")}"><div style="width:40%;height:0.5em;border-radius:1em;background:rgba(242,242,244,0.8);margin-bottom:0.2em"></div>${rows}</div>`, center);
+      return { play: once(() => M().scanBeam(q("[data-d]"), { color: ACC, pad: big ? 4 : 3 })) }; } });
+
   // ── Motion Tryouts ──
   const TILE = [["#2c2f36", "#141619", 18, 48], ["#202329", "#0f1114", 82, 26], ["#32353c", "#18191d", 42, 38], ["#25282e", "#121418", 90, 18], ["#2e3138", "#151619", 8, 56], ["#22252a", "#101113", 62, 32]];
   const tileBg = (i) => { const [a, b, x, k] = TILE[i % TILE.length]; return `radial-gradient(120% 85% at ${x}% 0%, color-mix(in srgb, ${ACC} ${k}%, transparent) 0%, transparent 62%), linear-gradient(170deg, ${a} 0%, ${b} 100%)`; };
