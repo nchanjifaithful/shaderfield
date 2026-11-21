@@ -2756,6 +2756,20 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const SIDE_OPP = { left: "right", right: "left", top: "bottom", bottom: "top" };
   const anchorOf = (n, sr, side) => { if (!n.getBoundingClientRect) return [n.x, n.y]; const r = n.getBoundingClientRect(), x = r.left - sr.left, y = r.top - sr.top;
     return side === "left" ? [x, y + r.height / 2] : side === "right" ? [x + r.width, y + r.height / 2] : side === "top" ? [x + r.width / 2, y] : side === "bottom" ? [x + r.width / 2, y + r.height] : [x + r.width / 2, y + r.height / 2]; };
+  function wire(stage, from, to, o = {}) {
+    rel(stage); const sr = stage.getBoundingClientRect(), col = o.color || "#34d399", d = o.duration ?? 0.6, dl = o.delay || 0, w = o.width ?? 2, bend = o.bend ?? 0.55;
+    let svg = stage._sfWire; if (!svg || !svg.isConnected) { svg = stage._sfWire = svgEl("svg", { "aria-hidden": "true" }); svg.style.cssText = "position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:4;"; stage.appendChild(svg); }
+    const a = anchorOf(from, sr), b = anchorOf(to, sr), hz = Math.abs(b[0] - a[0]) >= Math.abs(b[1] - a[1]);
+    const fs = o.fromSide || (hz ? (b[0] > a[0] ? "right" : "left") : b[1] > a[1] ? "bottom" : "top"), [x0, y0] = anchorOf(from, sr, fs), [x1, y1] = anchorOf(to, sr, o.toSide || SIDE_OPP[fs]);
+    const dd = hz ? `M${x0},${y0} C${x0 + (x1 - x0) * bend},${y0} ${x1 - (x1 - x0) * bend},${y1} ${x1},${y1}` : `M${x0},${y0} C${x0},${y0 + (y1 - y0) * bend} ${x1},${y1 - (y1 - y0) * bend} ${x1},${y1}`;
+    const p = svg.appendChild(svgEl("path", { d: dd, fill: "none", stroke: col, "stroke-width": w, "stroke-linecap": "round", pathLength: 1, "stroke-dasharray": 1, "stroke-dashoffset": 1, opacity: 0 }));
+    if (o.glow !== false) p.style.filter = `drop-shadow(0 0 ${w * 2}px ${withA(col, 0.7)})`;
+    const head = o.head === false ? null : svg.appendChild(svgEl("circle", { r: w * 2, fill: o.headColor || "#fff", opacity: 0 })); if (head) head.style.filter = `drop-shadow(0 0 ${w * 3}px ${col})`;
+    const L = p.getTotalLength();
+    return play(dl + d + 0.35, t => { const e = EZ.inOut(clamp((t - dl) / d)); p.setAttribute("opacity", t < dl ? 0 : 1); p.setAttribute("stroke-dashoffset", (1 - e).toFixed(4));
+      if (head) { const pt = p.getPointAtLength(L * e); head.setAttribute("cx", pt.x.toFixed(1)); head.setAttribute("cy", pt.y.toFixed(1)); head.setAttribute("opacity", t < dl ? 0 : e < 1 ? 1 : clamp(1 - (t - dl - d) / 0.35).toFixed(3)); } })
+      .then(() => { if (head) head.remove(); return p; });
+  }
   // Push through: the scene accelerates toward one point while it blurs and fades; reverse arrives from it
   function pushThrough(el, o = {}) {
     const d = o.duration ?? 0.85, s1 = o.scale ?? 2.4, px = o.blur ?? 16, rv = !!o.reverse, dl = o.delay || 0;
@@ -2779,5 +2793,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, clickCursor, scanBeam, pushThrough, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, clickCursor, scanBeam, wire, pushThrough, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

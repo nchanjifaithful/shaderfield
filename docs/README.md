@@ -5,9 +5,9 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 43
+- [Motion effects](#motion-effects) · 44
   - [Text](#text) · 14
-  - [Interface](#interface) · 17
+  - [Interface](#interface) · 18
   - [Transitions](#transitions) · 11
   - [Light](#light) · 1
 
@@ -147,6 +147,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Typing Dots](motion/typing-dots.md) | `typingDots` | Three dots bounce in a wave while a reply is coming. |
 | [Click Cursor](motion/click-cursor.md) | `clickCursor` | A pointer arcs in, clicks, and fires sparks and a ripple. |
 | [Scan Beam](motion/scan-beam.md) | `scanBeam` | A glowing scanline sweeps a card and lights up each field. |
+| [Wire Draw](motion/wire.md) | `wire` | Curved connectors draw from one element to several others. |
 
 ### Transitions
 
