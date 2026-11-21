@@ -219,6 +219,12 @@
       const q = stage(el, big, `<div data-d style="width:16em;padding:1.2em 1.3em;box-sizing:border-box;display:flex;flex-direction:column;gap:0.8em;font-size:1.2em;${card("border-radius:0.8em;")}"><div style="width:40%;height:0.5em;border-radius:1em;background:rgba(242,242,244,0.8);margin-bottom:0.2em"></div>${rows}</div>`, center);
       return { play: once(() => M().scanBeam(q("[data-d]"), { color: ACC, pad: big ? 4 : 3 })) }; } });
 
+  add({ id: "wire-draw", name: "Wire Draw", cat: "Interface", from: "Document AI Teaser", desc: "Curved connectors draw from one element to several others.",
+    code: `outputs.forEach((out, i) =>\n  Shaderfield.motion.wire(stage, hub, out, { color: "#0ea5e9", delay: i * 0.14 })\n);`,
+    build(el, big) { const outs = ["JSON", "CSV", "Spreadsheet", "Webhook"].map(n => `<div data-k style="padding:0.5em 1em;font-size:1.3em;color:#e4e5ea;${card("border-radius:0.6em;")}">${n}</div>`).join("");
+      const q = stage(el, big, `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 14%"><div data-h style="width:4.6em;height:4.6em;border-radius:50%;background:#121216;box-shadow:inset 0 0 0 1.5px ${ACC},0 0 1.4em ${ACC}55;display:flex;align-items:center;justify-content:center"><span style="width:1.1em;height:1.1em;border-radius:50%;background:${ACC}"></span></div><div style="display:flex;flex-direction:column;gap:0.8em">${outs}</div></div>`);
+      return { play: once(async () => { if (el._sfWire) el._sfWire.textContent = ""; const h = q("[data-h]"); await Promise.all([...el.querySelectorAll("[data-k]")].map((k, i) => M().wire(el, h, k, { color: ACC, delay: i * 0.14, width: big ? 2 : 1.5 }))); }) }; } });
+
   // ── Motion Tryouts ──
   const TILE = [["#2c2f36", "#141619", 18, 48], ["#202329", "#0f1114", 82, 26], ["#32353c", "#18191d", 42, 38], ["#25282e", "#121418", 90, 18], ["#2e3138", "#151619", 8, 56], ["#22252a", "#101113", 62, 32]];
   const tileBg = (i) => { const [a, b, x, k] = TILE[i % TILE.length]; return `radial-gradient(120% 85% at ${x}% 0%, color-mix(in srgb, ${ACC} ${k}%, transparent) 0%, transparent 62%), linear-gradient(170deg, ${a} 0%, ${b} 100%)`; };
