@@ -2792,6 +2792,14 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   // ── Motion Tryouts: transitions ──
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
+  // Blinds: horizontal bands close from their centre lines in a ragged order, the scene swaps, and they open again (Bllind)
+  function blinds(el, o = {}) {
+    rel(el); const N = o.bands ?? 12, col = o.color || "#c6f24e", CL = o.close ?? 0.4, OP = o.open ?? 0.42, seed = o.seed ?? Math.floor(Math.random() * 1000), wrap = overlay(el), swap = swapper(o);
+    const bs = Array.from({ length: N }, (_, i) => { const b = document.createElement("div"), h = document.createElement("div"); b.style.cssText = `position:absolute;left:0;right:0;height:0;background:${col};`; h.style.cssText = `position:absolute;left:0;right:0;height:2px;background:${col};opacity:0;`; wrap.append(b, h); return { b, h, d1: rnd(i + seed, 1) * 0.16, d2: rnd(i + seed + 40, 1) * 0.16 }; });
+    return play(CL + OP + 0.1, t => { if (t >= CL) swap(); const bh = el.clientHeight / N;
+      bs.forEach(({ b, h, d1, d2 }, i) => { const v = t < CL ? EZ.inOut(clamp((t - d1) / 0.24)) : 1 - EZ.inOut(clamp((t - CL - d2) / 0.26)), hair = v < 0.02 && (t < CL ? t > d1 - 0.08 : t < CL + d2 + 0.34);
+        b.style.top = (i * bh + (bh * (1 - v)) / 2 - 0.5).toFixed(1) + "px"; b.style.height = v > 0 ? (bh * v + 1).toFixed(1) + "px" : "0"; h.style.top = (i * bh + bh / 2 - 1).toFixed(1) + "px"; h.style.opacity = hair ? 0.7 : 0; }); }).then(() => wrap.remove());
+  }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, clickCursor, scanBeam, wire, pushThrough, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, clickCursor, scanBeam, wire, pushThrough, blinds, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
