@@ -5,9 +5,9 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 47
+- [Motion effects](#motion-effects) · 48
   - [Text](#text) · 15
-  - [Interface](#interface) · 19
+  - [Interface](#interface) · 20
   - [Transitions](#transitions) · 12
   - [Light](#light) · 1
 
@@ -150,6 +150,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Scan Beam](motion/scan-beam.md) | `scanBeam` | A glowing scanline sweeps a card and lights up each field. |
 | [Wire Draw](motion/wire.md) | `wire` | Curved connectors draw from one element to several others. |
 | [Pick Focus](motion/pick-focus.md) | `pickFocus` | All options pulse, then the chosen one lights up and the rest dim. |
+| [Lock Click](motion/lock-click.md) | `lockClick` | A padlock drops in, snaps shut, then turns into a check. |
 
 ### Transitions
 
