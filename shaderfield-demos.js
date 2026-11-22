@@ -225,6 +225,12 @@
       const q = stage(el, big, `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 14%"><div data-h style="width:4.6em;height:4.6em;border-radius:50%;background:#121216;box-shadow:inset 0 0 0 1.5px ${ACC},0 0 1.4em ${ACC}55;display:flex;align-items:center;justify-content:center"><span style="width:1.1em;height:1.1em;border-radius:50%;background:${ACC}"></span></div><div style="display:flex;flex-direction:column;gap:0.8em">${outs}</div></div>`);
       return { play: once(async () => { if (el._sfWire) el._sfWire.textContent = ""; const h = q("[data-h]"); await Promise.all([...el.querySelectorAll("[data-k]")].map((k, i) => M().wire(el, h, k, { color: ACC, delay: i * 0.14, width: big ? 2 : 1.5 }))); }) }; } });
 
+  add({ id: "pick-focus", name: "Pick Focus", cat: "Interface", from: "Document AI Teaser", desc: "All options pulse, then the chosen one lights up and the rest dim.",
+    code: `await Shaderfield.motion.pickFocus(cards, 0, { color: "#0ea5e9", dim: 0.72 });\nShaderfield.motion.pickFocus(cards, -1); // reset`,
+    build(el, big) { const opts = [["JSON", ".json"], ["CSV", ".csv"], ["Excel", ".xlsx"], ["XML", ".xml"]].map(([a, b]) => `<div data-k style="display:flex;justify-content:space-between;align-items:center;width:14em;padding:0.65em 1.1em;box-sizing:border-box;font-size:1.25em;${card()}"><span style="font-weight:600;color:#f2f2f4">${a}</span><span style="color:#7d7f89">${b}</span></div>`).join("");
+      stage(el, big, `<div style="display:flex;flex-direction:column;gap:0.55em">${opts}</div>`, center);
+      return { play: once(async () => { const ks = [...el.querySelectorAll("[data-k]")]; await M().pickFocus(ks, -1, { duration: 0.3, color: ACC }); await M().clickCursor(el, ks[0], { color: ACC, size: big ? 28 : 18, at: [0.6, 0.6], onClick: () => M().pickFocus(ks, 0, { color: ACC }) }); }) }; } });
+
   // ── Motion Tryouts ──
   const TILE = [["#2c2f36", "#141619", 18, 48], ["#202329", "#0f1114", 82, 26], ["#32353c", "#18191d", 42, 38], ["#25282e", "#121418", 90, 18], ["#2e3138", "#151619", 8, 56], ["#22252a", "#101113", 62, 32]];
   const tileBg = (i) => { const [a, b, x, k] = TILE[i % TILE.length]; return `radial-gradient(120% 85% at ${x}% 0%, color-mix(in srgb, ${ACC} ${k}%, transparent) 0%, transparent 62%), linear-gradient(170deg, ${a} 0%, ${b} 100%)`; };

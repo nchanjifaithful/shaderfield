@@ -2770,6 +2770,17 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       if (head) { const pt = p.getPointAtLength(L * e); head.setAttribute("cx", pt.x.toFixed(1)); head.setAttribute("cy", pt.y.toFixed(1)); head.setAttribute("opacity", t < dl ? 0 : e < 1 ? 1 : clamp(1 - (t - dl - d) / 0.35).toFixed(3)); } })
       .then(() => { if (head) head.remove(); return p; });
   }
+  // Pick focus: every option pulses once, then the chosen one lights up while the rest dim back
+  function pickFocus(items, index, o = {}) {
+    items = [...items]; const col = o.color || "#34d399", dim = o.dim ?? 0.72, d = o.duration ?? 0.5, pulse = o.pulse !== false && index >= 0, T0 = pulse ? 0.5 : 0;
+    items.forEach(n => { if (!n._sfPick) n._sfPick = { bs: n.style.boxShadow, bi: n.style.backgroundImage, f: 0 }; });
+    const from = items.map(n => n._sfPick.f), to = items.map((_, i) => (index < 0 ? 0 : i === index ? 1 : -1));
+    return play(T0 + d, t => { const pu = pulse ? Math.exp(-Math.pow((t - 0.2) / 0.11, 2)) : 0, k = EZ.inOut(clamp((t - T0) / d));
+      items.forEach((n, i) => { const S = n._sfPick, f = lerp(from[i], to[i], k), on = Math.max(0, f), off = Math.max(0, -f), ring = Math.max(pu, on), gw = Math.max(on, pu * 0.6); S.f = f;
+        n.style.boxShadow = `inset 0 0 0 1.5px ${withA(col, 0.9 * ring)}, 0 0 ${(40 * gw).toFixed(1)}px ${withA(col, 0.35 * gw)}` + (S.bs ? ", " + S.bs : "");
+        n.style.opacity = (1 - dim * off).toFixed(3);
+        n.style.backgroundImage = on > 0.002 ? `linear-gradient(${withA(col, 0.14 * on)}, ${withA(col, 0.14 * on)})` + (S.bi ? ", " + S.bi : "") : S.bi; }); });
+  }
   // Push through: the scene accelerates toward one point while it blurs and fades; reverse arrives from it
   function pushThrough(el, o = {}) {
     const d = o.duration ?? 0.85, s1 = o.scale ?? 2.4, px = o.blur ?? 16, rv = !!o.reverse, dl = o.delay || 0;
@@ -2801,5 +2812,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
         b.style.top = (i * bh + (bh * (1 - v)) / 2 - 0.5).toFixed(1) + "px"; b.style.height = v > 0 ? (bh * v + 1).toFixed(1) + "px" : "0"; h.style.top = (i * bh + bh / 2 - 1).toFixed(1) + "px"; h.style.opacity = hair ? 0.7 : 0; }); }).then(() => wrap.remove());
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, clickCursor, scanBeam, wire, pushThrough, blinds, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, clickCursor, scanBeam, wire, pickFocus, pushThrough, blinds, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
