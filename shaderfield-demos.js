@@ -208,6 +208,11 @@
     build(el, big) { const q = stage(el, big, `<div data-t style="font-size:3.4em;font-weight:600;letter-spacing:-0.04em;white-space:nowrap">Automatically.</div>`, center);
       return { play: once(async () => { const t = q("[data-t]"); await M().focusPull(t); await wait(0.4); await M().focusPull(t, { out: true }); await M().focusPull(t, { by: "char" }); }) }; } });
 
+  add({ id: "track-in", name: "Track In", cat: "Text", from: "Document AI Teaser", desc: "A tagline tightens its letter spacing as it sharpens.",
+    code: `Shaderfield.motion.trackIn(tagline, { from: 0.32, to: 0.02, duration: 0.8 });`,
+    build(el, big) { const q = stage(el, big, `<div style="display:flex;flex-direction:column;align-items:center;gap:0.5em"><div style="font-size:4.4em;font-weight:600;letter-spacing:-0.045em;line-height:1">Fieldnote</div><div data-t style="font-size:1.6em;color:#c9cad1;white-space:nowrap">Notes that sort themselves</div></div>`, center);
+      return { play: once(() => M().trackIn(q("[data-t]"), { duration: 0.6 })) }; } });
+
   add({ id: "click-cursor", name: "Click Cursor", cat: "Interface", from: "Document AI Teaser", desc: "A pointer arcs in, clicks, and fires sparks and a ripple.",
     code: `await Shaderfield.motion.clickCursor(stage, button, {\n  color: "#0ea5e9", size: 28,\n  onClick: () => {}   // runs on the press\n});`,
     build(el, big) { const q = stage(el, big, `<div data-b style="display:flex;align-items:center;gap:0.6em;padding:0.85em 1.7em;border-radius:999px;background:${ACC};color:#09090b;font-size:1.7em;font-weight:600;box-shadow:0 0 2.2em rgba(14,165,233,0.35)">Book a demo<span>→</span></div>`, center);

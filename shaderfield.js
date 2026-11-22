@@ -2706,6 +2706,15 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     return play(dl + d, t => { const p = clamp((t - dl) / d), k = out ? EZ.inOut(p) : oCubic(p), f = out ? 1 - k : k;
       el.style.opacity = f.toFixed(3); el.style.filter = f > 0.995 ? "none" : `blur(${((out ? k : 1 - k) * px).toFixed(2)}px)`; el.style.transform = `scale(${(out ? 1 - 0.03 * k : lerp(s0, 1, k)).toFixed(4)})`; });
   }
+  // Track in: a tagline arrives wide and soft, then tightens its letter spacing as it sharpens
+  function trackIn(el, o = {}) {
+    const from = o.from ?? 0.32, to = o.to ?? 0.02, d = o.duration ?? 0.8, dl = o.delay || 0, px = o.blur ?? 4;
+    if (o.by === "char") { const ch = el._sfChars && el._sfChars[0] && el.contains(el._sfChars[0]) ? el._sfChars : (el._sfChars = splitChars(el, true)), st = o.stagger ?? 0.11, dd = o.duration ?? 1.1, rs = o.rise ?? 0.22, bl = o.blur ?? 14, span = dd + ch.length * st;
+      el.style.opacity = 1; el.style.filter = "none";
+      return play(dl + span, t => { el.style.letterSpacing = lerp(from, to, q4((t - dl) / (span * 1.6))).toFixed(4) + "em"; ch.forEach((s, i) => { const k = EZ.inOut(clamp((t - dl - i * st) / dd));
+        s.style.opacity = k.toFixed(3); s.style.filter = k > 0.995 ? "none" : `blur(${((1 - k) * bl).toFixed(2)}px)`; s.style.transform = `translateY(${((1 - k) * rs).toFixed(3)}em)`; }); }); }
+    return play(dl + d, t => { const k = q4((t - dl) / d); el.style.letterSpacing = lerp(from, to, k).toFixed(4) + "em"; el.style.opacity = k.toFixed(3); el.style.filter = k > 0.995 ? "none" : `blur(${((1 - k) * px).toFixed(2)}px)`; });
+  }
   // Click cursor: a pointer arcs onto a target, squashes on the press and throws three sparks, a ripple and a flash
   function clickCursor(stage, target, o = {}) {
     rel(stage); const sr = stage.getBoundingClientRect(), col = o.color || "#34d399", ink = o.ink || "#f6f4ef", sz = o.size ?? 28, s = sz / 50, d = o.duration ?? 0.7, isEl = !!(target && target.getBoundingClientRect);
@@ -2812,5 +2821,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
         b.style.top = (i * bh + (bh * (1 - v)) / 2 - 0.5).toFixed(1) + "px"; b.style.height = v > 0 ? (bh * v + 1).toFixed(1) + "px" : "0"; h.style.top = (i * bh + bh / 2 - 1).toFixed(1) + "px"; h.style.opacity = hair ? 0.7 : 0; }); }).then(() => wrap.remove());
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, clickCursor, scanBeam, wire, pickFocus, pushThrough, blinds, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, pushThrough, blinds, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
