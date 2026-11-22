@@ -17,7 +17,7 @@
 ## Overview
 
 - **31 shaders.** GLSL fields, text and glyph shaders, particles, Canvas 2D scenes and an optional 3D glass add-on. Each has its own parameters, palettes, cursor interaction, PNG export and video recording.
-- **45 motion effects.** Text entrances, interface micro-motion, scene transitions and light, all on plain DOM elements.
+- **46 motion effects.** Text entrances, interface micro-motion, scene transitions and light, all on plain DOM elements.
 - **Three ways to use it.** A `<shader-field>` HTML element for websites, a frame-accurate `render(t)` API for video tools, and a ready-made prompt for AI coding agents.
 
 The repository also contains the Shaderfield site: a component browser where you can try every effect live, tune it, and copy the code, a prompt or a video render.
@@ -234,7 +234,7 @@ Glass Icons uses three.js, so it lives in a separate file that loads three.js fr
 
 **Text.** [Type in](docs/motion/type-in.md) · [Letter Rise](docs/motion/rise.md) · [Line Rise](docs/motion/line-rise.md) · [Block Reveal](docs/motion/cut.md) · [Type Log](docs/motion/type-lines.md) · [Count Up](docs/motion/count-up.md) · [Reveal words](docs/motion/reveal-words.md) · [Type Swap](docs/motion/type-swap.md) · [Roll Words](docs/motion/roll-words.md) · [Scramble Solve](docs/motion/solve.md) · [Letter Pop](docs/motion/pop.md) · [Lyric Flow](docs/motion/lyric-flow.md) · [Neon Type](docs/motion/neon-type.md) · [Focus Pull](docs/motion/focus-pull.md)
 
-**Interface.** [Tick Pop](docs/motion/tick.md) · [Progress Bars](docs/motion/bars.md) · [Focus Card](docs/motion/focus-card.md) · [Press Ripple](docs/motion/pressable.md) · [Signal Bars](docs/motion/signal-bars.md) · [Tab Morph](docs/motion/tab-morph.md) · [Masked Scroll](docs/motion/masked-scroll.md) · [Spring follow](docs/motion/spring-follow.md) · [Pen Trail](docs/motion/pen-trail.md) · [Bracket Hop](docs/motion/bracket-hop.md) · [Bracket Cursor](docs/motion/bracket-cursor.md) · [Color Index](docs/motion/color-index.md) · [Disc Stack](docs/motion/disc-stack.md) · [Shine](docs/motion/shine.md) · [Typing Dots](docs/motion/typing-dots.md) · [Click Cursor](docs/motion/click-cursor.md) · [Scan Beam](docs/motion/scan-beam.md) · [Wire Draw](docs/motion/wire.md)
+**Interface.** [Tick Pop](docs/motion/tick.md) · [Progress Bars](docs/motion/bars.md) · [Focus Card](docs/motion/focus-card.md) · [Press Ripple](docs/motion/pressable.md) · [Signal Bars](docs/motion/signal-bars.md) · [Tab Morph](docs/motion/tab-morph.md) · [Masked Scroll](docs/motion/masked-scroll.md) · [Spring follow](docs/motion/spring-follow.md) · [Pen Trail](docs/motion/pen-trail.md) · [Bracket Hop](docs/motion/bracket-hop.md) · [Bracket Cursor](docs/motion/bracket-cursor.md) · [Color Index](docs/motion/color-index.md) · [Disc Stack](docs/motion/disc-stack.md) · [Shine](docs/motion/shine.md) · [Typing Dots](docs/motion/typing-dots.md) · [Click Cursor](docs/motion/click-cursor.md) · [Scan Beam](docs/motion/scan-beam.md) · [Wire Draw](docs/motion/wire.md) · [Pick Focus](docs/motion/pick-focus.md)
 
 **Transitions.** [Curtain](docs/motion/curtain.md) · [Iris Close](docs/motion/iris.md) · [Line Draw](docs/motion/draw-frame.md) · [Line Draw](docs/motion/draw-line.md) · [Block Reveal](docs/motion/stripes.md) · [Camera Push](docs/motion/camera-push.md) · [Light Flash](docs/motion/flash.md) · [Radial Reveal](docs/motion/radial-reveal.md) · [Footer Reveal](docs/motion/underlay-reveal.md) · [Shock Ring](docs/motion/shock.md) · [Push Through](docs/motion/push-through.md) · [Blinds](docs/motion/blinds.md)
 
