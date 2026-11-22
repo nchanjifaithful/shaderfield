@@ -2790,6 +2790,22 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
         n.style.opacity = (1 - dim * off).toFixed(3);
         n.style.backgroundImage = on > 0.002 ? `linear-gradient(${withA(col, 0.14 * on)}, ${withA(col, 0.14 * on)})` + (S.bi ? ", " + S.bi : "") : S.bi; }); });
   }
+  // Lock click: a ring draws, a padlock drops in and its shackle snaps shut; with tick, it then folds into a check
+  function lockClick(el, o = {}) {
+    const S = o.size ?? 120, col = o.color || "#34d399", ink = o.ink || "#f6f4ef", bg = o.background || "#0b0b0e", tick = !!o.tick, dl = o.delay || 0;
+    el.innerHTML = `<svg viewBox="0 0 200 200" width="${S}" height="${S}" style="display:block;overflow:visible" aria-hidden="true"><circle cx="100" cy="100" r="88" fill="none" stroke-width="4" stroke-linecap="round" pathLength="1" transform="rotate(-90 100 100)"/><circle cx="100" cy="100" r="62" fill="${col}" opacity="0"/><g opacity="0"><path fill="none" stroke="${col}" stroke-width="11" stroke-linecap="round"/><path fill="${ink}" fill-rule="evenodd" d="M76,92H124A12,12 0 0 1 136,104V136A12,12 0 0 1 124,148H76A12,12 0 0 1 64,136V104A12,12 0 0 1 76,92ZM92,116a8,8 0 1 0 16,0a8,8 0 1 0 -16,0Z"/></g><path d="M73,101 L92,120 L128,83" fill="none" stroke="${bg}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" opacity="0"/></svg>`;
+    el.setAttribute("role", "img"); el.setAttribute("aria-label", o.label || (tick ? "Secured" : "Locked"));
+    const [ring, disc, g, tk] = el.firstChild.children, shackle = g.firstChild;
+    return play(dl + (tick ? 2.6 : 1.45), t => { const u = t - dl;
+      const rd = io4((u - 0.1) / 0.77), lin = q4((u - 0.25) / 0.42), cl = io4((u - 0.7) / 0.28), pr = q4((u - 0.97) / 0.13) - q4((u - 1.1) / 0.21);
+      const k = tick ? u - 1.6 : -1, gone = EZ.in(clamp(k / 0.3)), dsc = tick && k > 0.08 ? oBack(clamp((k - 0.08) / 0.42)) : 0, dr = tick ? oCubic(clamp((k - 0.3) / 0.35)) : 0;
+      ring.setAttribute("stroke-dasharray", `${rd.toFixed(4)} 2`); ring.setAttribute("opacity", rd > 0 ? 1 : 0); ring.style.stroke = gone > 0 ? `color-mix(in srgb, ${col} ${Math.round(gone * 100)}%, ${ink})` : ink;
+      disc.setAttribute("opacity", dsc > 0 ? 1 : 0); disc.setAttribute("transform", `translate(100 100) scale(${Math.max(0, dsc).toFixed(4)}) translate(-100 -100)`);
+      g.setAttribute("opacity", (lin * (1 - gone)).toFixed(3));
+      g.setAttribute("transform", `translate(0 ${lerp(-40, 0, lin).toFixed(2)}) translate(100 100) scale(${(1 - 0.5 * gone).toFixed(4)}) translate(-100 -100) translate(100 148) scale(${(1 - 0.04 * pr).toFixed(4)} ${(1 - 0.07 * pr).toFixed(4)}) translate(-100 -148)`);
+      shackle.setAttribute("d", `M80,92 V72 A20,20 0 0 1 120,72 V${lerp(80, 92, cl).toFixed(2)}`); shackle.setAttribute("transform", `translate(0 ${lerp(-16, 0, cl).toFixed(2)})`);
+      tk.setAttribute("stroke-dashoffset", (1 - dr).toFixed(4)); tk.setAttribute("opacity", dr > 0 ? 1 : 0); });
+  }
   // Push through: the scene accelerates toward one point while it blurs and fades; reverse arrives from it
   function pushThrough(el, o = {}) {
     const d = o.duration ?? 0.85, s1 = o.scale ?? 2.4, px = o.blur ?? 16, rv = !!o.reverse, dl = o.delay || 0;
@@ -2821,5 +2837,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
         b.style.top = (i * bh + (bh * (1 - v)) / 2 - 0.5).toFixed(1) + "px"; b.style.height = v > 0 ? (bh * v + 1).toFixed(1) + "px" : "0"; h.style.top = (i * bh + bh / 2 - 1).toFixed(1) + "px"; h.style.opacity = hair ? 0.7 : 0; }); }).then(() => wrap.remove());
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, pushThrough, blinds, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, blinds, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

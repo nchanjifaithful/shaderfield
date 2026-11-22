@@ -236,6 +236,11 @@
       stage(el, big, `<div style="display:flex;flex-direction:column;gap:0.55em">${opts}</div>`, center);
       return { play: once(async () => { const ks = [...el.querySelectorAll("[data-k]")]; await M().pickFocus(ks, -1, { duration: 0.3, color: ACC }); await M().clickCursor(el, ks[0], { color: ACC, size: big ? 28 : 18, at: [0.6, 0.6], onClick: () => M().pickFocus(ks, 0, { color: ACC }) }); }) }; } });
 
+  add({ id: "lock-click", name: "Lock Click", cat: "Interface", from: "Document AI Teaser", desc: "A padlock drops in, snaps shut, then turns into a check.",
+    code: `await Shaderfield.motion.lockClick(el, {\n  size: 120, color: "#0ea5e9", tick: true\n});`,
+    build(el, big) { const q = stage(el, big, `<div data-l></div>`, center);
+      return { play: once(() => M().lockClick(q("[data-l]"), { size: big ? 220 : 110, color: ACC, tick: true })) }; } });
+
   // ── Motion Tryouts ──
   const TILE = [["#2c2f36", "#141619", 18, 48], ["#202329", "#0f1114", 82, 26], ["#32353c", "#18191d", 42, 38], ["#25282e", "#121418", 90, 18], ["#2e3138", "#151619", 8, 56], ["#22252a", "#101113", 62, 32]];
   const tileBg = (i) => { const [a, b, x, k] = TILE[i % TILE.length]; return `radial-gradient(120% 85% at ${x}% 0%, color-mix(in srgb, ${ACC} ${k}%, transparent) 0%, transparent 62%), linear-gradient(170deg, ${a} 0%, ${b} 100%)`; };
