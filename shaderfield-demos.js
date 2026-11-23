@@ -262,6 +262,12 @@
       const go = () => { s.forEach(f => f()); const z = n++ % 2, dr = big ? 30 : 14; el.style.background = ACC; s = [M().slamIn(q("[data-a]"), { from: z ? "zoom" : "right", scale: 6, drift: dr }), M().slamIn(q("[data-b]"), { from: z ? "up" : "left", delay: 0.12, distance: z ? 500 : 1100, drift: dr })]; };
       return { play: () => { go(); return wait(1.6); }, stop: () => s.forEach(f => f()) }; } });
 
+  add({ id: "kinetic", name: "Kinetic Letters", cat: "Text", from: "Gridd Launch", desc: "Letters orbit in and collapse into the word, settle off an arch, tumble about, or the words push apart.",
+    code: `Shaderfield.motion.kinetic(el, { mode: "orbit" });\n// mode: "orbit" | "arch" | "jumble" | "spread"`,
+    build(el, big) { const W = ["complicated", "freeing", "headache", "charging made simple"], MD = ["orbit", "arch", "jumble", "spread"]; let i = 0;
+      const q = stage(el, big, `<div style="display:flex;flex-direction:column;align-items:center;gap:1.6em"><div data-t style="font-size:3.4em;font-weight:500;letter-spacing:-0.02em;white-space:nowrap;justify-content:center"></div><div data-m style="font-family:${MONO};font-size:1em;color:${DIM}"></div></div>`, center);
+      return { play: once(async () => { const k = i++ % 4, t = remake(q("[data-t]"), W[k]); q("[data-m]").textContent = `mode: "${MD[k]}"`; await M().kinetic(t, { mode: MD[k], radius: big ? 5.5 : 3.6 }); await wait(0.5); }) }; } });
+
   add({ id: "odometer", name: "Odometer", cat: "Interface", from: "Echoform · Kinetik", desc: "A count rolls to its next value. The old number blurs up and out as the new one rises in.",
     code: `const votes = Shaderfield.motion.odometer(el, { value: 47 });\nvotes.set(48);`,
     build(el, big) { const q = stage(el, big, `<div style="display:flex;align-items:center;gap:1.2em;padding:1em 1.2em;border-radius:1em;background:${PANEL};outline:1px solid ${LINE}"><div data-b style="width:4.4em;height:4.4em;border-radius:0.9em;background:${BG2};outline:1.5px solid rgba(242,242,244,0.14);display:flex;flex-direction:column;align-items:center;justify-content:center"><span data-a style="font-size:1em;font-weight:700;color:${MUTE}">▲</span><span data-n style="font-size:1.6em;font-weight:600"></span></div><div><div style="font-size:1.45em;font-weight:600;letter-spacing:-0.02em">Bulk export to CSV</div><div style="color:${MUTE};margin-top:0.3em">Requested by Northwind and 46 more</div></div></div>`, center);
