@@ -251,6 +251,10 @@
   const scene = (k, text, bg, col, hid, fs = 3.6) => `<div data-${k} style="position:absolute;inset:0;${center}text-align:center;background:${bg};color:${col};font-size:${fs}em;${H1}${hid ? "visibility:hidden;" : ""}">${text}</div>`;
   const swap2 = (a, b, bgB = BG2) => scene("a", a, BG1, INK) + scene("b", b, bgB, INK, true);
 
+  add({ id: "glyph-write", name: "Glyph Write", cat: "Text", from: "Bllind Launch", desc: "Letters resolve left to right behind a short run of scrambled glyphs.",
+    code: `Shaderfield.motion.glyphWrite(el, { front: 3, duration: 0.6 });`,
+    build(el, big) { const q = stage(el, big, `<div data-t style="font-size:${big ? 6 : 4}em;${H1}line-height:1.15">Shaderfield</div>`, center); return { play: once(() => M().glyphWrite(q("[data-t]"), { duration: 0.7 })) }; } });
+
   add({ id: "blinds", name: "Blinds", cat: "Transitions", from: "Bllind Launch", desc: "Horizontal bands close from their centre lines in a ragged order, the scene swaps, and they open again.",
     code: `Shaderfield.motion.blinds(stage, { bands: 12, color: "#0ea5e9", onSwap: () => showNext() });`,
     build(el, big) { const q = stage(el, big, scene("a", "Hire on skill.", BG1, INK) + scene("b", "Bias out.", ACC, "#09090b", true, 5.6)); const flip = flipB(q);

@@ -5,8 +5,8 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 48
-  - [Text](#text) · 15
+- [Motion effects](#motion-effects) · 49
+  - [Text](#text) · 16
   - [Interface](#interface) · 20
   - [Transitions](#transitions) · 12
   - [Light](#light) · 1
@@ -126,6 +126,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Neon Type](motion/neon-type.md) | `neonType` | Letters type on and flicker like neon before they hold. |
 | [Focus Pull](motion/focus-pull.md) | `focusPull` | Text racks into focus out of a blur, by line or by letter. |
 | [Track In](motion/track-in.md) | `trackIn` | A tagline tightens its letter spacing as it sharpens. |
+| [Glyph Write](motion/glyph-write.md) | `glyphWrite` | Letters resolve left to right behind a short run of scrambled glyphs. |
 
 ### Interface
 

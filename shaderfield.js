@@ -2822,6 +2822,14 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   const fsOf = (el) => parseFloat(getComputedStyle(el).fontSize) || 16;
   const wrapIn = (el, key) => { if (el[key] && el.contains(el[key])) return el[key]; const s = document.createElement("span"); s.style.cssText = "display:inline-block;position:relative;"; while (el.firstChild) s.appendChild(el.firstChild); el.appendChild(s); return (el[key] = s); };
   const blurPx = (p, b) => (p > 0.995 ? "none" : `blur(${((1 - p) * b).toFixed(2)}px)`);
+  // Glyph write: characters resolve left to right behind a short front of scrambled glyphs (Bllind)
+  function glyphWrite(el, o = {}) {
+    const text = el.dataset.sfText || el.textContent; el.dataset.sfText = text; el.setAttribute("aria-label", text); el.style.whiteSpace = "pre";
+    const G = o.glyphs || "!?_]^[#%&*/<>+=", n = text.length, fr = o.front ?? 3, d = o.duration ?? Math.max(0.4, n * 0.04), dl = o.delay || 0;
+    return play(dl + d, t => { const p = clamp((t - dl) / d), done = Math.floor(p * (n + fr)); let s = "";
+      for (let k = 0; k < n; k++) { const ch = text[k]; s += ch === " " || k < done - fr ? ch : k < done ? G[(Math.floor(t * 24) * 7 + k * 13) % G.length] : "\u00a0"; }
+      el.textContent = p >= 1 ? text : s; });
+  }
   // ── Motion Tryouts: interface ──
   const bgOf = (f) => (/^(#|rgb|hsl|oklch|color-mix|linear-gradient|radial-gradient|conic-gradient|repeating-)/.test(f || "") ? f : `center/cover url("${f}")`);
   const stageXY = (stage, n) => { const sr = stage.getBoundingClientRect(), sc = sr.width / (stage.offsetWidth || 1) || 1, r = n.getBoundingClientRect(); return [(r.left - sr.left + r.width / 2) / sc, (r.top - sr.top + r.height / 2) / sc, r.width / sc, r.height / sc]; };
@@ -2837,5 +2845,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
         b.style.top = (i * bh + (bh * (1 - v)) / 2 - 0.5).toFixed(1) + "px"; b.style.height = v > 0 ? (bh * v + 1).toFixed(1) + "px" : "0"; h.style.top = (i * bh + bh / 2 - 1).toFixed(1) + "px"; h.style.opacity = hair ? 0.7 : 0; }); }).then(() => wrap.remove());
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, blinds, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, glyphWrite, blinds, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
