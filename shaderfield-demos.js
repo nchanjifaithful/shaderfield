@@ -261,6 +261,11 @@
       const od = M().odometer(q("[data-n]"), { value: 47 });
       return { play: once(async () => { const b = q("[data-b]"), v = od.value() >= 52 ? 47 : od.value() + 1; M().play(0.22, t => (b.style.transform = `scale(${(1 - 0.12 * Math.sin((Math.PI * t) / 0.22)).toFixed(3)})`)); b.style.outlineColor = ACC; q("[data-a]").style.color = ACC; await od.set(v); await wait(0.7); }), stop: od }; } });
 
+  add({ id: "dot-morph", name: "Dot Morph", cat: "Interface", from: "Echoform · Kinetik", desc: "A dot of colour stretches into the pill behind a label, and the label flips to ink.",
+    code: `Shaderfield.motion.dotMorph(tag, { color: "#0ea5e9", ink: "#09090b" });`,
+    build(el, big) { const q = stage(el, big, `<div data-t style="display:flex;align-items:center;gap:0.6em;padding:0 1.5em;height:3em;font-size:2em;font-weight:500;letter-spacing:-0.02em;white-space:nowrap">Export<span style="font-family:${MONO};font-size:0.7em;opacity:0.6">48</span></div>`, center);
+      return { play: once(async () => { await M().dotMorph(q("[data-t]"), { color: ACC, ink: "#09090b" }); await wait(0.6); }) }; } });
+
   add({ id: "blinds", name: "Blinds", cat: "Transitions", from: "Bllind Launch", desc: "Horizontal bands close from their centre lines in a ragged order, the scene swaps, and they open again.",
     code: `Shaderfield.motion.blinds(stage, { bands: 12, color: "#0ea5e9", onSwap: () => showNext() });`,
     build(el, big) { const q = stage(el, big, scene("a", "Hire on skill.", BG1, INK) + scene("b", "Bias out.", ACC, "#09090b", true, 5.6)); const flip = flipB(q);
