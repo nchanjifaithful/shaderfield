@@ -2833,6 +2833,18 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   // ── Motion Tryouts: interface ──
   const bgOf = (f) => (/^(#|rgb|hsl|oklch|color-mix|linear-gradient|radial-gradient|conic-gradient|repeating-)/.test(f || "") ? f : `center/cover url("${f}")`);
   const stageXY = (stage, n) => { const sr = stage.getBoundingClientRect(), sc = sr.width / (stage.offsetWidth || 1) || 1, r = n.getBoundingClientRect(); return [(r.left - sr.left + r.width / 2) / sc, (r.top - sr.top + r.height / 2) / sc, r.width / sc, r.height / sc]; };
+  // Odometer: a number rolls to its next value, the old one blurring out as the new one rises in (Echoform, Kinetik)
+  function odometer(el, o = {}) {
+    rel(el); el.textContent = ""; Object.assign(el.style, { display: "inline-block", overflow: "hidden", verticalAlign: "bottom", fontVariantNumeric: "tabular-nums", height: "1.2em", lineHeight: "1.2em" });
+    const fmt = o.format || ((v) => String(v)), d = o.duration ?? 0.35, bl = o.blur ?? 6; let cur = o.value ?? 0, tok = 0;
+    const mk = () => { const s = document.createElement("span"); s.setAttribute("aria-hidden", "true"); s.style.cssText = "display:block;white-space:pre;text-align:center;"; el.appendChild(s); return s; };
+    const A = mk(), B = mk(); Object.assign(B.style, { position: "absolute", left: "0", right: "0", top: "0", opacity: 0 }); A.textContent = fmt(cur); el.setAttribute("aria-label", fmt(cur));
+    const set = (v) => { if (v === cur) return Promise.resolve(); const sg = v > cur || o.direction === "up" ? 1 : -1, k = ++tok; B.textContent = fmt(v); el.setAttribute("aria-label", fmt(v));
+      return play(d, t => { if (k !== tok) return; const r = oExpo(clamp(t / d)); A.style.transform = `translateY(${(-sg * r * 100).toFixed(2)}%)`; A.style.opacity = (1 - r).toFixed(3); A.style.filter = `blur(${(r * bl).toFixed(2)}px)`;
+        B.style.transform = `translateY(${(sg * (1 - r) * 100).toFixed(2)}%)`; B.style.opacity = r.toFixed(3); B.style.filter = blurPx(r, bl); })
+        .then(() => { if (k !== tok) return; cur = v; A.textContent = fmt(v); A.style.transform = ""; A.style.opacity = 1; A.style.filter = "none"; B.style.opacity = 0; }); };
+    const stop = () => { tok++; }; stop.set = set; stop.value = () => cur; return stop;
+  }
   // ── Motion Tryouts: transitions ──
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
@@ -2845,5 +2857,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
         b.style.top = (i * bh + (bh * (1 - v)) / 2 - 0.5).toFixed(1) + "px"; b.style.height = v > 0 ? (bh * v + 1).toFixed(1) + "px" : "0"; h.style.top = (i * bh + bh / 2 - 1).toFixed(1) + "px"; h.style.opacity = hair ? 0.7 : 0; }); }).then(() => wrap.remove());
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, glyphWrite, blinds, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, glyphWrite, odometer, blinds, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
