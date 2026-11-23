@@ -2838,6 +2838,24 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       el.style.transform = from === "zoom" ? `scale(${lerp(z0, 1, p).toFixed(4)})` : `translate(${((from === "left" ? -q : from === "right" ? q : 0) * dist + dv).toFixed(1)}px, ${((from === "up" ? q : from === "down" ? -q : 0) * dist).toFixed(1)}px)`;
       el.style.opacity = t < dl ? 0 : 1; el.style.filter = blurPx(p, bl); });
   }
+  // Kinetic letters (Gridd Launch): orbit · arch · jumble · spread
+  function kinetic(el, o = {}) {
+    const mode = o.mode || "orbit", dl = o.delay || 0;
+    if (mode === "spread") { const ws = splitWords(el), n = ws.length, st = o.stagger ?? 0.25, at = dl + n * st + 0.3, sp = o.spread ?? 1;
+      return play(at + 0.6, t => ws.forEach((s, i) => { const p = oExpo(clamp((t - dl - i * st) / 0.4)), k = EZ.inOut(clamp((t - at) / 0.55)) * sp;
+        s.style.opacity = p.toFixed(3); s.style.filter = blurPx(p, 6); s.style.transform = `translate(${(i === n - 1 ? k * 4 : -k * 0.95).toFixed(3)}em, ${((1 - p) * 0.4).toFixed(3)}em)`; })); }
+    const ch = splitChars(el, true), n = ch.length, fs = fsOf(el); ch.forEach(s => (s.style.transform = ""));
+    const er = el.getBoundingClientRect(), sc = er.width / (el.offsetWidth || 1) || 1, mid = er.left + er.width / 2, off = ch.map(s => { const r = s.getBoundingClientRect(); return (r.left + r.width / 2 - mid) / sc; });
+    if (mode === "arch") { const D = o.duration ?? 0.5, Hh = (o.height ?? 1.35) * fs, tilt = o.tilt ?? 11;
+      return play(dl + 0.6 + D, t => { const u = t - dl, a = 1 - EZ.inOut(clamp((u - 0.6) / D)); ch.forEach((s, k) => { s.style.opacity = clamp((u - k * 0.03) / 0.22).toFixed(3);
+        s.style.transform = a < 0.001 ? "" : `translateY(${(-Math.sin((Math.PI * (k + 0.5)) / n) * Hh * a).toFixed(1)}px) rotate(${((k - (n - 1) / 2) * tilt * a).toFixed(1)}deg)`; }); }); }
+    if (mode === "jumble") { const D = o.duration ?? 1.6, spin = o.spin ?? 70, base = [-90, 180, 90, 0, 180, -90, 0, 180];
+      return play(dl + D + 0.5, t => { const u = Math.max(0, t - dl), k = 1 - EZ.inOut(clamp((u - D) / 0.5)); ch.forEach((s, i) => {
+        s.style.transform = k < 0.001 ? "" : `translateX(${(off[i] * 0.4 * Math.min(u, D) * k).toFixed(1)}px) rotate(${((base[i % 8] + (i % 2 ? 1 : -1) * u * spin) * k).toFixed(1)}deg) scaleX(${i % 3 === 0 && k > 0.5 ? -1 : 1})`; }); }); }
+    const R = (o.radius ?? 5.5) * fs, D = o.duration ?? 0.6;
+    return play(dl + 0.3 + D, t => ch.forEach((s, i) => { const u = t - dl, q = 1 - EZ.inOut(clamp((u - 0.28) / D)), a = (i / n) * 6.2832 + 0.5 + u * 0.9 + rnd(i, 1) * 0.4, r = R * (1 + 0.25 * rnd(i, 3));
+      s.style.opacity = clamp((u - i * 0.02) / 0.2).toFixed(3); s.style.transform = q < 0.001 ? "" : `translate(${((Math.cos(a) * r - off[i]) * q).toFixed(1)}px,${(Math.sin(a) * r * q).toFixed(1)}px) rotate(${(q * (rnd(i, 9) - 0.5) * 60).toFixed(1)}deg)`; }));
+  }
   // ── Motion Tryouts: interface ──
   const bgOf = (f) => (/^(#|rgb|hsl|oklch|color-mix|linear-gradient|radial-gradient|conic-gradient|repeating-)/.test(f || "") ? f : `center/cover url("${f}")`);
   const stageXY = (stage, n) => { const sr = stage.getBoundingClientRect(), sc = sr.width / (stage.offsetWidth || 1) || 1, r = n.getBoundingClientRect(); return [(r.left - sr.left + r.width / 2) / sc, (r.top - sr.top + r.height / 2) / sc, r.width / sc, r.height / sc]; };
@@ -2901,5 +2919,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     return play(D * 2 + 0.05, t => { if (t < D) frame(t / D, true); else { swap(); frame(clamp((t - D) / D), false); } }).then(() => wrap.remove());
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, odometer, toastStack, dotMorph, blinds, columnWipe, blockWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, odometer, toastStack, dotMorph, blinds, columnWipe, blockWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
