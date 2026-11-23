@@ -5,8 +5,8 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 52
-  - [Text](#text) · 16
+- [Motion effects](#motion-effects) · 53
+  - [Text](#text) · 17
   - [Interface](#interface) · 22
   - [Transitions](#transitions) · 13
   - [Light](#light) · 1
@@ -127,6 +127,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Focus Pull](motion/focus-pull.md) | `focusPull` | Text racks into focus out of a blur, by line or by letter. |
 | [Track In](motion/track-in.md) | `trackIn` | A tagline tightens its letter spacing as it sharpens. |
 | [Glyph Write](motion/glyph-write.md) | `glyphWrite` | Letters resolve left to right behind a short run of scrambled glyphs. |
+| [Slam In](motion/slam-in.md) | `slamIn` | Oversized words fly in out of a blur, or drop from a giant zoom, then keep drifting. |
 
 ### Interface
 
