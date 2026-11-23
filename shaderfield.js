@@ -2845,6 +2845,13 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
         .then(() => { if (k !== tok) return; cur = v; A.textContent = fmt(v); A.style.transform = ""; A.style.opacity = 1; A.style.filter = "none"; B.style.opacity = 0; }); };
     const stop = () => { tok++; }; stop.set = set; stop.value = () => cur; return stop;
   }
+  // Dot morph: a small dot of colour stretches into the pill behind a label, and the label flips to ink (Echoform, Kinetik)
+  function dotMorph(el, o = {}) {
+    rel(el); el.querySelectorAll("[data-sf-dot]").forEach(n => n.remove()); const W = el.offsetWidth, H = el.offsetHeight, s = o.size ?? Math.min(24, H * 0.3), col = o.color || "#ff6b3d", ink = o.ink || "#0b0b0b", d = o.duration ?? 0.45, dl = o.delay || 0, R = o.radius ?? H / 2;
+    const bg = document.createElement("div"); bg.dataset.sfDot = ""; bg.setAttribute("aria-hidden", "true"); bg.style.cssText = `position:absolute;background:${col};z-index:-1;pointer-events:none;`; el.style.isolation = "isolate"; el.prepend(bg);
+    const sx = -s - (o.offset ?? 50), sy = (H - s) / 2;
+    return play(dl + d, t => { const m = oExpo(clamp((t - dl) / d)); Object.assign(bg.style, { left: lerp(sx, 0, m) + "px", top: lerp(sy, 0, m) + "px", width: lerp(s, W, m) + "px", height: lerp(s, H, m) + "px", borderRadius: lerp(s / 2, R, m) + "px" }); el.style.color = m > 0.5 ? ink : col; });
+  }
   // ── Motion Tryouts: transitions ──
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
@@ -2869,5 +2876,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     return play(mode === "both" ? D * 2 + 0.05 : D, t => { if (t < D) frame(clamp(t / D), true, 0); else { swap(); mode === "both" ? frame(clamp((t - D) / D), false, 40) : frame(1, true, 0); } }).then(() => { if (mode === "both") wrap.remove(); return wrap; });
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, glyphWrite, odometer, blinds, columnWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, glyphWrite, odometer, dotMorph, blinds, columnWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
