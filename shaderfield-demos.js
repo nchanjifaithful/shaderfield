@@ -255,6 +255,13 @@
     code: `Shaderfield.motion.glyphWrite(el, { front: 3, duration: 0.6 });`,
     build(el, big) { const q = stage(el, big, `<div data-t style="font-size:${big ? 6 : 4}em;${H1}line-height:1.15">Shaderfield</div>`, center); return { play: once(() => M().glyphWrite(q("[data-t]"), { duration: 0.7 })) }; } });
 
+  add({ id: "slam-in", name: "Slam In", cat: "Text", from: "Echoform · Kinetik · Bllind · Gridd", desc: "Oversized words fly in out of a blur, or drop from a giant zoom, then keep drifting.",
+    code: `Shaderfield.motion.slamIn(line1, { from: "right" });\nShaderfield.motion.slamIn(line2, { from: "left", delay: 0.12 });\n// from: "left" | "right" | "up" | "down" | "zoom"`,
+    build(el, big) { const L = "position:absolute;font-weight:700;letter-spacing:-0.055em;line-height:0.9;color:#09090b;white-space:nowrap;";
+      const q = stage(el, big, `<div data-a style="${L}left:-0.05em;top:6%;font-size:8em">All feedback</div><div data-b style="${L}left:24%;top:52%;font-size:9em">one inbox</div>`, `background:${ACC};`); let s = [], n = 0;
+      const go = () => { s.forEach(f => f()); const z = n++ % 2, dr = big ? 30 : 14; el.style.background = ACC; s = [M().slamIn(q("[data-a]"), { from: z ? "zoom" : "right", scale: 6, drift: dr }), M().slamIn(q("[data-b]"), { from: z ? "up" : "left", delay: 0.12, distance: z ? 500 : 1100, drift: dr })]; };
+      return { play: () => { go(); return wait(1.6); }, stop: () => s.forEach(f => f()) }; } });
+
   add({ id: "odometer", name: "Odometer", cat: "Interface", from: "Echoform · Kinetik", desc: "A count rolls to its next value. The old number blurs up and out as the new one rises in.",
     code: `const votes = Shaderfield.motion.odometer(el, { value: 47 });\nvotes.set(48);`,
     build(el, big) { const q = stage(el, big, `<div style="display:flex;align-items:center;gap:1.2em;padding:1em 1.2em;border-radius:1em;background:${PANEL};outline:1px solid ${LINE}"><div data-b style="width:4.4em;height:4.4em;border-radius:0.9em;background:${BG2};outline:1.5px solid rgba(242,242,244,0.14);display:flex;flex-direction:column;align-items:center;justify-content:center"><span data-a style="font-size:1em;font-weight:700;color:${MUTE}">▲</span><span data-n style="font-size:1.6em;font-weight:600"></span></div><div><div style="font-size:1.45em;font-weight:600;letter-spacing:-0.02em">Bulk export to CSV</div><div style="color:${MUTE};margin-top:0.3em">Requested by Northwind and 46 more</div></div></div>`, center);

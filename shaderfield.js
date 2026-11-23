@@ -2830,6 +2830,14 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       for (let k = 0; k < n; k++) { const ch = text[k]; s += ch === " " || k < done - fr ? ch : k < done ? G[(Math.floor(t * 24) * 7 + k * 13) % G.length] : "\u00a0"; }
       el.textContent = p >= 1 ? text : s; });
   }
+  // Slam in: a line flies in from off-frame (or down from a giant zoom) out of a blur, then keeps drifting (Echoform, Kinetik, Bllind, Gridd)
+  function slamIn(el, o = {}) {
+    const from = o.from || "left", d = o.duration ?? 0.55, dl = o.delay || 0, dist = o.distance ?? 1100, dr = o.drift ?? (from === "up" || from === "down" || from === "zoom" ? 0 : 30), bl = o.blur ?? 10, z0 = o.scale ?? 15, sg = from === "right" ? -1 : 1;
+    el.style.willChange = "transform, filter";
+    return loopFx(t => { const p = oExpo(clamp((t - dl) / d)), q = 1 - p, dv = Math.max(0, t - dl) * dr * sg;
+      el.style.transform = from === "zoom" ? `scale(${lerp(z0, 1, p).toFixed(4)})` : `translate(${((from === "left" ? -q : from === "right" ? q : 0) * dist + dv).toFixed(1)}px, ${((from === "up" ? q : from === "down" ? -q : 0) * dist).toFixed(1)}px)`;
+      el.style.opacity = t < dl ? 0 : 1; el.style.filter = blurPx(p, bl); });
+  }
   // ── Motion Tryouts: interface ──
   const bgOf = (f) => (/^(#|rgb|hsl|oklch|color-mix|linear-gradient|radial-gradient|conic-gradient|repeating-)/.test(f || "") ? f : `center/cover url("${f}")`);
   const stageXY = (stage, n) => { const sr = stage.getBoundingClientRect(), sc = sr.width / (stage.offsetWidth || 1) || 1, r = n.getBoundingClientRect(); return [(r.left - sr.left + r.width / 2) / sc, (r.top - sr.top + r.height / 2) / sc, r.width / sc, r.height / sc]; };
@@ -2876,5 +2884,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     return play(mode === "both" ? D * 2 + 0.05 : D, t => { if (t < D) frame(clamp(t / D), true, 0); else { swap(); mode === "both" ? frame(clamp((t - D) / D), false, 40) : frame(1, true, 0); } }).then(() => { if (mode === "both") wrap.remove(); return wrap; });
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, glyphWrite, odometer, dotMorph, blinds, columnWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, odometer, dotMorph, blinds, columnWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
