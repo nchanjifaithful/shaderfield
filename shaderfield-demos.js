@@ -285,6 +285,11 @@
       const q = stage(el, big, `<div data-s style="position:relative;width:min(24em,80%);height:86%"></div>`, center);
       return { play: once(async () => { const s = q("[data-s]"); s.innerHTML = ts.map(([a, b]) => `<div style="display:flex;align-items:center;gap:0.9em;padding:0.8em 1em;border-radius:0.9em;background:${BG2};outline:1px solid ${LINE};box-shadow:0 1em 2em rgba(0,0,0,0.4)"><span style="flex:none;width:1.9em;height:1.9em;border-radius:50%;outline:1.5px solid ${ACC};display:flex;align-items:center;justify-content:center;color:${ACC};font-weight:700">✓</span><div><div style="font-weight:600;font-size:1.1em">${a}</div><div style="color:${MUTE};margin-top:0.2em">${b}</div></div></div>`).join(""); if (!big) s.style.fontSize = "0.85em"; await M().toastStack(s, { gap: big ? 14 : 6, peek: big ? 16 : 8 }); await wait(1); }) }; } });
 
+  add({ id: "prompt-send", name: "Prompt Send", cat: "Interface", from: "Echoform · Kinetik · Vindora", desc: "A request types into a composer, the send button lights and is pressed, the box rises and the reply follows.",
+    code: `Shaderfield.motion.promptSend(stage, {\n  text: "Build a coverflow carousel", color: "#0ea5e9",\n  reply: "Agent is building your carousel",\n  steps: ["read   examples/coverflow", "write  Carousel.tsx"]\n});`,
+    build(el, big) { stage(el, big, "", `font-size:${big ? 20 : 11}px;`);
+      return { play: once(async () => { await M().promptSend(el, { text: "Build a coverflow carousel", color: ACC, background: PANEL, border: "rgba(242,242,244,0.14)", reply: "● Agent is building your carousel", steps: ["read   examples/coverflow", "write  components/Carousel.tsx", "add    drag + snap"], cps: 26 }); await wait(0.8); }) }; } });
+
   add({ id: "blinds", name: "Blinds", cat: "Transitions", from: "Bllind Launch", desc: "Horizontal bands close from their centre lines in a ragged order, the scene swaps, and they open again.",
     code: `Shaderfield.motion.blinds(stage, { bands: 12, color: "#0ea5e9", onSwap: () => showNext() });`,
     build(el, big) { const q = stage(el, big, scene("a", "Hire on skill.", BG1, INK) + scene("b", "Bias out.", ACC, "#09090b", true, 5.6)); const flip = flipB(q);

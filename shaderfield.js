@@ -2887,6 +2887,22 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     const sx = -s - (o.offset ?? 50), sy = (H - s) / 2;
     return play(dl + d, t => { const m = oExpo(clamp((t - dl) / d)); Object.assign(bg.style, { left: lerp(sx, 0, m) + "px", top: lerp(sy, 0, m) + "px", width: lerp(s, W, m) + "px", height: lerp(s, H, m) + "px", borderRadius: lerp(s / 2, R, m) + "px" }); el.style.color = m > 0.5 ? ink : col; });
   }
+  // Prompt send: a request types into a composer, the send button lights and is pressed, the box rises and the reply lines follow (Echoform, Kinetik, Vindora)
+  function promptSend(el, o = {}) {
+    rel(el); el.textContent = ""; const acc = o.color || "#ff6b3d", text = o.text || "Build a coverflow carousel", steps = o.steps || [], cps = o.cps ?? 22, dl = o.delay || 0, ink = o.ink || "#ededed", w = o.width || "min(86%, 30em)";
+    const box = document.createElement("div"), line = document.createElement("div"), txt = document.createElement("span"), car = document.createElement("span"), btn = document.createElement("div"), out = document.createElement("div");
+    box.style.cssText = `position:absolute;left:50%;top:50%;width:${w};transform:translate(-50%,-50%);box-sizing:border-box;padding:1.1em 1.3em 3.4em;border-radius:1.1em;background:${o.background || "#171818"};outline:1.5px solid ${o.border || "#2a2b2b"};`;
+    line.style.cssText = "display:flex;align-items:center;min-height:1.3em;white-space:nowrap;overflow:hidden;"; car.style.cssText = `display:inline-block;width:2px;height:1.2em;margin-left:3px;background:${ink};`; line.append(txt, car);
+    btn.style.cssText = "position:absolute;right:0.8em;bottom:0.8em;width:2em;height:2em;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#0b0b0b;background:#333434;"; btn.textContent = "↑"; btn.setAttribute("aria-hidden", "true"); box.append(line, btn);
+    out.style.cssText = `position:absolute;left:50%;top:0;width:${w};transform:translateX(-50%);display:flex;flex-direction:column;gap:0.7em;`; el.append(box, out);
+    const rows = [o.reply && `<span style="color:${acc};font-weight:500">${o.reply}</span>`, ...steps.map(s => `<span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:0.85em;color:#9a9b9b;white-space:pre">✓  ${s}</span>`)].filter(Boolean).map(h => { const r = document.createElement("div"); r.innerHTML = h; r.style.opacity = 0; out.appendChild(r); return r; });
+    const T = text.length / cps, sendAt = dl + 0.4 + T + 0.25, H = el.clientHeight;
+    return play(sendAt + 0.85 + rows.length * 0.3 + 0.4, t => { const n = Math.floor(clamp((t - dl - 0.4) / T) * text.length), m = EZ.inOut(clamp((t - sendAt - 0.15) / 0.5)), pr = t > sendAt && t < sendAt + 0.15 ? Math.sin((Math.PI * (t - sendAt)) / 0.15) : 0;
+      txt.textContent = n ? text.slice(0, n) : o.placeholder || "Describe a component…"; txt.style.color = n ? ink : "#5e5f5f"; car.style.opacity = m > 0 ? 0 : n < text.length || Math.floor(t * 2.6) % 2 === 0 ? 1 : 0;
+      btn.style.background = n ? acc : "#333434"; btn.style.transform = `scale(${(1 - 0.15 * pr).toFixed(3)})`; btn.style.opacity = (1 - m).toFixed(3); box.style.paddingBottom = lerp(3.4, 1.1, m).toFixed(3) + "em";
+      const bh = box.offsetHeight; box.style.top = lerp(H / 2, bh / 2 + H * 0.06, m).toFixed(1) + "px"; out.style.top = (H * 0.06 + bh + 18).toFixed(1) + "px";
+      rows.forEach((r, i) => { const p = oExpo(clamp((t - sendAt - 0.7 - i * 0.3) / 0.4)); r.style.opacity = p.toFixed(3); r.style.filter = blurPx(p, 6); r.style.transform = `translateY(${((1 - p) * 10).toFixed(1)}px)`; }); });
+  }
   // ── Motion Tryouts: transitions ──
   const overlay = (el, z = 30) => { const w = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:${z};overflow:hidden;`; el.appendChild(w); return w; };
   const swapper = (o) => { let done = false; return () => { if (!done) { done = true; o.onSwap && o.onSwap(); } }; };
@@ -2919,5 +2935,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     return play(D * 2 + 0.05, t => { if (t < D) frame(t / D, true); else { swap(); frame(clamp((t - D) / D), false); } }).then(() => wrap.remove());
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, odometer, toastStack, dotMorph, blinds, columnWipe, blockWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, odometer, toastStack, dotMorph, promptSend, blinds, columnWipe, blockWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

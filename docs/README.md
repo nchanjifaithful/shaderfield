@@ -5,9 +5,9 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 56
+- [Motion effects](#motion-effects) · 57
   - [Text](#text) · 18
-  - [Interface](#interface) · 23
+  - [Interface](#interface) · 24
   - [Transitions](#transitions) · 14
   - [Light](#light) · 1
 
@@ -157,6 +157,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Odometer](motion/odometer.md) | `odometer` | A count rolls to its next value. The old number blurs up and out as the new one rises in. |
 | [Toast Stack](motion/toast-stack.md) | `toastStack` | Notifications land stacked behind each other, then fan out into a list. |
 | [Dot Morph](motion/dot-morph.md) | `dotMorph` | A dot of colour stretches into the pill behind a label, and the label flips to ink. |
+| [Prompt Send](motion/prompt-send.md) | `promptSend` | A request types into a composer, the send button lights and is pressed, the box rises and the reply follows. |
 
 ### Transitions
 
