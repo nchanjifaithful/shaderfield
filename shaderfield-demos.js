@@ -255,6 +255,12 @@
     code: `Shaderfield.motion.glyphWrite(el, { front: 3, duration: 0.6 });`,
     build(el, big) { const q = stage(el, big, `<div data-t style="font-size:${big ? 6 : 4}em;${H1}line-height:1.15">Shaderfield</div>`, center); return { play: once(() => M().glyphWrite(q("[data-t]"), { duration: 0.7 })) }; } });
 
+  add({ id: "odometer", name: "Odometer", cat: "Interface", from: "Echoform · Kinetik", desc: "A count rolls to its next value. The old number blurs up and out as the new one rises in.",
+    code: `const votes = Shaderfield.motion.odometer(el, { value: 47 });\nvotes.set(48);`,
+    build(el, big) { const q = stage(el, big, `<div style="display:flex;align-items:center;gap:1.2em;padding:1em 1.2em;border-radius:1em;background:${PANEL};outline:1px solid ${LINE}"><div data-b style="width:4.4em;height:4.4em;border-radius:0.9em;background:${BG2};outline:1.5px solid rgba(242,242,244,0.14);display:flex;flex-direction:column;align-items:center;justify-content:center"><span data-a style="font-size:1em;font-weight:700;color:${MUTE}">▲</span><span data-n style="font-size:1.6em;font-weight:600"></span></div><div><div style="font-size:1.45em;font-weight:600;letter-spacing:-0.02em">Bulk export to CSV</div><div style="color:${MUTE};margin-top:0.3em">Requested by Northwind and 46 more</div></div></div>`, center);
+      const od = M().odometer(q("[data-n]"), { value: 47 });
+      return { play: once(async () => { const b = q("[data-b]"), v = od.value() >= 52 ? 47 : od.value() + 1; M().play(0.22, t => (b.style.transform = `scale(${(1 - 0.12 * Math.sin((Math.PI * t) / 0.22)).toFixed(3)})`)); b.style.outlineColor = ACC; q("[data-a]").style.color = ACC; await od.set(v); await wait(0.7); }), stop: od }; } });
+
   add({ id: "blinds", name: "Blinds", cat: "Transitions", from: "Bllind Launch", desc: "Horizontal bands close from their centre lines in a ragged order, the scene swaps, and they open again.",
     code: `Shaderfield.motion.blinds(stage, { bands: 12, color: "#0ea5e9", onSwap: () => showNext() });`,
     build(el, big) { const q = stage(el, big, scene("a", "Hire on skill.", BG1, INK) + scene("b", "Bias out.", ACC, "#09090b", true, 5.6)); const flip = flipB(q);
