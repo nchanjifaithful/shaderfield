@@ -273,6 +273,12 @@
     build(el, big) { const q = stage(el, big, `<div data-t style="display:flex;align-items:center;gap:0.6em;padding:0 1.5em;height:3em;font-size:2em;font-weight:500;letter-spacing:-0.02em;white-space:nowrap">Export<span style="font-family:${MONO};font-size:0.7em;opacity:0.6">48</span></div>`, center);
       return { play: once(async () => { await M().dotMorph(q("[data-t]"), { color: ACC, ink: "#09090b" }); await wait(0.6); }) }; } });
 
+  add({ id: "toast-stack", name: "Toast Stack", cat: "Interface", from: "Echoform · Kinetik", desc: "Notifications land stacked behind each other, then fan out into a list.",
+    code: `<div id="toasts" style="position:relative;height:340px">\n  <div>Shipped: Bulk export</div> …\n</div>\n\nShaderfield.motion.toastStack(toasts, { stagger: 0.18 });`,
+    build(el, big) { const ts = [["Shipped: Bulk export", "Linked to 48 requests"], ["48 customers notified", "Release note sent"], ["Northwind replied", "“This saves us an hour a week.”"]];
+      const q = stage(el, big, `<div data-s style="position:relative;width:min(24em,80%);height:86%"></div>`, center);
+      return { play: once(async () => { const s = q("[data-s]"); s.innerHTML = ts.map(([a, b]) => `<div style="display:flex;align-items:center;gap:0.9em;padding:0.8em 1em;border-radius:0.9em;background:${BG2};outline:1px solid ${LINE};box-shadow:0 1em 2em rgba(0,0,0,0.4)"><span style="flex:none;width:1.9em;height:1.9em;border-radius:50%;outline:1.5px solid ${ACC};display:flex;align-items:center;justify-content:center;color:${ACC};font-weight:700">✓</span><div><div style="font-weight:600;font-size:1.1em">${a}</div><div style="color:${MUTE};margin-top:0.2em">${b}</div></div></div>`).join(""); if (!big) s.style.fontSize = "0.85em"; await M().toastStack(s, { gap: big ? 14 : 6, peek: big ? 16 : 8 }); await wait(1); }) }; } });
+
   add({ id: "blinds", name: "Blinds", cat: "Transitions", from: "Bllind Launch", desc: "Horizontal bands close from their centre lines in a ragged order, the scene swaps, and they open again.",
     code: `Shaderfield.motion.blinds(stage, { bands: 12, color: "#0ea5e9", onSwap: () => showNext() });`,
     build(el, big) { const q = stage(el, big, scene("a", "Hire on skill.", BG1, INK) + scene("b", "Bias out.", ACC, "#09090b", true, 5.6)); const flip = flipB(q);

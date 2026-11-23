@@ -2853,6 +2853,15 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
         .then(() => { if (k !== tok) return; cur = v; A.textContent = fmt(v); A.style.transform = ""; A.style.opacity = 1; A.style.filter = "none"; B.style.opacity = 0; }); };
     const stop = () => { tok++; }; stop.set = set; stop.value = () => cur; return stop;
   }
+  // Toast stack: notifications land stacked behind each other, then fan out into a list (Echoform, Kinetik)
+  function toastStack(el, o = {}) {
+    rel(el); const ks = [...el.children], n = ks.length, st = o.stagger ?? 0.18, gap = o.gap ?? 16, dl = o.delay || 0, ex = o.expand !== false, peek = o.peek ?? 16;
+    ks.forEach(k => Object.assign(k.style, { position: "absolute", left: "0", right: "0", top: "0", transformOrigin: "50% 0", opacity: 0 }));
+    const h = Math.max(...ks.map(k => k.offsetHeight)), pitch = h + gap, H = el.clientHeight, at = dl + n * st + 0.15;
+    return play(at + (ex ? 0.45 : 0), t => { const ap = ks.map((_, j) => oExpo(clamp((t - dl - j * st) / 0.4))), e = ex ? oExpo(clamp((t - at) / 0.35)) : 0, top = lerp((H - h) / 2, (H - (n * h + (n - 1) * gap)) / 2, e);
+      ks.forEach((k, j) => { const d = ap.slice(j + 1).reduce((s, v) => s + v, 0); k.style.zIndex = 10 - Math.round(d); k.style.opacity = Math.max(0, lerp(1 - 0.28 * d, 1, e) * ap[j]).toFixed(3);
+        k.style.transform = `translateY(${(top + lerp(d * peek, d * pitch, e) - (1 - ap[j]) * 40).toFixed(1)}px) scale(${lerp(1 - 0.05 * d, 1, e).toFixed(4)})`; }); });
+  }
   // Dot morph: a small dot of colour stretches into the pill behind a label, and the label flips to ink (Echoform, Kinetik)
   function dotMorph(el, o = {}) {
     rel(el); el.querySelectorAll("[data-sf-dot]").forEach(n => n.remove()); const W = el.offsetWidth, H = el.offsetHeight, s = o.size ?? Math.min(24, H * 0.3), col = o.color || "#ff6b3d", ink = o.ink || "#0b0b0b", d = o.duration ?? 0.45, dl = o.delay || 0, R = o.radius ?? H / 2;
@@ -2884,5 +2893,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     return play(mode === "both" ? D * 2 + 0.05 : D, t => { if (t < D) frame(clamp(t / D), true, 0); else { swap(); mode === "both" ? frame(clamp((t - D) / D), false, 40) : frame(1, true, 0); } }).then(() => { if (mode === "both") wrap.remove(); return wrap; });
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, odometer, dotMorph, blinds, columnWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, odometer, toastStack, dotMorph, blinds, columnWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

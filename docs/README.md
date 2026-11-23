@@ -5,9 +5,9 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 53
+- [Motion effects](#motion-effects) · 54
   - [Text](#text) · 17
-  - [Interface](#interface) · 22
+  - [Interface](#interface) · 23
   - [Transitions](#transitions) · 13
   - [Light](#light) · 1
 
@@ -154,6 +154,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Pick Focus](motion/pick-focus.md) | `pickFocus` | All options pulse, then the chosen one lights up and the rest dim. |
 | [Lock Click](motion/lock-click.md) | `lockClick` | A padlock drops in, snaps shut, then turns into a check. |
 | [Odometer](motion/odometer.md) | `odometer` | A count rolls to its next value. The old number blurs up and out as the new one rises in. |
+| [Toast Stack](motion/toast-stack.md) | `toastStack` | Notifications land stacked behind each other, then fan out into a list. |
 | [Dot Morph](motion/dot-morph.md) | `dotMorph` | A dot of colour stretches into the pill behind a label, and the label flips to ink. |
 
 ### Transitions
