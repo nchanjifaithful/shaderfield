@@ -5,9 +5,9 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 72
+- [Motion effects](#motion-effects) · 73
   - [Text](#text) · 23
-  - [Interface](#interface) · 30
+  - [Interface](#interface) · 31
   - [Transitions](#transitions) · 17
   - [Light](#light) · 2
 
@@ -169,6 +169,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Card Flip](motion/flip-card.md) | `flipCard` | The card turns edge-on and comes back showing its other face. |
 | [Progress Button](motion/progress-button.md) | `progressButton` | The button squeezes, fills with progress under a busy label, then pops into a completed state as its check draws in. |
 | [Live Feed](motion/live-feed.md) | `liveFeed` | New rows push in at the top while the older ones slide down and dim. |
+| [Face Scan](motion/face-scan.md) | `faceScan` | A tick ring fills while a scanline sweeps a face glyph, then it folds into a filled check. |
 
 ### Transitions
 
