@@ -2985,6 +2985,13 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       const pl = lab.querySelector("polyline"); if (pl) pl.setAttribute("stroke-dashoffset", (1 - oCubic(clamp((u - 0.05) / 0.3))).toFixed(3)); btn.style.transform = `scale(${(1 + 0.05 * Math.sin(Math.PI * clamp(u / 0.32))).toFixed(4)})`; })
       .then(() => { btn.style.transform = ""; });
   }
+  // Live feed: new rows push in at the top while older ones slide down and dim (Vaulton)
+  function liveFeed(el, rows, o = {}) {
+    rel(el); el.style.overflow = "hidden"; el.textContent = ""; const iv = o.interval ?? 0.66, max = o.max ?? 5, h = o.rowHeight ?? 58, N = rows.length, shown = []; let last = -1;
+    const mk = o.row || ((r) => { const d = document.createElement("div"); d.style.cssText = "display:flex;align-items:center;gap:0.8em;height:100%;border-bottom:1px solid rgba(242,242,244,0.1);"; d.innerHTML = r; return d; });
+    return loopFx(t => { const k = Math.floor(t / iv); while (last < k) { last++; const w = document.createElement("div"); w.style.cssText = `position:absolute;left:0;right:0;top:0;height:${h}px;`; w.appendChild(mk(rows[last % N], last)); w._at = last * iv; el.appendChild(w); shown.unshift(w); if (shown.length > max + 1) shown.pop().remove(); }
+      const p0 = oExpo(clamp((t - shown[0]._at) / 0.35)); shown.forEach((w, i) => { w.style.transform = `translateY(${((i - (1 - p0)) * h).toFixed(1)}px)`; w.style.opacity = (i === 0 ? p0 : Math.max(0, 1 - i * 0.12 - (i === max ? p0 : 0))).toFixed(3); }); });
+  }
   // Prompt send: a request types into a composer, the send button lights and is pressed, the box rises and the reply lines follow (Echoform, Kinetik, Vindora)
   function promptSend(el, o = {}) {
     rel(el); el.textContent = ""; const acc = o.color || "#ff6b3d", text = o.text || "Build a coverflow carousel", steps = o.steps || [], cps = o.cps ?? 22, dl = o.delay || 0, ink = o.ink || "#ededed", w = o.width || "min(86%, 30em)";
@@ -3052,5 +3059,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       if (nx) nx.style.clipPath = `polygon(${-2 * W}px 0px, ${(e - (H / 2) * T).toFixed(1)}px 0px, ${(e + (H / 2) * T).toFixed(1)}px ${H}px, ${-2 * W}px ${H}px)`; if (e > W / 2) swap(); }).then(() => { wrap.remove(); if (nx) nx.style.clipPath = ""; });
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, splitTone, colorWave, converge, slotRoll, odometer, toastStack, dotMorph, coverflow, cardDrift, morph, flipCard, progressButton, promptSend, blinds, columnWipe, blockWipe, doors, beamWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, splitTone, colorWave, converge, slotRoll, odometer, toastStack, dotMorph, coverflow, cardDrift, morph, flipCard, progressButton, liveFeed, promptSend, blinds, columnWipe, blockWipe, doors, beamWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
