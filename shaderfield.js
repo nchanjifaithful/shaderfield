@@ -2879,6 +2879,15 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       s.style.opacity = p.toFixed(3); s.style.color = k >= 1 ? "" : `color-mix(in srgb, ${B} ${Math.round(k * 100)}%, ${A})`; s.style.filter = bl ? blurPx(p, bl) : "none";
       s.style.transform = `translateY(${((1 - p) * rs * fs).toFixed(1)}px)` + (by === "word" ? ` scale(${(0.92 + 0.08 * p).toFixed(3)})` : ""); }));
   }
+  // Echo converge: two faint copies above and below slide into the word as it sharpens (Vaulton)
+  function converge(el, o = {}) {
+    rel(el); const box = wrapIn(el, "_sfCv"); box.querySelectorAll("[data-sf-ghost]").forEach(n => n.remove()); const text = box.textContent, g = o.gap ?? 0.92, d = o.duration ?? 0.6, dl = o.delay || 0, op = o.ghost ?? 0.16, fs = fsOf(el);
+    const main = box.firstElementChild && box.firstElementChild.dataset.sfMain != null ? box.firstElementChild : (() => { const s = document.createElement("span"); s.dataset.sfMain = ""; s.style.display = "inline-block"; while (box.firstChild) s.appendChild(box.firstChild); box.appendChild(s); return s; })();
+    const gh = [-1, 1].map(sg => { const c = document.createElement("span"); c.dataset.sfGhost = ""; c.setAttribute("aria-hidden", "true"); c.textContent = text; c.style.cssText = "position:absolute;left:0;top:0;white-space:nowrap;pointer-events:none;filter:blur(5px);"; if (o.ghostColor) c.style.color = o.ghostColor; box.appendChild(c); return [c, sg]; });
+    return play(dl + 0.35 + d, t => { const u = t - dl, inP = oExpo(clamp(u / 0.7)), cv = EZ.inOut(clamp((u - 0.1) / d));
+      main.style.opacity = inP.toFixed(3); main.style.filter = blurPx(inP, 14); main.style.transform = `scale(${(0.9 + 0.1 * inP).toFixed(4)})`;
+      gh.forEach(([c, sg]) => { c.style.opacity = (op * (1 - cv) * inP).toFixed(3); c.style.transform = `translateY(${(sg * g * fs * (1 - cv)).toFixed(1)}px)`; }); }).then(() => gh.forEach(([c]) => c.remove()));
+  }
   // ── Motion Tryouts: interface ──
   const bgOf = (f) => (/^(#|rgb|hsl|oklch|color-mix|linear-gradient|radial-gradient|conic-gradient|repeating-)/.test(f || "") ? f : `center/cover url("${f}")`);
   const stageXY = (stage, n) => { const sr = stage.getBoundingClientRect(), sc = sr.width / (stage.offsetWidth || 1) || 1, r = n.getBoundingClientRect(); return [(r.left - sr.left + r.width / 2) / sc, (r.top - sr.top + r.height / 2) / sc, r.width / sc, r.height / sc]; };
@@ -2986,5 +2995,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       [...L.children, ...Rr.children].forEach(b => (b.style.opacity = e)); if (t >= CL) swap(); }).then(() => wrap.remove());
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, colorWave, odometer, toastStack, dotMorph, coverflow, cardDrift, promptSend, blinds, columnWipe, blockWipe, doors, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, colorWave, converge, odometer, toastStack, dotMorph, coverflow, cardDrift, promptSend, blinds, columnWipe, blockWipe, doors, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

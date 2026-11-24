@@ -279,6 +279,11 @@
     build(el, big) { let n = 0; const q = stage(el, big, `<div data-t style="font-size:4em;${H1}white-space:nowrap;justify-content:center"></div>`, center);
       return { play: once(async () => { const w = n++ % 2, t = remake(q("[data-t]"), w ? "A new motion kit" : "Worlds to build?"); await M().colorWave(t, w ? { by: "word", from: ACC } : { from: ACC }); await wait(0.4); }) }; } });
 
+  add({ id: "converge", name: "Echo Converge", cat: "Text", from: "Vaulton Launch", desc: "Two faint copies above and below slide into the word as it sharpens.",
+    code: `Shaderfield.motion.converge(el, { gap: 0.92, ghost: 0.16 });`,
+    build(el, big) { const q = stage(el, big, `<div data-t style="font-size:7em;${H1}">Meet</div>`, center);
+      return { play: once(() => M().converge(q("[data-t]"), { ghostColor: ACC, ghost: 0.3 })) }; } });
+
   add({ id: "odometer", name: "Odometer", cat: "Interface", from: "Echoform · Kinetik", desc: "A count rolls to its next value. The old number blurs up and out as the new one rises in.",
     code: `const votes = Shaderfield.motion.odometer(el, { value: 47 });\nvotes.set(48);`,
     build(el, big) { const q = stage(el, big, `<div style="display:flex;align-items:center;gap:1.2em;padding:1em 1.2em;border-radius:1em;background:${PANEL};outline:1px solid ${LINE}"><div data-b style="width:4.4em;height:4.4em;border-radius:0.9em;background:${BG2};outline:1.5px solid rgba(242,242,244,0.14);display:flex;flex-direction:column;align-items:center;justify-content:center"><span data-a style="font-size:1em;font-weight:700;color:${MUTE}">▲</span><span data-n style="font-size:1.6em;font-weight:600"></span></div><div><div style="font-size:1.45em;font-weight:600;letter-spacing:-0.02em">Bulk export to CSV</div><div style="color:${MUTE};margin-top:0.3em">Requested by Northwind and 46 more</div></div></div>`, center);
