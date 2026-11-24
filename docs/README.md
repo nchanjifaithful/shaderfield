@@ -5,10 +5,10 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 64
+- [Motion effects](#motion-effects) · 65
   - [Text](#text) · 20
   - [Interface](#interface) · 27
-  - [Transitions](#transitions) · 15
+  - [Transitions](#transitions) · 16
   - [Light](#light) · 2
 
 ## Shaders
@@ -183,6 +183,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Column Rise](motion/column-wipe.md) | `columnWipe` | Stepped columns of colour rise to cover the frame, the scene swaps, then they retreat upward. |
 | [Block Wipe](motion/block-wipe.md) | `blockWipe` | A grid of blocks fills from one corner, the scene swaps, and the blocks clear in the same direction. |
 | [Doors](motion/doors.md) | `doors` | Two panels slide in from the sides with ragged edges, meet in the middle for the swap, then part. |
+| [Beam Wipe](motion/beam-wipe.md) | `beamWipe` | A bundle of slanted beams sweeps across. The next scene is revealed behind its trailing edge. |
 
 ### Light
 
