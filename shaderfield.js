@@ -2938,6 +2938,14 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     return loopFx(t => cards.forEach((c, i) => { const p = ((((i - t * rate) % N) + N) % N) - N / 2; c.style.opacity = (clamp(1 - (Math.abs(p) - 3.5)) * clamp(t / 0.3)).toFixed(3); c.style.zIndex = Math.round(100 - p * 10);
       c.style.transform = `translate3d(${(p * dx).toFixed(1)}px,${(p * dy).toFixed(1)}px,${(p * dz).toFixed(1)}px) rotateY(${ry}deg) rotateX(6deg)`; }));
   }
+  // Shared morph: an element glides and resizes into another element's box, radius and all (Kinetik, Vindora, Gridd)
+  function morph(el, target, o = {}) {
+    const par = el.offsetParent || el.parentElement, pr = par.getBoundingClientRect(), sc = pr.width / (par.offsetWidth || 1) || 1, a = { x: el.offsetLeft, y: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight }, tr = target.getBoundingClientRect ? target.getBoundingClientRect() : null;
+    const b = tr ? { x: (tr.left - pr.left) / sc - par.clientLeft, y: (tr.top - pr.top) / sc - par.clientTop, w: tr.width / sc, h: tr.height / sc } : target;
+    const r0 = parseFloat(getComputedStyle(el).borderRadius) || 0, r1 = o.radius ?? (tr ? parseFloat(getComputedStyle(target).borderRadius) || r0 : r0), d = o.duration ?? 0.6, dl = o.delay || 0;
+    Object.assign(el.style, { position: "absolute", boxSizing: "border-box", margin: "0" });
+    return play(dl + d, t => { const k = EZ.inOut(clamp((t - dl) / d)); Object.assign(el.style, { left: lerp(a.x, b.x, k) + "px", top: lerp(a.y, b.y, k) + "px", width: lerp(a.w, b.w, k) + "px", height: lerp(a.h, b.h, k) + "px", borderRadius: lerp(r0, r1, k) + "px" }); });
+  }
   // Prompt send: a request types into a composer, the send button lights and is pressed, the box rises and the reply lines follow (Echoform, Kinetik, Vindora)
   function promptSend(el, o = {}) {
     rel(el); el.textContent = ""; const acc = o.color || "#ff6b3d", text = o.text || "Build a coverflow carousel", steps = o.steps || [], cps = o.cps ?? 22, dl = o.delay || 0, ink = o.ink || "#ededed", w = o.width || "min(86%, 30em)";
@@ -2995,5 +3003,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       [...L.children, ...Rr.children].forEach(b => (b.style.opacity = e)); if (t >= CL) swap(); }).then(() => wrap.remove());
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, colorWave, converge, odometer, toastStack, dotMorph, coverflow, cardDrift, promptSend, blinds, columnWipe, blockWipe, doors, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, colorWave, converge, odometer, toastStack, dotMorph, coverflow, cardDrift, morph, promptSend, blinds, columnWipe, blockWipe, doors, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
