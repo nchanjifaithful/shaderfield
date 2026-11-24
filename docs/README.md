@@ -5,8 +5,8 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 71
-  - [Text](#text) · 22
+- [Motion effects](#motion-effects) · 72
+  - [Text](#text) · 23
   - [Interface](#interface) · 30
   - [Transitions](#transitions) · 17
   - [Light](#light) · 2
@@ -133,6 +133,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Echo Converge](motion/converge.md) | `converge` | Two faint copies above and below slide into the word as it sharpens. |
 | [Slot Roll](motion/slot-roll.md) | `slotRoll` | Words roll through a slot that resizes to fit each one, with faint echoes as it lands. |
 | [Split Tone](motion/split-tone.md) | `splitTone` | Letters light up from the edges inward, then a second colour sweeps through the line from right to left. |
+| [Word Trail](motion/word-trail.md) | `wordTrail` | Words land one by one and the earlier ones dim back, so the eye follows the newest. |
 
 ### Interface
 
