@@ -2964,6 +2964,20 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     const show = (back) => { f.style.display = back ? "none" : ""; b.style.display = back ? "" : "none"; }; show(!toBack);
     return play(dl + d, t => { const k = EZ.inOut(clamp((t - dl) / d)); el.style.transform = `scaleX(${Math.max(0.001, Math.abs(Math.cos(k * Math.PI))).toFixed(4)})`; show(k > 0.5 ? toBack : !toBack); }).then(() => (el.style.transform = ""));
   }
+  // Progress button: the button squeezes, fills with progress under a busy label, then pops into a clean completed state with a check that draws in (Vaulton)
+  function progressButton(btn, o = {}) {
+    rel(btn); btn.style.overflow = "hidden"; const lab = btn._sfLab || (btn._sfLab = (() => { const s = document.createElement("span"); s.style.cssText = "position:relative;display:inline-flex;align-items:center;gap:0.45em;"; while (btn.firstChild) s.appendChild(btn.firstChild); btn.appendChild(s); return s; })());
+    const idle = btn._sfIdle ?? (btn._sfIdle = lab.textContent), bg0 = btn._sfBg ?? (btn._sfBg = btn.style.background), c0 = btn._sfCol ?? (btn._sfCol = btn.style.color), d = o.duration ?? 0.8; btn.querySelectorAll("[data-sf-fill]").forEach(n => n.remove()); lab._done = 0;
+    if (o.reset) { lab.textContent = idle; btn.style.background = bg0; btn.style.color = c0; btn.style.transform = ""; btn.setAttribute("aria-busy", "false"); return Promise.resolve(); }
+    const f = document.createElement("span"); f.dataset.sfFill = ""; f.setAttribute("aria-hidden", "true"); f.style.cssText = `position:absolute;left:0;top:0;bottom:0;width:0;background:${o.fill || "rgba(9,9,11,0.12)"};pointer-events:none;`; btn.prepend(f); btn.setAttribute("aria-busy", "true");
+    return play(0.15 + d + 0.5, t => { const k = clamp((t - 0.15) / d);
+      if (t < 0.15) { btn.style.transform = `scale(${(1 - 0.05 * Math.sin((Math.PI * t) / 0.15)).toFixed(4)})`; return; }
+      if (k < 1) { btn.style.transform = ""; if (lab.textContent !== (o.busy ?? "Working…")) lab.textContent = o.busy ?? "Working…"; f.style.width = (k * 100).toFixed(1) + "%"; return; }
+      const u = t - 0.15 - d; if (!lab._done) { lab._done = 1; f.remove(); btn.setAttribute("aria-busy", "false"); btn.style.background = o.doneColor || "#22c58b"; btn.style.color = o.doneInk || "#06140d";
+        lab.innerHTML = `<svg width="0.95em" height="0.95em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg><span>${o.done ?? "Done"}</span>`; }
+      const pl = lab.querySelector("polyline"); if (pl) pl.setAttribute("stroke-dashoffset", (1 - oCubic(clamp((u - 0.05) / 0.3))).toFixed(3)); btn.style.transform = `scale(${(1 + 0.05 * Math.sin(Math.PI * clamp(u / 0.32))).toFixed(4)})`; })
+      .then(() => { btn.style.transform = ""; });
+  }
   // Prompt send: a request types into a composer, the send button lights and is pressed, the box rises and the reply lines follow (Echoform, Kinetik, Vindora)
   function promptSend(el, o = {}) {
     rel(el); el.textContent = ""; const acc = o.color || "#ff6b3d", text = o.text || "Build a coverflow carousel", steps = o.steps || [], cps = o.cps ?? 22, dl = o.delay || 0, ink = o.ink || "#ededed", w = o.width || "min(86%, 30em)";
@@ -3031,5 +3045,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       if (nx) nx.style.clipPath = `polygon(${-2 * W}px 0px, ${(e - (H / 2) * T).toFixed(1)}px 0px, ${(e + (H / 2) * T).toFixed(1)}px ${H}px, ${-2 * W}px ${H}px)`; if (e > W / 2) swap(); }).then(() => { wrap.remove(); if (nx) nx.style.clipPath = ""; });
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, colorWave, converge, slotRoll, odometer, toastStack, dotMorph, coverflow, cardDrift, morph, flipCard, promptSend, blinds, columnWipe, blockWipe, doors, beamWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, colorWave, converge, slotRoll, odometer, toastStack, dotMorph, coverflow, cardDrift, morph, flipCard, progressButton, promptSend, blinds, columnWipe, blockWipe, doors, beamWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
