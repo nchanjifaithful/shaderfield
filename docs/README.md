@@ -5,10 +5,10 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 59
+- [Motion effects](#motion-effects) · 60
   - [Text](#text) · 19
   - [Interface](#interface) · 25
-  - [Transitions](#transitions) · 14
+  - [Transitions](#transitions) · 15
   - [Light](#light) · 1
 
 ## Shaders
@@ -179,6 +179,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Blinds](motion/blinds.md) | `blinds` | Horizontal bands close from their centre lines in a ragged order, the scene swaps, and they open again. |
 | [Column Rise](motion/column-wipe.md) | `columnWipe` | Stepped columns of colour rise to cover the frame, the scene swaps, then they retreat upward. |
 | [Block Wipe](motion/block-wipe.md) | `blockWipe` | A grid of blocks fills from one corner, the scene swaps, and the blocks clear in the same direction. |
+| [Doors](motion/doors.md) | `doors` | Two panels slide in from the sides with ragged edges, meet in the middle for the swap, then part. |
 
 ### Light
 
