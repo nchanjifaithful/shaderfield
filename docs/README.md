@@ -5,9 +5,9 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 67
+- [Motion effects](#motion-effects) · 68
   - [Text](#text) · 21
-  - [Interface](#interface) · 28
+  - [Interface](#interface) · 29
   - [Transitions](#transitions) · 16
   - [Light](#light) · 2
 
@@ -165,6 +165,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Card Drift](motion/card-drift.md) | `cardDrift` | A deck of cards turned in 3D drifts along a diagonal, endlessly. |
 | [Shared Morph](motion/morph.md) | `morph` | An open card glides and resizes into its slot in the grid while its details fold away. |
 | [Card Flip](motion/flip-card.md) | `flipCard` | The card turns edge-on and comes back showing its other face. |
+| [Progress Button](motion/progress-button.md) | `progressButton` | The button squeezes, fills with progress under a busy label, then pops into a completed state as its check draws in. |
 
 ### Transitions
 
