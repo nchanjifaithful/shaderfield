@@ -5,9 +5,9 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 60
+- [Motion effects](#motion-effects) · 61
   - [Text](#text) · 19
-  - [Interface](#interface) · 25
+  - [Interface](#interface) · 26
   - [Transitions](#transitions) · 15
   - [Light](#light) · 1
 
@@ -160,6 +160,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Dot Morph](motion/dot-morph.md) | `dotMorph` | A dot of colour stretches into the pill behind a label, and the label flips to ink. |
 | [Prompt Send](motion/prompt-send.md) | `promptSend` | A request types into a composer, the send button lights and is pressed, the box rises and the reply follows. |
 | [Coverflow](motion/coverflow.md) | `coverflow` | Cards fan out in 3D around the one in focus and glide when it changes. |
+| [Card Drift](motion/card-drift.md) | `cardDrift` | A deck of cards turned in 3D drifts along a diagonal, endlessly. |
 
 ### Transitions
 

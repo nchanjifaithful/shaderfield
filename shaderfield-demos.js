@@ -299,6 +299,10 @@
     code: `const flow = Shaderfield.motion.coverflow(el, ["a.jpg", "b.jpg", "c.jpg", "#0ea5e9"], { hold: 1.4 });\nflow.next();`,
     build(el, big) { stage(el, big, ""); const s = big ? 0.66 : 0.34; return loopDemo(() => M().coverflow(el, Array.from({ length: 7 }, (_, i) => tileBg(i)), { width: 300 * s, height: 380 * s, spread: 200 * s, tail: 70 * s, rotate: 48, radius: big ? 12 : 8, hold: 1.4 })); } });
 
+  add({ id: "card-drift", name: "Card Drift", cat: "Interface", from: "Kinetik Plus", desc: "A deck of cards turned in 3D drifts along a diagonal, endlessly.",
+    code: `Shaderfield.motion.cardDrift(el, ["a.jpg", "b.jpg", "c.jpg"], { rate: 1.8, rotate: -48 });`,
+    build(el, big) { stage(el, big, ""); const s = big ? 0.6 : 0.3; return loopDemo(() => M().cardDrift(el, Array.from({ length: 9 }, (_, i) => tileBg(i)), { width: 300 * s, height: 400 * s, dx: 100 * s, dy: -60 * s, dz: -150 * s, rate: 1.2, radius: big ? 14 : 8 })); } });
+
   add({ id: "blinds", name: "Blinds", cat: "Transitions", from: "Bllind Launch", desc: "Horizontal bands close from their centre lines in a ragged order, the scene swaps, and they open again.",
     code: `Shaderfield.motion.blinds(stage, { bands: 12, color: "#0ea5e9", onSwap: () => showNext() });`,
     build(el, big) { const q = stage(el, big, scene("a", "Hire on skill.", BG1, INK) + scene("b", "Bias out.", ACC, "#09090b", true, 5.6)); const flip = flipB(q);

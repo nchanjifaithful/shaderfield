@@ -2907,6 +2907,13 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
         c.style.transform = `translate3d(${(sg * (a * sp + Math.max(Math.abs(p) - 1, 0) * tail)).toFixed(1)}px,0,${(-a * 220).toFixed(1)}px) rotateY(${(-clamp(p, -1, 1) * rot).toFixed(2)}deg)`; }); });
     const stop = () => stopL(); stop.set = (i) => { user = true; set(i); }; stop.next = () => stop.set(Math.round(target) + 1); stop.prev = () => stop.set(Math.round(target) - 1); return stop;
   }
+  // Card drift: a deck of cards turned in 3D drifts along a diagonal, endlessly (Kinetik)
+  function cardDrift(el, faces, o = {}) {
+    rel(el); el.textContent = ""; el.style.perspective = o.perspective || "1400px"; const N = o.count ?? 11, W = o.width ?? 300, Hh = o.height ?? 400, rate = o.rate ?? 1.8, dx = o.dx ?? 120, dy = o.dy ?? -80, dz = o.dz ?? -160, ry = o.rotate ?? -48;
+    const cards = Array.from({ length: N }, (_, i) => { const c = document.createElement("div"); c.style.cssText = `position:absolute;left:50%;top:50%;width:${W}px;height:${Hh}px;margin:${-Hh / 2}px 0 0 ${-W / 2}px;border-radius:${o.radius ?? 16}px;box-shadow:0 30px 60px rgba(0,0,0,0.6);background:${bgOf(faces[i % faces.length])};`; el.appendChild(c); return c; });
+    return loopFx(t => cards.forEach((c, i) => { const p = ((((i - t * rate) % N) + N) % N) - N / 2; c.style.opacity = (clamp(1 - (Math.abs(p) - 3.5)) * clamp(t / 0.3)).toFixed(3); c.style.zIndex = Math.round(100 - p * 10);
+      c.style.transform = `translate3d(${(p * dx).toFixed(1)}px,${(p * dy).toFixed(1)}px,${(p * dz).toFixed(1)}px) rotateY(${ry}deg) rotateX(6deg)`; }));
+  }
   // Prompt send: a request types into a composer, the send button lights and is pressed, the box rises and the reply lines follow (Echoform, Kinetik, Vindora)
   function promptSend(el, o = {}) {
     rel(el); el.textContent = ""; const acc = o.color || "#ff6b3d", text = o.text || "Build a coverflow carousel", steps = o.steps || [], cps = o.cps ?? 22, dl = o.delay || 0, ink = o.ink || "#ededed", w = o.width || "min(86%, 30em)";
@@ -2964,5 +2971,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       [...L.children, ...Rr.children].forEach(b => (b.style.opacity = e)); if (t >= CL) swap(); }).then(() => wrap.remove());
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, colorWave, odometer, toastStack, dotMorph, coverflow, promptSend, blinds, columnWipe, blockWipe, doors, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, colorWave, odometer, toastStack, dotMorph, coverflow, cardDrift, promptSend, blinds, columnWipe, blockWipe, doors, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
