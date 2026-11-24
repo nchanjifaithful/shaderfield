@@ -2913,6 +2913,12 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     return play(dl + n * st + 1, t => ws.forEach((s, i) => { const a = dl + i * st, p = oExpo(clamp((t - a) / d)), f = i >= n - keep ? 1 : lerp(1, dim, EZ.inOut(clamp((t - a - 0.5) / 0.4)));
       s.style.opacity = (p * f).toFixed(3); s.style.filter = blurPx(p, 6); s.style.transform = `translateY(${((1 - p) * 0.4 * fs).toFixed(1)}px)`; }));
   }
+  // Marquee light: an oversized line drifts sideways while its letters brighten one after another (Gridd, Vaulton)
+  function marquee(el, o = {}) {
+    const ch = splitChars(el, true), d = o.duration ?? 1.6, dist = o.distance ?? -0.4, dim = o.dim ?? 0.18, st = o.stagger ?? 0.07, dl = o.delay || 0, W = el.offsetWidth;
+    return play(dl + Math.max(d, ch.length * st + 0.25), t => { const u = t - dl; el.style.transform = `translateX(${(clamp(u / d) * dist * W).toFixed(1)}px)`;
+      ch.forEach((s, k) => (s.style.opacity = (dim + (1 - dim) * clamp((u - 0.05 - k * st) / 0.2)).toFixed(3))); });
+  }
   // ── Motion Tryouts: interface ──
   const bgOf = (f) => (/^(#|rgb|hsl|oklch|color-mix|linear-gradient|radial-gradient|conic-gradient|repeating-)/.test(f || "") ? f : `center/cover url("${f}")`);
   const stageXY = (stage, n) => { const sr = stage.getBoundingClientRect(), sc = sr.width / (stage.offsetWidth || 1) || 1, r = n.getBoundingClientRect(); return [(r.left - sr.left + r.width / 2) / sc, (r.top - sr.top + r.height / 2) / sc, r.width / sc, r.height / sc]; };
@@ -3096,5 +3102,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       .then(() => { o.onSwap && o.onSwap(); mark.style.visibility = ""; if (o.keep) return f; return play(0.35, t => (f.style.opacity = (1 - t / 0.35).toFixed(3))).then(() => f.remove()); });
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, splitTone, colorWave, converge, slotRoll, wordTrail, odometer, toastStack, dotMorph, coverflow, cardDrift, morph, flipCard, progressButton, liveFeed, faceScan, coinPill, promptSend, blinds, columnWipe, blockWipe, doors, beamWipe, markExpand, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, splitTone, colorWave, converge, slotRoll, wordTrail, marquee, odometer, toastStack, dotMorph, coverflow, cardDrift, morph, flipCard, progressButton, liveFeed, faceScan, coinPill, promptSend, blinds, columnWipe, blockWipe, doors, beamWipe, markExpand, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
