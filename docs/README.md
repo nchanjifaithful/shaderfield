@@ -5,9 +5,9 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 73
+- [Motion effects](#motion-effects) · 74
   - [Text](#text) · 23
-  - [Interface](#interface) · 31
+  - [Interface](#interface) · 32
   - [Transitions](#transitions) · 17
   - [Light](#light) · 2
 
@@ -170,6 +170,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Progress Button](motion/progress-button.md) | `progressButton` | The button squeezes, fills with progress under a busy label, then pops into a completed state as its check draws in. |
 | [Live Feed](motion/live-feed.md) | `liveFeed` | New rows push in at the top while the older ones slide down and dim. |
 | [Face Scan](motion/face-scan.md) | `faceScan` | A tick ring fills while a scanline sweeps a face glyph, then it folds into a filled check. |
+| [Coin Pill](motion/coin-pill.md) | `coinPill` | A currency coin pops in, a pill slides out of it and the country name types in. |
 
 ### Transitions
 

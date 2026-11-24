@@ -357,6 +357,12 @@
     code: `await Shaderfield.motion.faceScan(el, { size: 200, color: "#0ea5e9" });`,
     build(el, big) { const q = stage(el, big, `<div data-f></div>`, center); return { play: once(async () => { await M().faceScan(q("[data-f]"), { size: big ? 260 : 130, color: ACC, ink: INK, track: "#26262c" }); await wait(0.6); }) }; } });
 
+  add({ id: "coin-pill", name: "Coin Pill", cat: "Interface", from: "Invois App Launch", desc: "A currency coin pops in, a pill slides out of it and the country name types in.",
+    code: `Shaderfield.motion.coinPill(el, { symbol: "₦", code: "NGN", label: "Nigeria", color: "#0ea5e9" });`,
+    build(el, big) { const mk = [["₦", "NGN", "Nigeria"], ["₵", "GHS", "Ghana"], ["KSh", "KES", "Kenya"]]; let i = 0;
+      const q = stage(el, big, `<div data-p style="font-size:${big ? 2.4 : 1.5}em"></div>`, center);
+      return { play: once(async () => { const [symbol, code, label] = mk[i++ % 3]; await M().coinPill(q("[data-p]"), { symbol, code, label, color: ACC, pill: INK, ink: "#09090b" }); await wait(0.8); }) }; } });
+
   add({ id: "blinds", name: "Blinds", cat: "Transitions", from: "Bllind Launch", desc: "Horizontal bands close from their centre lines in a ragged order, the scene swaps, and they open again.",
     code: `Shaderfield.motion.blinds(stage, { bands: 12, color: "#0ea5e9", onSwap: () => showNext() });`,
     build(el, big) { const q = stage(el, big, scene("a", "Hire on skill.", BG1, INK) + scene("b", "Bias out.", ACC, "#09090b", true, 5.6)); const flip = flipB(q);
