@@ -314,6 +314,14 @@
     code: `Shaderfield.motion.cardDrift(el, ["a.jpg", "b.jpg", "c.jpg"], { rate: 1.8, rotate: -48 });`,
     build(el, big) { stage(el, big, ""); const s = big ? 0.6 : 0.3; return loopDemo(() => M().cardDrift(el, Array.from({ length: 9 }, (_, i) => tileBg(i)), { width: 300 * s, height: 400 * s, dx: 100 * s, dy: -60 * s, dz: -150 * s, rate: 1.2, radius: big ? 14 : 8 })); } });
 
+  add({ id: "shared-morph", name: "Shared Morph", cat: "Interface", from: "Kinetik · Vindora · Gridd", desc: "An open card glides and resizes into its slot in the grid while its details fold away.",
+    code: `await Shaderfield.motion.morph(modal, gridSlot, { duration: 0.6 });`,
+    build(el, big) { const q = stage(el, big, `<div data-g style="position:absolute;inset:12% 18%;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:0.8em">${[0, 1, 2, 3].map(i => `<div style="border-radius:0.8em;background:${tileBg(i + 1)}"></div>`).join("")}</div><div data-m style="position:absolute;overflow:hidden;background:${BG2};box-shadow:0 2em 5em rgba(0,0,0,0.6)"><div data-i style="background:${tileBg(1)}"></div><div data-x style="padding:${big ? "0.8em 1em" : "0.6em 0.7em"}"><div style="font-size:1.4em;font-weight:600;letter-spacing:-0.02em;white-space:nowrap">Shared layout</div><div style="color:${MUTE};margin-top:0.3em;${big ? "" : "display:none"}">One element, two states.</div></div></div>`);
+      const m = q("[data-m]"), img = q("[data-i]"), tx = q("[data-x]"), ks = [...q("[data-g]").children];
+      const open = () => { Object.assign(m.style, { left: "30%", top: "7%", width: "40%", height: "86%", borderRadius: "0.8em" }); img.style.height = big ? "64%" : "56%"; tx.style.opacity = 1; ks.forEach((k, i) => (k.style.opacity = i ? 0.25 : 0)); }; open();
+      return { play: once(async () => { open(); await wait(0.5); const h0 = big ? 64 : 56; M().play(0.6, t => { const k = M().ease.inOut(t / 0.6); img.style.height = h0 + (100 - h0) * k + "%"; tx.style.opacity = (1 - Math.min(1, k * 2.5)).toFixed(3); ks.forEach((c, i) => i && (c.style.opacity = (0.25 + 0.75 * k).toFixed(3))); });
+        await M().morph(m, ks[0]); await wait(1.2); }) }; } });
+
   add({ id: "blinds", name: "Blinds", cat: "Transitions", from: "Bllind Launch", desc: "Horizontal bands close from their centre lines in a ragged order, the scene swaps, and they open again.",
     code: `Shaderfield.motion.blinds(stage, { bands: 12, color: "#0ea5e9", onSwap: () => showNext() });`,
     build(el, big) { const q = stage(el, big, scene("a", "Hire on skill.", BG1, INK) + scene("b", "Bias out.", ACC, "#09090b", true, 5.6)); const flip = flipB(q);
