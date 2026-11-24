@@ -295,6 +295,10 @@
     build(el, big) { stage(el, big, "", `font-size:${big ? 20 : 11}px;`);
       return { play: once(async () => { await M().promptSend(el, { text: "Build a coverflow carousel", color: ACC, background: PANEL, border: "rgba(242,242,244,0.14)", reply: "● Agent is building your carousel", steps: ["read   examples/coverflow", "write  components/Carousel.tsx", "add    drag + snap"], cps: 26 }); await wait(0.8); }) }; } });
 
+  add({ id: "coverflow", name: "Coverflow", cat: "Interface", from: "Kinetik Plus", desc: "Cards fan out in 3D around the one in focus and glide when it changes.",
+    code: `const flow = Shaderfield.motion.coverflow(el, ["a.jpg", "b.jpg", "c.jpg", "#0ea5e9"], { hold: 1.4 });\nflow.next();`,
+    build(el, big) { stage(el, big, ""); const s = big ? 0.66 : 0.34; return loopDemo(() => M().coverflow(el, Array.from({ length: 7 }, (_, i) => tileBg(i)), { width: 300 * s, height: 380 * s, spread: 200 * s, tail: 70 * s, rotate: 48, radius: big ? 12 : 8, hold: 1.4 })); } });
+
   add({ id: "blinds", name: "Blinds", cat: "Transitions", from: "Bllind Launch", desc: "Horizontal bands close from their centre lines in a ragged order, the scene swaps, and they open again.",
     code: `Shaderfield.motion.blinds(stage, { bands: 12, color: "#0ea5e9", onSwap: () => showNext() });`,
     build(el, big) { const q = stage(el, big, scene("a", "Hire on skill.", BG1, INK) + scene("b", "Bias out.", ACC, "#09090b", true, 5.6)); const flip = flipB(q);

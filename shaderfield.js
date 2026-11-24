@@ -2895,6 +2895,18 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     const sx = -s - (o.offset ?? 50), sy = (H - s) / 2;
     return play(dl + d, t => { const m = oExpo(clamp((t - dl) / d)); Object.assign(bg.style, { left: lerp(sx, 0, m) + "px", top: lerp(sy, 0, m) + "px", width: lerp(s, W, m) + "px", height: lerp(s, H, m) + "px", borderRadius: lerp(s / 2, R, m) + "px" }); el.style.color = m > 0.5 ? ink : col; });
   }
+  // Coverflow: cards fan out in 3D around the one in focus and glide when it changes (Kinetik)
+  function coverflow(el, faces, o = {}) {
+    rel(el); el.textContent = ""; el.style.perspective = o.perspective || "1600px"; const N = faces.length, W = o.width ?? 300, Hh = o.height ?? 380, sp = o.spread ?? 250, tail = o.tail ?? 110, rot = o.rotate ?? 55, hold = o.hold ?? 1.4, D = o.duration ?? 0.9;
+    const cards = faces.map(f => { const c = document.createElement("div"); c.style.cssText = `position:absolute;left:50%;top:50%;width:${W}px;height:${Hh}px;margin:${-Hh / 2}px 0 0 ${-W / 2}px;border-radius:${o.radius ?? 12}px;box-shadow:0 30px 50px rgba(0,0,0,0.25);background:${bgOf(f)};`; el.appendChild(c); return c; });
+    let target = o.active ?? Math.floor(N / 2), from = target, t0 = -9, user = false;
+    const pos = () => lerp(from, target, EZ.inOut(clamp((now() - t0) / D))), set = (i) => { from = pos(); target = Math.max(0, Math.min(N - 1, i)); t0 = now(); };
+    const stopL = loopFx(t => { if (o.auto !== false && !user && N > 1) { const k = Math.floor(t / hold) % (2 * (N - 1)), i = k < N ? k : 2 * (N - 1) - k; if (i !== target) set(i); }
+      const c0 = pos(); cards.forEach((c, i) => { const p = i - c0, a = Math.min(Math.abs(p), 1), sg = Math.sign(p);
+        c.style.zIndex = Math.round(100 - Math.abs(p) * 10); c.style.opacity = clamp(4.2 - Math.abs(p)).toFixed(3);
+        c.style.transform = `translate3d(${(sg * (a * sp + Math.max(Math.abs(p) - 1, 0) * tail)).toFixed(1)}px,0,${(-a * 220).toFixed(1)}px) rotateY(${(-clamp(p, -1, 1) * rot).toFixed(2)}deg)`; }); });
+    const stop = () => stopL(); stop.set = (i) => { user = true; set(i); }; stop.next = () => stop.set(Math.round(target) + 1); stop.prev = () => stop.set(Math.round(target) - 1); return stop;
+  }
   // Prompt send: a request types into a composer, the send button lights and is pressed, the box rises and the reply lines follow (Echoform, Kinetik, Vindora)
   function promptSend(el, o = {}) {
     rel(el); el.textContent = ""; const acc = o.color || "#ff6b3d", text = o.text || "Build a coverflow carousel", steps = o.steps || [], cps = o.cps ?? 22, dl = o.delay || 0, ink = o.ink || "#ededed", w = o.width || "min(86%, 30em)";
@@ -2943,5 +2955,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     return play(D * 2 + 0.05, t => { if (t < D) frame(t / D, true); else { swap(); frame(clamp((t - D) / D), false); } }).then(() => wrap.remove());
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, colorWave, odometer, toastStack, dotMorph, promptSend, blinds, columnWipe, blockWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, colorWave, odometer, toastStack, dotMorph, coverflow, promptSend, blinds, columnWipe, blockWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
