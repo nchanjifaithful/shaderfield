@@ -2907,6 +2907,12 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
         it.m.style.opacity = Math.max(0, 1 - ad * 1.3).toFixed(3); it.m.style.transform = `translateY(${(d * 0.9).toFixed(3)}em)`; it.m.style.filter = ad > 0.01 ? `blur(${(ad * bl).toFixed(1)}px)` : "none";
         const go = k === i % N && u < hold ? gp * clamp(u / 0.15) * (1 - clamp((u - 0.35) / 0.4)) : 0; it.g.forEach((g, j) => { g.style.opacity = go.toFixed(3); g.style.transform = `translateY(${j ? 0.62 : -0.62}em)`; }); }); });
   }
+  // Word trail: words land one by one and the earlier ones dim back, so the eye follows the newest (Gridd)
+  function wordTrail(el, o = {}) {
+    const ws = splitWords(el), n = ws.length, st = o.stagger ?? 0.24, d = o.duration ?? 0.4, dim = o.dim ?? 0.4, keep = o.keep ?? 2, dl = o.delay || 0, fs = fsOf(el);
+    return play(dl + n * st + 1, t => ws.forEach((s, i) => { const a = dl + i * st, p = oExpo(clamp((t - a) / d)), f = i >= n - keep ? 1 : lerp(1, dim, EZ.inOut(clamp((t - a - 0.5) / 0.4)));
+      s.style.opacity = (p * f).toFixed(3); s.style.filter = blurPx(p, 6); s.style.transform = `translateY(${((1 - p) * 0.4 * fs).toFixed(1)}px)`; }));
+  }
   // ── Motion Tryouts: interface ──
   const bgOf = (f) => (/^(#|rgb|hsl|oklch|color-mix|linear-gradient|radial-gradient|conic-gradient|repeating-)/.test(f || "") ? f : `center/cover url("${f}")`);
   const stageXY = (stage, n) => { const sr = stage.getBoundingClientRect(), sc = sr.width / (stage.offsetWidth || 1) || 1, r = n.getBoundingClientRect(); return [(r.left - sr.left + r.width / 2) / sc, (r.top - sr.top + r.height / 2) / sc, r.width / sc, r.height / sc]; };
@@ -3066,5 +3072,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       .then(() => { o.onSwap && o.onSwap(); mark.style.visibility = ""; if (o.keep) return f; return play(0.35, t => (f.style.opacity = (1 - t / 0.35).toFixed(3))).then(() => f.remove()); });
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, splitTone, colorWave, converge, slotRoll, odometer, toastStack, dotMorph, coverflow, cardDrift, morph, flipCard, progressButton, liveFeed, promptSend, blinds, columnWipe, blockWipe, doors, beamWipe, markExpand, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, splitTone, colorWave, converge, slotRoll, wordTrail, odometer, toastStack, dotMorph, coverflow, cardDrift, morph, flipCard, progressButton, liveFeed, promptSend, blinds, columnWipe, blockWipe, doors, beamWipe, markExpand, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
