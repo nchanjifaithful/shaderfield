@@ -241,6 +241,12 @@
     build(el, big) { const q = stage(el, big, `<div data-l></div>`, center);
       return { play: once(() => M().lockClick(q("[data-l]"), { size: big ? 220 : 110, color: ACC, tick: true })) }; } });
 
+  add({ id: "impact-glow", name: "Impact Glow", cat: "Light", from: "Document AI Teaser", desc: "A halo behind an element flares each time something lands.",
+    code: `const glow = Shaderfield.motion.glowHub(el, { color: "#0ea5e9", size: 1.9 });\nglow.hit();      // flare\nglow.hit(0.5);   // softer`,
+    build(el, big) { const q = stage(el, big, `<div data-h style="width:13em;height:13em;border-radius:50%;background:#101013;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.2em"><span data-n style="font-size:2.2em;font-weight:600;letter-spacing:-0.03em;font-variant-numeric:tabular-nums">1,204</span><span style="font-size:1em;color:#7d7f89">fields read</span></div>`, center);
+      const glow = M().glowHub(q("[data-h]"), { color: ACC }); let n = 1204;
+      return { play: once(async () => { for (const s of [1, 0.6, 0.6, 1]) { glow.hit(s); n += 1; q("[data-n]").textContent = n.toLocaleString("en-US"); await wait(0.45); } }), stop: glow }; } });
+
   // ── Motion Tryouts ──
   const TILE = [["#2c2f36", "#141619", 18, 48], ["#202329", "#0f1114", 82, 26], ["#32353c", "#18191d", 42, 38], ["#25282e", "#121418", 90, 18], ["#2e3138", "#151619", 8, 56], ["#22252a", "#101113", 62, 32]];
   const tileBg = (i) => { const [a, b, x, k] = TILE[i % TILE.length]; return `radial-gradient(120% 85% at ${x}% 0%, color-mix(in srgb, ${ACC} ${k}%, transparent) 0%, transparent 62%), linear-gradient(170deg, ${a} 0%, ${b} 100%)`; };
