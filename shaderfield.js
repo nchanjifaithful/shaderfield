@@ -2958,6 +2958,12 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     Object.assign(el.style, { position: "absolute", boxSizing: "border-box", margin: "0" });
     return play(dl + d, t => { const k = EZ.inOut(clamp((t - dl) / d)); Object.assign(el.style, { left: lerp(a.x, b.x, k) + "px", top: lerp(a.y, b.y, k) + "px", width: lerp(a.w, b.w, k) + "px", height: lerp(a.h, b.h, k) + "px", borderRadius: lerp(r0, r1, k) + "px" }); });
   }
+  // Card flip: the card turns edge-on and comes back showing its other face (Vaulton)
+  function flipCard(el, o = {}) {
+    const [f, b] = el.children, d = o.duration ?? 0.55, dl = o.delay || 0, toBack = o.back !== false; if (!b) return Promise.resolve();
+    const show = (back) => { f.style.display = back ? "none" : ""; b.style.display = back ? "" : "none"; }; show(!toBack);
+    return play(dl + d, t => { const k = EZ.inOut(clamp((t - dl) / d)); el.style.transform = `scaleX(${Math.max(0.001, Math.abs(Math.cos(k * Math.PI))).toFixed(4)})`; show(k > 0.5 ? toBack : !toBack); }).then(() => (el.style.transform = ""));
+  }
   // Prompt send: a request types into a composer, the send button lights and is pressed, the box rises and the reply lines follow (Echoform, Kinetik, Vindora)
   function promptSend(el, o = {}) {
     rel(el); el.textContent = ""; const acc = o.color || "#ff6b3d", text = o.text || "Build a coverflow carousel", steps = o.steps || [], cps = o.cps ?? 22, dl = o.delay || 0, ink = o.ink || "#ededed", w = o.width || "min(86%, 30em)";
@@ -3025,5 +3031,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       if (nx) nx.style.clipPath = `polygon(${-2 * W}px 0px, ${(e - (H / 2) * T).toFixed(1)}px 0px, ${(e + (H / 2) * T).toFixed(1)}px ${H}px, ${-2 * W}px ${H}px)`; if (e > W / 2) swap(); }).then(() => { wrap.remove(); if (nx) nx.style.clipPath = ""; });
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, colorWave, converge, slotRoll, odometer, toastStack, dotMorph, coverflow, cardDrift, morph, promptSend, blinds, columnWipe, blockWipe, doors, beamWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, colorWave, converge, slotRoll, odometer, toastStack, dotMorph, coverflow, cardDrift, morph, flipCard, promptSend, blinds, columnWipe, blockWipe, doors, beamWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
