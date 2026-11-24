@@ -314,6 +314,11 @@
     build(el, big) { const q = stage(el, big, swap2("Our team", "Our history")); const flip = flipB(q); let n = 0;
       return { play: once(async () => { await M().blockWipe(el, { color: ACC, from: ["tr", "r", "bl"][n++ % 3], onSwap: flip }); await wait(0.5); }) }; } });
 
+  add({ id: "doors", name: "Doors", cat: "Transitions", from: "Corporate Presentation", desc: "Two panels slide in from the sides with ragged edges, meet in the middle for the swap, then part.",
+    code: `Shaderfield.motion.doors(stage, { color: "#0ea5e9", onSwap: () => showNext() });`,
+    build(el, big) { const q = stage(el, big, swap2("Achievements", "Milestones")); const flip = flipB(q);
+      return { play: once(async () => { await M().doors(el, { color: ACC, onSwap: flip }); await wait(0.5); }) }; } });
+
   // Group related components together: list order drives the grid and the sidebar
   const ORDER_IDS = ["letter-rise","word-rise","line-rise","pop","focus-pull","track-in","color-wave","converge","slam-in","kinetic","roll-words","slot-roll","type-swap","solve","glyph-write","split-tone","word-trail","marquee","pill-words","underline-cycle","neon-type","typewriter","type-log","count-up","lyric-flow","caption-pop","cut-reveal","square-reveal","center-split","rule-list","strike","click-cursor","bracket-cursor","bracket-hop","pen-trail","press-ripple","shine","pick-focus","focus-card","tick-pop","lock-click","face-scan","progress-button","switch","odometer","dot-morph","coin-pill","progress-bars","signal-bars","streak-dots","typing-dots","tab-morph","masked-scroll","live-feed","toast-stack","prompt-send","color-index","step-list","disc-stack","coverflow","card-drift","card-flip","shared-morph","drag-swap","photo-flicker","tile-pop","flicker-on","swatch-rise","scan-beam","wire-draw","node-map","timeline-draw","candles","waveform","iris","blinds","column-rise","block-wipe","doors","beam-wipe","stripe-wipe","line-draw","radial-reveal","runway","footer-reveal","whip-pan","mark-expand","circle-flood","circle-sweep","squeeze","camera-push","camera-path","push-through","flash","shock","glow-sheen","impact-glow","border-comet","glass-ignite","glitch-slices"];
   const rank = (d) => { const i = ORDER_IDS.indexOf(d.id); return i < 0 ? 999 : i; };
