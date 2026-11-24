@@ -5,8 +5,8 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 65
-  - [Text](#text) · 20
+- [Motion effects](#motion-effects) · 66
+  - [Text](#text) · 21
   - [Interface](#interface) · 27
   - [Transitions](#transitions) · 16
   - [Light](#light) · 2
@@ -131,6 +131,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Kinetic Letters](motion/kinetic.md) | `kinetic` | Letters orbit in and collapse into the word, settle off an arch, tumble about, or the words push apart. |
 | [Colour Wave](motion/color-wave.md) | `colorWave` | Letters rise out of a blur in an accent colour, then settle into the text colour. Also steps by word. |
 | [Echo Converge](motion/converge.md) | `converge` | Two faint copies above and below slide into the word as it sharpens. |
+| [Slot Roll](motion/slot-roll.md) | `slotRoll` | Words roll through a slot that resizes to fit each one, with faint echoes as it lands. |
 
 ### Interface
 

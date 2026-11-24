@@ -284,6 +284,11 @@
     build(el, big) { const q = stage(el, big, `<div data-t style="font-size:7em;${H1}">Meet</div>`, center);
       return { play: once(() => M().converge(q("[data-t]"), { ghostColor: ACC, ghost: 0.3 })) }; } });
 
+  add({ id: "slot-roll", name: "Slot Roll", cat: "Text", from: "Vaulton Launch", desc: "Words roll through a slot that resizes to fit each one, with faint echoes as it lands.",
+    code: `Shaderfield.motion.slotRoll(el, ["dynamic", "flexible", "adaptive", "fastest"], { hold: 0.8 });`,
+    build(el, big) { const q = stage(el, big, `<div style="font-size:${big ? 4.2 : 3.4}em;font-weight:500;letter-spacing:-0.03em;white-space:nowrap;display:flex;align-items:center;line-height:1.15em"><span style="display:block;height:1.15em">the&nbsp;</span><span data-s style="color:${ACC}"></span></div>`, center);
+      return loopDemo(() => M().slotRoll(q("[data-s]"), ["dynamic", "flexible", "adaptive", "fastest"])); } });
+
   add({ id: "odometer", name: "Odometer", cat: "Interface", from: "Echoform · Kinetik", desc: "A count rolls to its next value. The old number blurs up and out as the new one rises in.",
     code: `const votes = Shaderfield.motion.odometer(el, { value: 47 });\nvotes.set(48);`,
     build(el, big) { const q = stage(el, big, `<div style="display:flex;align-items:center;gap:1.2em;padding:1em 1.2em;border-radius:1em;background:${PANEL};outline:1px solid ${LINE}"><div data-b style="width:4.4em;height:4.4em;border-radius:0.9em;background:${BG2};outline:1.5px solid rgba(242,242,244,0.14);display:flex;flex-direction:column;align-items:center;justify-content:center"><span data-a style="font-size:1em;font-weight:700;color:${MUTE}">▲</span><span data-n style="font-size:1.6em;font-weight:600"></span></div><div><div style="font-size:1.45em;font-weight:600;letter-spacing:-0.02em">Bulk export to CSV</div><div style="color:${MUTE};margin-top:0.3em">Requested by Northwind and 46 more</div></div></div>`, center);
