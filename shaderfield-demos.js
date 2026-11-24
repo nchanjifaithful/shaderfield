@@ -247,6 +247,11 @@
       const glow = M().glowHub(q("[data-h]"), { color: ACC }); let n = 1204;
       return { play: once(async () => { for (const s of [1, 0.6, 0.6, 1]) { glow.hit(s); n += 1; q("[data-n]").textContent = n.toLocaleString("en-US"); await wait(0.45); } }), stop: glow }; } });
 
+  add({ id: "border-comet", name: "Border Comet", cat: "Light", from: "Document AI Teaser", desc: "A glowing comet races around a border, in one colour or a blend of hues.",
+    code: `const stop = Shaderfield.motion.traceBorder(button, {\n  color: "#0ea5e9", length: 0.3, speed: 0.3\n});\n// multi-hue: { hues: ["#a78bfa", "#60a5fa", "#0ea5e9"] }`,
+    build(el, big) { const q = stage(el, big, `<div data-b style="display:flex;gap:0.6em;align-items:center;padding:0.9em 1.8em;border-radius:1.4em;background:rgba(242,242,244,0.06);outline:0.5px solid rgba(242,242,244,0.4);font-size:1.6em;color:#f2f2f4;box-shadow:0 0 2em rgba(14,165,233,0.14)">Read the docs<span style="color:${ACC}">→</span></div>`, center);
+      return loopDemo(() => M().traceBorder(q("[data-b]"), { color: ACC, width: big ? 2 : 1.5 })); } });
+
   // ── Motion Tryouts ──
   const TILE = [["#2c2f36", "#141619", 18, 48], ["#202329", "#0f1114", 82, 26], ["#32353c", "#18191d", 42, 38], ["#25282e", "#121418", 90, 18], ["#2e3138", "#151619", 8, 56], ["#22252a", "#101113", 62, 32]];
   const tileBg = (i) => { const [a, b, x, k] = TILE[i % TILE.length]; return `radial-gradient(120% 85% at ${x}% 0%, color-mix(in srgb, ${ACC} ${k}%, transparent) 0%, transparent 62%), linear-gradient(170deg, ${a} 0%, ${b} 100%)`; };

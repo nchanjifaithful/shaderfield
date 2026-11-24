@@ -2794,6 +2794,17 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     const stop = () => { stopL(); h.remove(); el.style.boxShadow = bs; el.style.transform = tf; };
     stop.hit = (s = 1) => { hits.push([now() - t0, s]); if (hits.length > 8) hits = hits.slice(-8); }; return stop;
   }
+  // Border comet: a glowing head with a fading tail races around a rounded border
+  function traceBorder(el, o = {}) {
+    rel(el); const col = o.color || "#34d399", len = o.length ?? 0.3, spd = o.speed ?? 0.3, w = o.width ?? 2, r = o.radius ?? (parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0);
+    const svg = svgEl("svg", { "aria-hidden": "true" }); svg.style.cssText = `position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:3;opacity:0;filter:drop-shadow(0 0 ${o.glow ?? 6}px ${withA(col, 0.75)});`;
+    // A smooth tail: N short butt-capped segments end to end, fading from the round-capped head
+    const N = o.tail === false ? 1 : 20, L = len / N, ov = 0.0015, hues = o.hues, segCol = (i) => (hues && hues.length ? hues[Math.min(hues.length - 1, Math.floor((i / N) * hues.length))] : col);
+    const segs = Array.from({ length: N }, (_, i) => svg.appendChild(svgEl("rect", { x: 0, y: 0, width: "100%", height: "100%", rx: r, fill: "none", stroke: segCol(i), "stroke-width": w, "stroke-linecap": i === 0 ? "round" : "butt", pathLength: 1, "stroke-dasharray": `${L + ov} ${1 - L - ov}`, opacity: (N === 1 ? 1 : Math.pow(1 - i / N, 1.8)).toFixed(3) })));
+    el.appendChild(svg);
+    const stop = loopFx(t => { const hd = (t * spd) % 1; segs.forEach((q, i) => q.setAttribute("stroke-dashoffset", (L + ov - (hd - i * L)).toFixed(4))); svg.style.opacity = clamp(t / 0.5).toFixed(3); });
+    return () => { stop(); svg.remove(); };
+  }
   // Pick focus: every option pulses once, then the chosen one lights up while the rest dim back
   function pickFocus(items, index, o = {}) {
     items = [...items]; const col = o.color || "#34d399", dim = o.dim ?? 0.72, d = o.duration ?? 0.5, pulse = o.pulse !== false && index >= 0, T0 = pulse ? 0.5 : 0;
@@ -3118,5 +3129,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       .then(() => { if (nx) { nx.style.clipPath = ""; f.remove(); return; } if (o.keep) return f; return play(0.35, t => (f.style.opacity = (1 - t / 0.35).toFixed(3))).then(() => f.remove()); });
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, splitTone, colorWave, converge, slotRoll, wordTrail, marquee, odometer, toastStack, dotMorph, coverflow, cardDrift, morph, flipCard, progressButton, liveFeed, faceScan, coinPill, streak, promptSend, blinds, columnWipe, blockWipe, doors, beamWipe, markExpand, circleFlood, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, traceBorder, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, splitTone, colorWave, converge, slotRoll, wordTrail, marquee, odometer, toastStack, dotMorph, coverflow, cardDrift, morph, flipCard, progressButton, liveFeed, faceScan, coinPill, streak, promptSend, blinds, columnWipe, blockWipe, doors, beamWipe, markExpand, circleFlood, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

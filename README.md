@@ -17,7 +17,7 @@
 ## Overview
 
 - **31 shaders.** GLSL fields, text and glyph shaders, particles, Canvas 2D scenes and an optional 3D glass add-on. Each has its own parameters, palettes, cursor interaction, PNG export and video recording.
-- **77 motion effects.** Text entrances, interface micro-motion, scene transitions and light, all on plain DOM elements.
+- **78 motion effects.** Text entrances, interface micro-motion, scene transitions and light, all on plain DOM elements.
 - **Three ways to use it.** A `<shader-field>` HTML element for websites, a frame-accurate `render(t)` API for video tools, and a ready-made prompt for AI coding agents.
 
 The repository also contains the Shaderfield site: a component browser where you can try every effect live, tune it, and copy the code, a prompt or a video render.
@@ -238,7 +238,7 @@ Glass Icons uses three.js, so it lives in a separate file that loads three.js fr
 
 **Transitions.** [Curtain](docs/motion/curtain.md) · [Iris Close](docs/motion/iris.md) · [Line Draw](docs/motion/draw-frame.md) · [Line Draw](docs/motion/draw-line.md) · [Block Reveal](docs/motion/stripes.md) · [Camera Push](docs/motion/camera-push.md) · [Light Flash](docs/motion/flash.md) · [Radial Reveal](docs/motion/radial-reveal.md) · [Footer Reveal](docs/motion/underlay-reveal.md) · [Shock Ring](docs/motion/shock.md) · [Push Through](docs/motion/push-through.md) · [Blinds](docs/motion/blinds.md) · [Column Rise](docs/motion/column-wipe.md) · [Block Wipe](docs/motion/block-wipe.md) · [Doors](docs/motion/doors.md) · [Beam Wipe](docs/motion/beam-wipe.md) · [Mark Expand](docs/motion/mark-expand.md) · [Circle Flood](docs/motion/circle-flood.md)
 
-**Light.** [Glow Sheen](docs/motion/glow-text.md) · [Impact Glow](docs/motion/glow-hub.md)
+**Light.** [Glow Sheen](docs/motion/glow-text.md) · [Impact Glow](docs/motion/glow-hub.md) · [Border Comet](docs/motion/trace-border.md)
 
 ## Palettes
 
