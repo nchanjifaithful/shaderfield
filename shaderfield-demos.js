@@ -342,6 +342,12 @@
     build(el, big) { const q = stage(el, big, `<div data-b style="padding:0 1.8em;height:3.2em;border-radius:999px;background:${INK};color:#09090b;font-size:1.4em;font-weight:600;display:flex;align-items:center;white-space:nowrap">Publish</div>`, center);
       return { play: once(async () => { const b = q("[data-b]"); await M().progressButton(b, { reset: true }); await wait(0.25); await M().progressButton(b, { busy: "Publishing…", done: "Published", duration: 0.9, doneColor: ACC, doneInk: "#09090b" }); await wait(1.1); return M().progressButton(b, { reset: true }); }) }; } });
 
+  add({ id: "live-feed", name: "Live Feed", cat: "Interface", from: "Vaulton Product", desc: "New rows push in at the top while the older ones slide down and dim.",
+    code: `Shaderfield.motion.liveFeed(list, rowsHtml, { interval: 0.66, max: 5 });`,
+    build(el, big) { const rows = [["Lisbon", 12], ["Singapore", 40], ["Dubai", 250], ["London", 8], ["Toronto", 30], ["Zurich", 1200], ["São Paulo", 20], ["Seoul", 90]].map(([c, u]) => `<span style="flex:none;width:1.3em;height:1.3em;border-radius:50%;border:2px solid ${ACC};box-sizing:border-box"></span><span style="font-weight:600">${c}</span><span style="margin-left:auto;font-family:${MONO};color:${MUTE}">+${u.toLocaleString("en-US")} units</span>`);
+      const q = stage(el, big, `<div data-f style="width:min(24em,80%);height:${big ? 280 : 150}px;font-size:1.2em"></div>`, center);
+      return loopDemo(() => M().liveFeed(q("[data-f]"), rows, { rowHeight: big ? 52 : 30, interval: 0.7 })); } });
+
   add({ id: "blinds", name: "Blinds", cat: "Transitions", from: "Bllind Launch", desc: "Horizontal bands close from their centre lines in a ragged order, the scene swaps, and they open again.",
     code: `Shaderfield.motion.blinds(stage, { bands: 12, color: "#0ea5e9", onSwap: () => showNext() });`,
     build(el, big) { const q = stage(el, big, scene("a", "Hire on skill.", BG1, INK) + scene("b", "Bias out.", ACC, "#09090b", true, 5.6)); const flip = flipB(q);
