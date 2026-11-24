@@ -2856,6 +2856,14 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     return play(dl + 0.3 + D, t => ch.forEach((s, i) => { const u = t - dl, q = 1 - EZ.inOut(clamp((u - 0.28) / D)), a = (i / n) * 6.2832 + 0.5 + u * 0.9 + rnd(i, 1) * 0.4, r = R * (1 + 0.25 * rnd(i, 3));
       s.style.opacity = clamp((u - i * 0.02) / 0.2).toFixed(3); s.style.transform = q < 0.001 ? "" : `translate(${((Math.cos(a) * r - off[i]) * q).toFixed(1)}px,${(Math.sin(a) * r * q).toFixed(1)}px) rotate(${(q * (rnd(i, 9) - 0.5) * 60).toFixed(1)}deg)`; }));
   }
+  // Colour wave: letters (or words) rise out of a blur in an accent colour, then settle into the text colour (Vaulton, Invois App)
+  function colorWave(el, o = {}) {
+    const by = o.by || "char", B = o.to || getComputedStyle(el).color, parts = by === "word" ? splitWords(el) : splitChars(el, true), st = o.stagger ?? (by === "word" ? 0.075 : 0.03), d = o.duration ?? (by === "word" ? 0.3 : 0.55);
+    const A = o.from || "#6e9bff", dl = o.delay || 0, fs = fsOf(el), rs = o.rise ?? (by === "word" ? 0.32 : 0.28), bl = o.blur ?? (by === "word" ? 0 : 12);
+    return play(dl + parts.length * st + d * 2.2, t => parts.forEach((s, i) => { const a = dl + i * st, p = oExpo(clamp((t - a) / d)), k = clamp((t - a - d * 0.4) / (d * 1.6));
+      s.style.opacity = p.toFixed(3); s.style.color = k >= 1 ? "" : `color-mix(in srgb, ${B} ${Math.round(k * 100)}%, ${A})`; s.style.filter = bl ? blurPx(p, bl) : "none";
+      s.style.transform = `translateY(${((1 - p) * rs * fs).toFixed(1)}px)` + (by === "word" ? ` scale(${(0.92 + 0.08 * p).toFixed(3)})` : ""); }));
+  }
   // ── Motion Tryouts: interface ──
   const bgOf = (f) => (/^(#|rgb|hsl|oklch|color-mix|linear-gradient|radial-gradient|conic-gradient|repeating-)/.test(f || "") ? f : `center/cover url("${f}")`);
   const stageXY = (stage, n) => { const sr = stage.getBoundingClientRect(), sc = sr.width / (stage.offsetWidth || 1) || 1, r = n.getBoundingClientRect(); return [(r.left - sr.left + r.width / 2) / sc, (r.top - sr.top + r.height / 2) / sc, r.width / sc, r.height / sc]; };
@@ -2935,5 +2943,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     return play(D * 2 + 0.05, t => { if (t < D) frame(t / D, true); else { swap(); frame(clamp((t - D) / D), false); } }).then(() => wrap.remove());
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, odometer, toastStack, dotMorph, promptSend, blinds, columnWipe, blockWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, colorWave, odometer, toastStack, dotMorph, promptSend, blinds, columnWipe, blockWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
