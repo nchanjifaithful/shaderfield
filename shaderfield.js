@@ -2779,6 +2779,21 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       if (head) { const pt = p.getPointAtLength(L * e); head.setAttribute("cx", pt.x.toFixed(1)); head.setAttribute("cy", pt.y.toFixed(1)); head.setAttribute("opacity", t < dl ? 0 : e < 1 ? 1 : clamp(1 - (t - dl - d) / 0.35).toFixed(3)); } })
       .then(() => { if (head) head.remove(); return p; });
   }
+  // Impact glow: a halo behind an element breathes, and swells and flares each time hit() is called
+  function glowHub(el, o = {}) {
+    const par = el.parentNode; rel(par); rel(el); const col = o.color || "#34d399", sz = o.size ?? 2.3, base = o.base ?? 0.6, brA = o.breathe ?? 0.5, t0 = now();
+    const h = document.createElement("div"); h.setAttribute("aria-hidden", "true");
+    h.style.cssText = `position:absolute;border-radius:50%;pointer-events:none;background:radial-gradient(closest-side, ${withA(col, 0.75)} 0%, ${withA(col, 0.3)} 40%, ${withA(col, 0.08)} 62%, ${withA(col, 0)} 78%);`;
+    par.insertBefore(h, el); const bs = el.style.boxShadow, tf = el.style.transform; let hits = [];
+    const stopL = loopFx(() => { const t = now() - t0, w = el.offsetWidth, hh = el.offsetHeight, D = Math.max(w, hh) * sz;
+      const k = hits.reduce((m, [ht, s]) => (t >= ht ? Math.max(m, s * Math.exp(-(t - ht) * 6)) : m), 0), br = brA * (0.5 + 0.5 * Math.sin(t * 1.6));
+      h.style.width = h.style.height = D + "px"; h.style.left = el.offsetLeft + w / 2 - D / 2 + "px"; h.style.top = el.offsetTop + hh / 2 - D / 2 + "px";
+      h.style.opacity = Math.min(1, base + 0.15 * br + 0.6 * k).toFixed(3); h.style.transform = `scale(${(1 + 0.05 * br + 0.26 * k).toFixed(4)})`;
+      if (o.ring !== false) el.style.boxShadow = `inset 0 0 0 ${(1.5 + 1.5 * k).toFixed(2)}px ${withA(col, 0.55 + 0.45 * k)}, 0 0 ${(18 + 46 * k).toFixed(1)}px ${withA(col, 0.25 + 0.5 * k)}` + (bs ? ", " + bs : "");
+      if (o.pulse !== false) el.style.transform = (tf ? tf + " " : "") + `scale(${(1 + 0.08 * k).toFixed(4)})`; });
+    const stop = () => { stopL(); h.remove(); el.style.boxShadow = bs; el.style.transform = tf; };
+    stop.hit = (s = 1) => { hits.push([now() - t0, s]); if (hits.length > 8) hits = hits.slice(-8); }; return stop;
+  }
   // Pick focus: every option pulses once, then the chosen one lights up while the rest dim back
   function pickFocus(items, index, o = {}) {
     items = [...items]; const col = o.color || "#34d399", dim = o.dim ?? 0.72, d = o.duration ?? 0.5, pulse = o.pulse !== false && index >= 0, T0 = pulse ? 0.5 : 0;
@@ -2971,5 +2986,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       [...L.children, ...Rr.children].forEach(b => (b.style.opacity = e)); if (t >= CL) swap(); }).then(() => wrap.remove());
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, colorWave, odometer, toastStack, dotMorph, coverflow, cardDrift, promptSend, blinds, columnWipe, blockWipe, doors, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, colorWave, odometer, toastStack, dotMorph, coverflow, cardDrift, promptSend, blinds, columnWipe, blockWipe, doors, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();

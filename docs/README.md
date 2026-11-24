@@ -5,11 +5,11 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 61
+- [Motion effects](#motion-effects) · 62
   - [Text](#text) · 19
   - [Interface](#interface) · 26
   - [Transitions](#transitions) · 15
-  - [Light](#light) · 1
+  - [Light](#light) · 2
 
 ## Shaders
 
@@ -187,3 +187,4 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | Effect | Helper | Description |
 |---|---|---|
 | [Glow Sheen](motion/glow-text.md) | `glowText` | A bright band drifts through gradient text under a soft glow. |
+| [Impact Glow](motion/glow-hub.md) | `glowHub` | A halo behind an element flares each time something lands. |
