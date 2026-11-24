@@ -289,6 +289,11 @@
     build(el, big) { const q = stage(el, big, `<div style="font-size:${big ? 4.2 : 3.4}em;font-weight:500;letter-spacing:-0.03em;white-space:nowrap;display:flex;align-items:center;line-height:1.15em"><span style="display:block;height:1.15em">the&nbsp;</span><span data-s style="color:${ACC}"></span></div>`, center);
       return loopDemo(() => M().slotRoll(q("[data-s]"), ["dynamic", "flexible", "adaptive", "fastest"])); } });
 
+  add({ id: "split-tone", name: "Split Tone", cat: "Text", from: "Invois Reveal", desc: "Letters light up from the edges inward, then a second colour sweeps through the line from right to left.",
+    code: `Shaderfield.motion.splitTone(el, {\n  colors: ["#0ea5e9", "#f2f2f4"],  // swept colour, starting colour\n  from: 1.05, to: -0.05, soft: 0.05, duration: 1.4\n});`,
+    build(el, big) { const q = stage(el, big, `<div data-t style="font-size:${big ? 2.7 : 1.7}em;font-weight:600;letter-spacing:-0.03em;line-height:1.2;white-space:nowrap">The beginning of something new</div>`, center);
+      return { play: once(async () => { await M().splitTone(q("[data-t]"), { colors: [ACC, INK], from: 1.05, to: -0.05, soft: 0.05, duration: 1.4 }); await wait(0.6); }) }; } });
+
   add({ id: "odometer", name: "Odometer", cat: "Interface", from: "Echoform · Kinetik", desc: "A count rolls to its next value. The old number blurs up and out as the new one rises in.",
     code: `const votes = Shaderfield.motion.odometer(el, { value: 47 });\nvotes.set(48);`,
     build(el, big) { const q = stage(el, big, `<div style="display:flex;align-items:center;gap:1.2em;padding:1em 1.2em;border-radius:1em;background:${PANEL};outline:1px solid ${LINE}"><div data-b style="width:4.4em;height:4.4em;border-radius:0.9em;background:${BG2};outline:1.5px solid rgba(242,242,244,0.14);display:flex;flex-direction:column;align-items:center;justify-content:center"><span data-a style="font-size:1em;font-weight:700;color:${MUTE}">▲</span><span data-n style="font-size:1.6em;font-weight:600"></span></div><div><div style="font-size:1.45em;font-weight:600;letter-spacing:-0.02em">Bulk export to CSV</div><div style="color:${MUTE};margin-top:0.3em">Requested by Northwind and 46 more</div></div></div>`, center);

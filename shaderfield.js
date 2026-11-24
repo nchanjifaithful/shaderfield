@@ -2871,6 +2871,13 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     return play(dl + 0.3 + D, t => ch.forEach((s, i) => { const u = t - dl, q = 1 - EZ.inOut(clamp((u - 0.28) / D)), a = (i / n) * 6.2832 + 0.5 + u * 0.9 + rnd(i, 1) * 0.4, r = R * (1 + 0.25 * rnd(i, 3));
       s.style.opacity = clamp((u - i * 0.02) / 0.2).toFixed(3); s.style.transform = q < 0.001 ? "" : `translate(${((Math.cos(a) * r - off[i]) * q).toFixed(1)}px,${(Math.sin(a) * r * q).toFixed(1)}px) rotate(${(q * (rnd(i, 9) - 0.5) * 60).toFixed(1)}deg)`; }));
   }
+  // Split tone: letters light from the edges in, then a two-colour split travels leftward through the line (Invois Reveal)
+  function splitTone(el, o = {}) {
+    const ch = splitChars(el, false), n = ch.length, [A, B] = o.colors || ["#01ffff", "#e3e8ff"], s0 = o.from ?? 1.05, s1 = o.to ?? 0.64, soft = o.soft ?? 0.03, d = o.duration ?? 0.75, dl = o.delay || 0, ig = o.ignite !== false;
+    return play(dl + 0.45 + d, t => { const u = t - dl, sp = lerp(s0, s1, oCubic(clamp((u - 0.45) / d)));
+      ch.forEach((s, i) => { const x = (i + 0.5) / n, k = clamp((x - sp) / soft + 0.5), at = (1 - Math.abs(x - 0.5) * 2) * 0.27 + rnd(i, 5) * 0.1;
+        s.style.color = `color-mix(in srgb, ${B} ${Math.round(k * 100)}%, ${A})`; s.style.opacity = ig ? q4((u - at) / 0.2).toFixed(3) : 1; }); });
+  }
   // Colour wave: letters (or words) rise out of a blur in an accent colour, then settle into the text colour (Vaulton, Invois App)
   function colorWave(el, o = {}) {
     const by = o.by || "char", B = o.to || getComputedStyle(el).color, parts = by === "word" ? splitWords(el) : splitChars(el, true), st = o.stagger ?? (by === "word" ? 0.075 : 0.03), d = o.duration ?? (by === "word" ? 0.3 : 0.55);
@@ -3045,5 +3052,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       if (nx) nx.style.clipPath = `polygon(${-2 * W}px 0px, ${(e - (H / 2) * T).toFixed(1)}px 0px, ${(e + (H / 2) * T).toFixed(1)}px ${H}px, ${-2 * W}px ${H}px)`; if (e > W / 2) swap(); }).then(() => { wrap.remove(); if (nx) nx.style.clipPath = ""; });
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, colorWave, converge, slotRoll, odometer, toastStack, dotMorph, coverflow, cardDrift, morph, flipCard, progressButton, promptSend, blinds, columnWipe, blockWipe, doors, beamWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, splitTone, colorWave, converge, slotRoll, odometer, toastStack, dotMorph, coverflow, cardDrift, morph, flipCard, progressButton, promptSend, blinds, columnWipe, blockWipe, doors, beamWipe, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
