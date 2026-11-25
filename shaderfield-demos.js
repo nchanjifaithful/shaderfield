@@ -309,6 +309,11 @@
     build(el, big) { const q = stage(el, big, `<div data-t style="position:absolute;left:0.5em;top:50%;margin-top:-0.55em;font-size:10em;font-weight:500;letter-spacing:-0.04em;line-height:1.1;white-space:nowrap">every investment is worthwhile</div>`);
       return { play: once(async () => { await M().marquee(q("[data-t]"), { duration: 2.6, distance: -0.62, stagger: 0.06 }); await wait(0.4); }) }; } });
 
+  add({ id: "underline-cycle", name: "Underline Cycle", cat: "Text", from: "Oncheck Brand Animation", desc: "Value words take turns. Each one's underline draws in, then retracts to the right as it leaves.",
+    code: `Shaderfield.motion.underlineCycle(el, ["Crafted.", "Bold.", "Yours."], { color: "#0ea5e9" });`,
+    build(el, big) { const q = stage(el, big, `<div data-t style="font-size:5.4em;font-weight:600;letter-spacing:-0.04em"></div>`, center);
+      return loopDemo(() => M().underlineCycle(q("[data-t]"), ["Crafted.", "Bold.", "Yours."], { color: ACC, thickness: "0.035em", width: "1.6em" })); } });
+
   add({ id: "odometer", name: "Odometer", cat: "Interface", from: "Echoform · Kinetik", desc: "A count rolls to its next value. The old number blurs up and out as the new one rises in.",
     code: `const votes = Shaderfield.motion.odometer(el, { value: 47 });\nvotes.set(48);`,
     build(el, big) { const q = stage(el, big, `<div style="display:flex;align-items:center;gap:1.2em;padding:1em 1.2em;border-radius:1em;background:${PANEL};outline:1px solid ${LINE}"><div data-b style="width:4.4em;height:4.4em;border-radius:0.9em;background:${BG2};outline:1.5px solid rgba(242,242,244,0.14);display:flex;flex-direction:column;align-items:center;justify-content:center"><span data-a style="font-size:1em;font-weight:700;color:${MUTE}">▲</span><span data-n style="font-size:1.6em;font-weight:600"></span></div><div><div style="font-size:1.45em;font-weight:600;letter-spacing:-0.02em">Bulk export to CSV</div><div style="color:${MUTE};margin-top:0.3em">Requested by Northwind and 46 more</div></div></div>`, center);

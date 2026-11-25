@@ -5,8 +5,8 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 78
-  - [Text](#text) · 24
+- [Motion effects](#motion-effects) · 79
+  - [Text](#text) · 25
   - [Interface](#interface) · 33
   - [Transitions](#transitions) · 18
   - [Light](#light) · 3
@@ -135,6 +135,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Split Tone](motion/split-tone.md) | `splitTone` | Letters light up from the edges inward, then a second colour sweeps through the line from right to left. |
 | [Word Trail](motion/word-trail.md) | `wordTrail` | Words land one by one and the earlier ones dim back, so the eye follows the newest. |
 | [Marquee Light](motion/marquee.md) | `marquee` | An oversized line drifts sideways while its letters brighten one after another. |
+| [Underline Cycle](motion/underline-cycle.md) | `underlineCycle` | Value words take turns. Each one's underline draws in, then retracts to the right as it leaves. |
 
 ### Interface
 

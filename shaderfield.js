@@ -2930,6 +2930,17 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     return play(dl + Math.max(d, ch.length * st + 0.25), t => { const u = t - dl; el.style.transform = `translateX(${(clamp(u / d) * dist * W).toFixed(1)}px)`;
       ch.forEach((s, k) => (s.style.opacity = (dim + (1 - dim) * clamp((u - 0.05 - k * st) / 0.2)).toFixed(3))); });
   }
+  // Underline cycle: value words take turns; each one's underline draws in, then retracts to the right as it leaves (Oncheck)
+  function underlineCycle(el, words, o = {}) {
+    rel(el); el.textContent = ""; el.setAttribute("aria-label", words.join(" ")); Object.assign(el.style, { display: "inline-flex", flexDirection: "column", alignItems: "center", gap: o.gap || "0.26em" });
+    const w = document.createElement("div"), track = document.createElement("div"), line = document.createElement("div"); w.setAttribute("aria-hidden", "true"); w.style.whiteSpace = "nowrap";
+    track.style.cssText = `width:${o.width || "1.75em"};height:${o.thickness || "1.5px"};display:flex;`; line.style.cssText = `height:100%;background:${o.color || "#ff8a8a"};`; track.appendChild(line); el.append(w, track);
+    const step = o.hold ?? 1.3, N = words.length; let last = -1;
+    return loopFx(t => { const i = Math.floor(t / step), u = t - i * step; if (i !== last) { last = i; w.textContent = words[i % N]; }
+      const iP = EZ.inOut(clamp(u / 0.55)), oP = EZ.inOut(clamp((u - step + 0.45) / 0.45)), draw = EZ.inOut(clamp((u - 0.3) / 0.7)), ret = EZ.inOut(clamp((u - step + 0.5) / 0.45));
+      w.style.opacity = (iP * (1 - oP)).toFixed(3); w.style.filter = `blur(${((1 - iP) * 10 + oP * 7).toFixed(1)}px)`; w.style.transform = `translateY(${((1 - iP) * 0.2 - oP * 0.12).toFixed(3)}em)`;
+      track.style.justifyContent = ret > 0 ? "flex-end" : "flex-start"; line.style.width = ((ret > 0 ? 1 - ret : draw) * 100).toFixed(2) + "%"; });
+  }
   // ── Motion Tryouts: interface ──
   const bgOf = (f) => (/^(#|rgb|hsl|oklch|color-mix|linear-gradient|radial-gradient|conic-gradient|repeating-)/.test(f || "") ? f : `center/cover url("${f}")`);
   const stageXY = (stage, n) => { const sr = stage.getBoundingClientRect(), sc = sr.width / (stage.offsetWidth || 1) || 1, r = n.getBoundingClientRect(); return [(r.left - sr.left + r.width / 2) / sc, (r.top - sr.top + r.height / 2) / sc, r.width / sc, r.height / sc]; };
@@ -3129,5 +3140,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
       .then(() => { if (nx) { nx.style.clipPath = ""; f.remove(); return; } if (o.keep) return f; return play(0.35, t => (f.style.opacity = (1 - t / 0.35).toFixed(3))).then(() => f.remove()); });
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, traceBorder, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, splitTone, colorWave, converge, slotRoll, wordTrail, marquee, odometer, toastStack, dotMorph, coverflow, cardDrift, morph, flipCard, progressButton, liveFeed, faceScan, coinPill, streak, promptSend, blinds, columnWipe, blockWipe, doors, beamWipe, markExpand, circleFlood, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, traceBorder, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, splitTone, colorWave, converge, slotRoll, wordTrail, marquee, underlineCycle, odometer, toastStack, dotMorph, coverflow, cardDrift, morph, flipCard, progressButton, liveFeed, faceScan, coinPill, streak, promptSend, blinds, columnWipe, blockWipe, doors, beamWipe, markExpand, circleFlood, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
