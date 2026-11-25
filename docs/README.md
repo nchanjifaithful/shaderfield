@@ -5,9 +5,9 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 81
+- [Motion effects](#motion-effects) · 82
   - [Text](#text) · 25
-  - [Interface](#interface) · 34
+  - [Interface](#interface) · 35
   - [Transitions](#transitions) · 19
   - [Light](#light) · 3
 
@@ -175,6 +175,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Coin Pill](motion/coin-pill.md) | `coinPill` | A currency coin pops in, a pill slides out of it and the country name types in. |
 | [Streak Dots](motion/streak.md) | `streak` | A row of day dots fills with colour one by one, each with a small pop. |
 | [Switch](motion/toggle.md) | `toggle` | Toggles slide their knobs across as the track fills with colour. |
+| [Step List](motion/step-list.md) | `stepList` | A dot and an arrow mark the active item and step down the list. The rest stay muted. |
 
 ### Transitions
 

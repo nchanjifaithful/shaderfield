@@ -389,6 +389,11 @@
       const ss = [...el.querySelectorAll("[data-s]")]; ss.forEach(s => M().toggle(s, { on: false, duration: 0.01, off: "#2a2a30" }));
       return { play: once(async () => { for (const s of ss) { M().toggle(s, { on: true, color: ACC, off: "#2a2a30" }); await wait(0.3); } await wait(0.9); ss.forEach(s => M().toggle(s, { on: false, color: ACC, off: "#2a2a30" })); await wait(0.3); }) }; } });
 
+  add({ id: "step-list", name: "Step List", cat: "Interface", from: "Gridd Launch", desc: "A dot and an arrow mark the active item and step down the list. The rest stay muted.",
+    code: `const steps = Shaderfield.motion.stepList(list, { interval: 0.8, color: "#0ea5e9" });\nsteps.set(2);`,
+    build(el, big) { const q = stage(el, big, `<div data-l style="display:flex;flex-direction:column;gap:0.7em;font-size:2.4em;font-weight:500;letter-spacing:-0.02em">${["buy", "use", "monetise"].map(w => `<div>${w}</div>`).join("")}</div>`, center);
+      return loopDemo(() => M().stepList(q("[data-l]"), { color: ACC, ink: INK, muted: DIM })); } });
+
   add({ id: "blinds", name: "Blinds", cat: "Transitions", from: "Bllind Launch", desc: "Horizontal bands close from their centre lines in a ragged order, the scene swaps, and they open again.",
     code: `Shaderfield.motion.blinds(stage, { bands: 12, color: "#0ea5e9", onSwap: () => showNext() });`,
     build(el, big) { const q = stage(el, big, scene("a", "Hire on skill.", BG1, INK) + scene("b", "Bias out.", ACC, "#09090b", true, 5.6)); const flip = flipB(q);
