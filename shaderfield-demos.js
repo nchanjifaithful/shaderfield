@@ -383,6 +383,12 @@
     build(el, big) { const q = stage(el, big, `<div data-s style="font-size:${big ? 1.7 : 1.15}em"></div>`, center);
       return { play: once(async () => { await M().streak(q("[data-s]"), { color: ACC, track: "rgba(242,242,244,0.16)", muted: MUTE }); await wait(0.6); }) }; } });
 
+  add({ id: "switch", name: "Switch", cat: "Interface", from: "Vaulton Product · Vindora", desc: "Toggles slide their knobs across as the track fills with colour.",
+    code: `Shaderfield.motion.toggle(el, { on: true, color: "#0ea5e9" });`,
+    build(el, big) { stage(el, big, `<div style="display:flex;flex-direction:column;gap:1em;font-size:1.3em">${["Verified holders only", "Auto captions", "Weekly digest"].map(l => `<div style="display:flex;align-items:center;gap:0.9em"><span data-s></span><span>${l}</span></div>`).join("")}</div>`, center);
+      const ss = [...el.querySelectorAll("[data-s]")]; ss.forEach(s => M().toggle(s, { on: false, duration: 0.01, off: "#2a2a30" }));
+      return { play: once(async () => { for (const s of ss) { M().toggle(s, { on: true, color: ACC, off: "#2a2a30" }); await wait(0.3); } await wait(0.9); ss.forEach(s => M().toggle(s, { on: false, color: ACC, off: "#2a2a30" })); await wait(0.3); }) }; } });
+
   add({ id: "blinds", name: "Blinds", cat: "Transitions", from: "Bllind Launch", desc: "Horizontal bands close from their centre lines in a ragged order, the scene swaps, and they open again.",
     code: `Shaderfield.motion.blinds(stage, { bands: 12, color: "#0ea5e9", onSwap: () => showNext() });`,
     build(el, big) { const q = stage(el, big, scene("a", "Hire on skill.", BG1, INK) + scene("b", "Bias out.", ACC, "#09090b", true, 5.6)); const flip = flipB(q);
