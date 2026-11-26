@@ -5,8 +5,8 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 82
-  - [Text](#text) · 25
+- [Motion effects](#motion-effects) · 83
+  - [Text](#text) · 26
   - [Interface](#interface) · 35
   - [Transitions](#transitions) · 19
   - [Light](#light) · 3
@@ -136,6 +136,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Word Trail](motion/word-trail.md) | `wordTrail` | Words land one by one and the earlier ones dim back, so the eye follows the newest. |
 | [Marquee Light](motion/marquee.md) | `marquee` | An oversized line drifts sideways while its letters brighten one after another. |
 | [Underline Cycle](motion/underline-cycle.md) | `underlineCycle` | Value words take turns. Each one's underline draws in, then retracts to the right as it leaves. |
+| [Pill Words](motion/pill-words.md) | `pillWords` | An outlined pill opens and the words grow into it one at a time. |
 
 ### Interface
 
