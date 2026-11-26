@@ -314,6 +314,11 @@
     build(el, big) { const q = stage(el, big, `<div data-t style="font-size:5.4em;font-weight:600;letter-spacing:-0.04em"></div>`, center);
       return loopDemo(() => M().underlineCycle(q("[data-t]"), ["Crafted.", "Bold.", "Yours."], { color: ACC, thickness: "0.035em", width: "1.6em" })); } });
 
+  add({ id: "pill-words", name: "Pill Words", cat: "Text", from: "Gridd Launch", desc: "An outlined pill opens and the words grow into it one at a time.",
+    code: `Shaderfield.motion.pillWords(el, { stagger: 0.35 });`,
+    build(el, big) { const q = stage(el, big, `<div data-t style="font-size:1.7em">don’t have the resources</div>`, center);
+      return { play: once(async () => { await M().pillWords(q("[data-t]"), { color: "rgba(242,242,244,0.6)" }); await wait(0.6); }) }; } });
+
   add({ id: "odometer", name: "Odometer", cat: "Interface", from: "Echoform · Kinetik", desc: "A count rolls to its next value. The old number blurs up and out as the new one rises in.",
     code: `const votes = Shaderfield.motion.odometer(el, { value: 47 });\nvotes.set(48);`,
     build(el, big) { const q = stage(el, big, `<div style="display:flex;align-items:center;gap:1.2em;padding:1em 1.2em;border-radius:1em;background:${PANEL};outline:1px solid ${LINE}"><div data-b style="width:4.4em;height:4.4em;border-radius:0.9em;background:${BG2};outline:1.5px solid rgba(242,242,244,0.14);display:flex;flex-direction:column;align-items:center;justify-content:center"><span data-a style="font-size:1em;font-weight:700;color:${MUTE}">▲</span><span data-n style="font-size:1.6em;font-weight:600"></span></div><div><div style="font-size:1.45em;font-weight:600;letter-spacing:-0.02em">Bulk export to CSV</div><div style="color:${MUTE};margin-top:0.3em">Requested by Northwind and 46 more</div></div></div>`, center);
