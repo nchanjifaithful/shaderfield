@@ -399,6 +399,12 @@
     build(el, big) { const q = stage(el, big, `<div data-l style="display:flex;flex-direction:column;gap:0.7em;font-size:2.4em;font-weight:500;letter-spacing:-0.02em">${["buy", "use", "monetise"].map(w => `<div>${w}</div>`).join("")}</div>`, center);
       return loopDemo(() => M().stepList(q("[data-l]"), { color: ACC, ink: INK, muted: DIM })); } });
 
+  add({ id: "node-map", name: "Node Map", cat: "Interface", from: "Vindora Launch", desc: "Clips pop onto a board, the chosen ones ring up, dotted links draw between them and the rest dim and strike through.",
+    code: `Shaderfield.motion.nodeMap(board, clips, {\n  links: [[0, 5, "match cut"], [5, 2, "motion flow"], [2, 7, "beat drop"]],\n  color: "#0ea5e9"\n});`,
+    build(el, big) { const P = [[4, 10], [29, 10], [54, 10], [79, 10], [4, 62], [29, 62], [54, 62], [79, 62]];
+      const q = stage(el, big, `<div data-b style="position:absolute;inset:8%;border-radius:1em;background:${PANEL};outline:1px solid ${LINE};background-image:radial-gradient(rgba(242,242,244,0.08) 1.5px, transparent 2px);background-size:1.6em 1.6em">${P.map(([x, y], i) => `<div data-n style="position:absolute;left:${x}%;top:${y}%;width:17%;height:26%;border-radius:0.6em;background:${tileBg(i)};color:#fff;font-family:${MONO};font-size:0.8em;padding:0.4em 0.5em;box-sizing:border-box;opacity:0">clip_0${i + 1}</div>`).join("")}</div>`);
+      return { play: once(async () => { const b = q("[data-b]"); await M().nodeMap(b, b.querySelectorAll("[data-n]"), { links: [[0, 5, "match cut"], [5, 2, "motion flow"], [2, 7, "beat drop"]], color: ACC, width: big ? 4 : 2.5, labelSize: big ? "0.85em" : "0.75em" }); await wait(0.8); }) }; } });
+
   add({ id: "blinds", name: "Blinds", cat: "Transitions", from: "Bllind Launch", desc: "Horizontal bands close from their centre lines in a ragged order, the scene swaps, and they open again.",
     code: `Shaderfield.motion.blinds(stage, { bands: 12, color: "#0ea5e9", onSwap: () => showNext() });`,
     build(el, big) { const q = stage(el, big, scene("a", "Hire on skill.", BG1, INK) + scene("b", "Bias out.", ACC, "#09090b", true, 5.6)); const flip = flipB(q);
