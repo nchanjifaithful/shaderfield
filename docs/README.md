@@ -5,10 +5,10 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 85
+- [Motion effects](#motion-effects) · 86
   - [Text](#text) · 27
   - [Interface](#interface) · 36
-  - [Transitions](#transitions) · 19
+  - [Transitions](#transitions) · 20
   - [Light](#light) · 3
 
 ## Shaders
@@ -203,6 +203,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Mark Expand](motion/mark-expand.md) | `markExpand` | The logo mark grows until it fills the frame with its colour, ready for the next scene. |
 | [Circle Flood](motion/circle-flood.md) | `circleFlood` | A disc of colour bursts out of the pressed button until it covers the frame. |
 | [Circle Sweep](motion/circle-sweep.md) | `circleSweep` | Two large discs sweep in, cover the frame for the swap, then sweep out the other side. |
+| [Runway Wipe](motion/runway.md) | `runway` | The next page rises from the bottom like a curtain while its content lifts into place. |
 
 ### Light
 
