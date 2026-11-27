@@ -3213,6 +3213,14 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     const d = o.duration ?? 0.9, lift = o.lift ?? 60, dl = o.delay || 0, inner = el.firstElementChild, out = !!o.out;
     return play(dl + d, t => { const p = EZ.inOut(clamp((t - dl) / d)), v = out ? 1 - p : p; el.style.clipPath = `inset(${((1 - v) * 100).toFixed(2)}% 0 0 0)`; if (inner) inner.style.transform = `translateY(${((1 - v) * lift).toFixed(1)}px)`; }).then(() => { if (!out) el.style.clipPath = ""; });
   }
+  // Whip pan: one scene whips off to the side with a speed blur as the next whips in from the other side (Onne)
+  function whip(a, b, o = {}) {
+    const d = o.duration ?? 0.6, sg = o.direction === "right" ? 1 : -1, W = ((a || b).parentElement.clientWidth || 800) * 1.1, bl = o.blur ?? 6;
+    if (b) b.style.transform = `translateX(${-sg * W}px)`;
+    return play(d, t => { const k = EZ.inOut(clamp(t / d)), sp = Math.sin(Math.PI * k) * bl, f = sp > 0.3 ? `blur(${sp.toFixed(1)}px)` : "none";
+      if (a) { a.style.transform = `translateX(${(sg * W * k).toFixed(1)}px)`; a.style.filter = f; } if (b) { b.style.transform = `translateX(${(-sg * W * (1 - k)).toFixed(1)}px)`; b.style.filter = f; } })
+      .then(() => { if (a) a.style.filter = "none"; if (b) { b.style.filter = "none"; b.style.transform = ""; } });
+  }
   // Circle sweep: two large discs sweep in one after the other, cover the frame for the swap, then sweep out the other side (Gridd)
   function circleSweep(el, o = {}) {
     rel(el); const W = el.clientWidth, H = el.clientHeight, R = Math.hypot(W, H) * 0.56, d = o.duration ?? 0.55, lag = o.lag ?? 0.09, swap = swapper(o);
@@ -3223,5 +3231,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     return play(2 * d + lag, t => { pos(A, t / d); pos(B, (t - lag) / d); if (t >= d + lag) swap(); }).then(() => { A.remove(); B.remove(); });
   }
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, traceBorder, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, splitTone, colorWave, converge, slotRoll, wordTrail, marquee, underlineCycle, pillWords, squareReveal, centerSplit, odometer, toastStack, dotMorph, coverflow, cardDrift, morph, flipCard, progressButton, liveFeed, faceScan, coinPill, streak, nodeMap, dragSwap, waveform, promptSend, toggle, stepList, blinds, columnWipe, blockWipe, doors, beamWipe, markExpand, circleFlood, runway, circleSweep, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, traceBorder, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, splitTone, colorWave, converge, slotRoll, wordTrail, marquee, underlineCycle, pillWords, squareReveal, centerSplit, odometer, toastStack, dotMorph, coverflow, cardDrift, morph, flipCard, progressButton, liveFeed, faceScan, coinPill, streak, nodeMap, dragSwap, waveform, promptSend, toggle, stepList, blinds, columnWipe, blockWipe, doors, beamWipe, markExpand, circleFlood, runway, whip, circleSweep, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
