@@ -5,9 +5,9 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 90
+- [Motion effects](#motion-effects) · 91
   - [Text](#text) · 28
-  - [Interface](#interface) · 38
+  - [Interface](#interface) · 39
   - [Transitions](#transitions) · 21
   - [Light](#light) · 3
 
@@ -182,6 +182,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Node Map](motion/node-map.md) | `nodeMap` | Clips pop onto a board, the chosen ones ring up, dotted links draw between them and the rest dim and strike through. |
 | [Drag Swap](motion/drag-swap.md) | `dragSwap` | A card lifts with a tilt and a shadow, travels to another slot while that card glides back, and the two trade places. |
 | [Waveform](motion/waveform.md) | `waveform` | Bars grow up out of a line, then a playhead sweeps through and colours them. |
+| [Swatch Rise](motion/swatches.md) | `swatches` | Palette columns rise from below one after another, then their names and values fade in. |
 
 ### Transitions
 
