@@ -425,6 +425,11 @@
     build(el, big) { const q = stage(el, big, `<div style="width:min(28em,84%);display:flex;flex-direction:column;gap:1em"><div style="display:flex;gap:0.5em">${["Warm", "Energetic", "Calm"].map((v, i) => `<span style="flex:1;text-align:center;padding:0.6em 0;border-radius:2em;background:${i === 1 ? ACC : BG2};color:${i === 1 ? "#09090b" : INK};font-weight:600;font-size:0.95em;white-space:nowrap">${v}</span>`).join("")}</div><div data-w style="height:${big ? 110 : 60}px"></div></div>`, center);
       return loopDemo(() => M().waveform(q("[data-w]"), { color: ACC, track: "rgba(242,242,244,0.18)", bars: big ? 46 : 30, gap: big ? "6px" : "4px" })); } });
 
+  add({ id: "swatch-rise", name: "Swatch Rise", cat: "Interface", from: "Oncheck Brand Book · Gridd", desc: "Palette columns rise from below one after another, then their names and values fade in.",
+    code: `Shaderfield.motion.swatches(el, [\n  { color: "#09090b", name: "Ink", ratio: 34 },\n  { color: "#0ea5e9", name: "Accent", ratio: 18, ink: "#09090b" }\n]);`,
+    build(el, big) { const q = stage(el, big, `<div data-s style="position:absolute;inset:0;font-size:${big ? 1.4 : 0.85}em"></div>`);
+      return { play: once(async () => { await M().swatches(q("[data-s]"), [{ color: "#09090b", name: "Ink", ratio: 30, ink: INK, hex: "#09090B" }, { color: BG2, name: "Graphite", ratio: 22, ink: INK }, { color: ACC, name: "Accent", ratio: 18, ink: "#09090b" }, { color: ACC2, name: "Mist", ratio: 15, ink: "#09090b" }, { color: INK, name: "Paper", ratio: 15, ink: "#09090b" }]); await wait(0.5); }) }; } });
+
   add({ id: "blinds", name: "Blinds", cat: "Transitions", from: "Bllind Launch", desc: "Horizontal bands close from their centre lines in a ragged order, the scene swaps, and they open again.",
     code: `Shaderfield.motion.blinds(stage, { bands: 12, color: "#0ea5e9", onSwap: () => showNext() });`,
     build(el, big) { const q = stage(el, big, scene("a", "Hire on skill.", BG1, INK) + scene("b", "Bias out.", ACC, "#09090b", true, 5.6)); const flip = flipB(q);
