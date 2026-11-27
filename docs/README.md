@@ -5,10 +5,10 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 89
+- [Motion effects](#motion-effects) · 90
   - [Text](#text) · 28
   - [Interface](#interface) · 38
-  - [Transitions](#transitions) · 20
+  - [Transitions](#transitions) · 21
   - [Light](#light) · 3
 
 ## Shaders
@@ -207,6 +207,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Circle Flood](motion/circle-flood.md) | `circleFlood` | A disc of colour bursts out of the pressed button until it covers the frame. |
 | [Circle Sweep](motion/circle-sweep.md) | `circleSweep` | Two large discs sweep in, cover the frame for the swap, then sweep out the other side. |
 | [Runway Wipe](motion/runway.md) | `runway` | The next page rises from the bottom like a curtain while its content lifts into place. |
+| [Whip Pan](motion/whip.md) | `whip` | One window whips off to the side with a speed blur as the next whips in. |
 
 ### Light
 
