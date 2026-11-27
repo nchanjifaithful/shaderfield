@@ -324,6 +324,11 @@
     build(el, big) { const q = stage(el, big, `<div data-t style="font-size:2.6em;${H1}text-align:center;white-space:pre;padding:0 0.2em">To present your\ncompany in a new light</div>`, center);
       return { play: once(() => M().squareReveal(q("[data-t]"), { color: ACC })) }; } });
 
+  add({ id: "center-split", name: "Centre Split", cat: "Text", from: "Gridd Launch", desc: "The middle letter stands up, then the word opens outward from it.",
+    code: `Shaderfield.motion.centerSplit(wordmark, { duration: 0.45 });`,
+    build(el, big) { const q = stage(el, big, `<div data-t style="font-size:${big ? 6 : 4.6}em;font-weight:700;letter-spacing:-0.045em;line-height:1.15;white-space:nowrap">shaderfield</div>`, center);
+      return { play: once(async () => { await M().centerSplit(q("[data-t]")); await wait(0.5); }) }; } });
+
   add({ id: "odometer", name: "Odometer", cat: "Interface", from: "Echoform · Kinetik", desc: "A count rolls to its next value. The old number blurs up and out as the new one rises in.",
     code: `const votes = Shaderfield.motion.odometer(el, { value: 47 });\nvotes.set(48);`,
     build(el, big) { const q = stage(el, big, `<div style="display:flex;align-items:center;gap:1.2em;padding:1em 1.2em;border-radius:1em;background:${PANEL};outline:1px solid ${LINE}"><div data-b style="width:4.4em;height:4.4em;border-radius:0.9em;background:${BG2};outline:1.5px solid rgba(242,242,244,0.14);display:flex;flex-direction:column;align-items:center;justify-content:center"><span data-a style="font-size:1em;font-weight:700;color:${MUTE}">▲</span><span data-n style="font-size:1.6em;font-weight:600"></span></div><div><div style="font-size:1.45em;font-weight:600;letter-spacing:-0.02em">Bulk export to CSV</div><div style="color:${MUTE};margin-top:0.3em">Requested by Northwind and 46 more</div></div></div>`, center);
