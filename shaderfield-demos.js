@@ -420,6 +420,11 @@
     build(el, big) { stage(el, big, `<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8em;width:min(24em,78%)">${["Opener", "Close-up", "City", "Drop"].map((t, i) => `<div data-k style="padding:0.55em;border-radius:0.8em;background:${BG2};outline:1px solid ${LINE}"><div style="height:3.2em;border-radius:0.5em;background:${tileBg(i + 2)};color:#fff;font-weight:700;padding:0.35em 0.55em;box-sizing:border-box">${i + 1}</div><div style="font-weight:600;margin-top:0.45em">${t}</div></div>`).join("")}</div>`, center);
       return { play: once(async () => { const ks = [...el.querySelectorAll("[data-k]")]; await M().dragSwap(ks[3], ks[1]); await wait(0.6); }) }; } });
 
+  add({ id: "waveform", name: "Waveform", cat: "Interface", from: "Vindora Launch", desc: "Bars grow up out of a line, then a playhead sweeps through and colours them.",
+    code: `Shaderfield.motion.waveform(el, { bars: 46, color: "#0ea5e9" });`,
+    build(el, big) { const q = stage(el, big, `<div style="width:min(28em,84%);display:flex;flex-direction:column;gap:1em"><div style="display:flex;gap:0.5em">${["Warm", "Energetic", "Calm"].map((v, i) => `<span style="flex:1;text-align:center;padding:0.6em 0;border-radius:2em;background:${i === 1 ? ACC : BG2};color:${i === 1 ? "#09090b" : INK};font-weight:600;font-size:0.95em;white-space:nowrap">${v}</span>`).join("")}</div><div data-w style="height:${big ? 110 : 60}px"></div></div>`, center);
+      return loopDemo(() => M().waveform(q("[data-w]"), { color: ACC, track: "rgba(242,242,244,0.18)", bars: big ? 46 : 30, gap: big ? "6px" : "4px" })); } });
+
   add({ id: "blinds", name: "Blinds", cat: "Transitions", from: "Bllind Launch", desc: "Horizontal bands close from their centre lines in a ragged order, the scene swaps, and they open again.",
     code: `Shaderfield.motion.blinds(stage, { bands: 12, color: "#0ea5e9", onSwap: () => showNext() });`,
     build(el, big) { const q = stage(el, big, scene("a", "Hire on skill.", BG1, INK) + scene("b", "Bias out.", ACC, "#09090b", true, 5.6)); const flip = flipB(q);
