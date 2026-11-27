@@ -410,6 +410,11 @@
       const q = stage(el, big, `<div data-b style="position:absolute;inset:8%;border-radius:1em;background:${PANEL};outline:1px solid ${LINE};background-image:radial-gradient(rgba(242,242,244,0.08) 1.5px, transparent 2px);background-size:1.6em 1.6em">${P.map(([x, y], i) => `<div data-n style="position:absolute;left:${x}%;top:${y}%;width:17%;height:26%;border-radius:0.6em;background:${tileBg(i)};color:#fff;font-family:${MONO};font-size:0.8em;padding:0.4em 0.5em;box-sizing:border-box;opacity:0">clip_0${i + 1}</div>`).join("")}</div>`);
       return { play: once(async () => { const b = q("[data-b]"); await M().nodeMap(b, b.querySelectorAll("[data-n]"), { links: [[0, 5, "match cut"], [5, 2, "motion flow"], [2, 7, "beat drop"]], color: ACC, width: big ? 4 : 2.5, labelSize: big ? "0.85em" : "0.75em" }); await wait(0.8); }) }; } });
 
+  add({ id: "drag-swap", name: "Drag Swap", cat: "Interface", from: "Vindora Launch", desc: "A card lifts with a tilt and a shadow, travels to another slot while that card glides back, and the two trade places.",
+    code: `await Shaderfield.motion.dragSwap(cardD, cardB);`,
+    build(el, big) { stage(el, big, `<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8em;width:min(24em,78%)">${["Opener", "Close-up", "City", "Drop"].map((t, i) => `<div data-k style="padding:0.55em;border-radius:0.8em;background:${BG2};outline:1px solid ${LINE}"><div style="height:3.2em;border-radius:0.5em;background:${tileBg(i + 2)};color:#fff;font-weight:700;padding:0.35em 0.55em;box-sizing:border-box">${i + 1}</div><div style="font-weight:600;margin-top:0.45em">${t}</div></div>`).join("")}</div>`, center);
+      return { play: once(async () => { const ks = [...el.querySelectorAll("[data-k]")]; await M().dragSwap(ks[3], ks[1]); await wait(0.6); }) }; } });
+
   add({ id: "blinds", name: "Blinds", cat: "Transitions", from: "Bllind Launch", desc: "Horizontal bands close from their centre lines in a ragged order, the scene swaps, and they open again.",
     code: `Shaderfield.motion.blinds(stage, { bands: 12, color: "#0ea5e9", onSwap: () => showNext() });`,
     build(el, big) { const q = stage(el, big, scene("a", "Hire on skill.", BG1, INK) + scene("b", "Bias out.", ACC, "#09090b", true, 5.6)); const flip = flipB(q);
