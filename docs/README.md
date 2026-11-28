@@ -5,8 +5,8 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 94
-  - [Text](#text) · 29
+- [Motion effects](#motion-effects) · 95
+  - [Text](#text) · 30
   - [Interface](#interface) · 40
   - [Transitions](#transitions) · 21
   - [Light](#light) · 4
@@ -140,6 +140,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Square Reveal](motion/square-reveal.md) | `squareReveal` | A solid square pops in at the right and slides left, unmasking the title behind it. |
 | [Centre Split](motion/center-split.md) | `centerSplit` | The middle letter stands up, then the word opens outward from it. |
 | [Typewriter](motion/typewriter.md) | `typewriter` | Plain typing behind a blinking caret, for prompts, form fields and drafts. |
+| [Caption Pop](motion/captions.md) | `captions` | Subtitle words pop in one at a time. The word being spoken sits on an accent pill. |
 
 ### Interface
 

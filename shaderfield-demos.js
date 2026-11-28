@@ -334,6 +334,11 @@
     build(el, big) { const q = stage(el, big, `<div style="width:min(26em,82%);padding:1.2em 1.4em;border-radius:1em;background:${PANEL};outline:1px solid ${LINE};font-size:1.45em;line-height:1.4;min-height:4.6em;box-sizing:border-box"><span data-t>Clear layout and fast turnaround. The comparison table makes the plans easy to read.</span></div>`, center);
       return { play: once(() => M().typewriter(q("[data-t]"), { cps: 38, caretColor: ACC })) }; } });
 
+  add({ id: "caption-pop", name: "Caption Pop", cat: "Text", from: "Vindora Launch", desc: "Subtitle words pop in one at a time. The word being spoken sits on an accent pill.",
+    code: `Shaderfield.motion.captions(el, "Spring, but louder.", { accent: "#0ea5e9", per: 0.3 });`,
+    build(el, big) { const q = stage(el, big, `<div style="position:absolute;inset:10% 14%;border-radius:1em;background:${tileBg(4)};display:flex;align-items:flex-end;justify-content:center;padding-bottom:1.6em;box-sizing:border-box"><div data-t style="font-size:2.6em;font-weight:700;letter-spacing:-0.02em;max-width:92%"></div></div>`);
+      return { play: once(async () => { await M().captions(q("[data-t]"), "Spring, but louder.", { accent: ACC, ink: "#09090b", pill: INK, text: "#09090b" }); await wait(0.6); }) }; } });
+
   add({ id: "odometer", name: "Odometer", cat: "Interface", from: "Echoform · Kinetik", desc: "A count rolls to its next value. The old number blurs up and out as the new one rises in.",
     code: `const votes = Shaderfield.motion.odometer(el, { value: 47 });\nvotes.set(48);`,
     build(el, big) { const q = stage(el, big, `<div style="display:flex;align-items:center;gap:1.2em;padding:1em 1.2em;border-radius:1em;background:${PANEL};outline:1px solid ${LINE}"><div data-b style="width:4.4em;height:4.4em;border-radius:0.9em;background:${BG2};outline:1.5px solid rgba(242,242,244,0.14);display:flex;flex-direction:column;align-items:center;justify-content:center"><span data-a style="font-size:1em;font-weight:700;color:${MUTE}">▲</span><span data-n style="font-size:1.6em;font-weight:600"></span></div><div><div style="font-size:1.45em;font-weight:600;letter-spacing:-0.02em">Bulk export to CSV</div><div style="color:${MUTE};margin-top:0.3em">Requested by Northwind and 46 more</div></div></div>`, center);
