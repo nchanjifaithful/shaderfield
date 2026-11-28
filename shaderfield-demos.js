@@ -505,6 +505,11 @@
       stage(el, big, win("Feedback", [["Pricing page shipped", 70], ["Design review done", 45]]) + win("Q3 goals", [["Self-serve pricing", 82], ["Onboarding in 3 days", 64]], true)); let cur = 0;
       return { play: once(async () => { const ss = [...el.querySelectorAll("[data-s]")]; await M().whip(ss[cur], ss[1 - cur]); cur = 1 - cur; await wait(0.7); }) }; } });
 
+  add({ id: "squeeze", name: "Squeeze", cat: "Transitions", from: "Gridd Launch", desc: "An image between two words pinches down to a sliver and the words close in around it.",
+    code: `await Shaderfield.motion.squeeze(photo, { to: 18 });\nShaderfield.motion.squeeze(photo, { open: true });`,
+    build(el, big) { const q = stage(el, big, `<div style="display:flex;align-items:center;justify-content:center;gap:1.2em;font-size:1.5em;font-weight:500;letter-spacing:-0.02em;white-space:nowrap"><span>the way we</span><div data-i style="width:5em;height:6.5em;border-radius:0.4em;background:${tileBg(2)};flex:none"></div><span>recharge them</span></div>`, center);
+      return { play: once(async () => { const i = q("[data-i]"); await wait(0.4); await M().squeeze(i, { to: 10 }); await wait(0.9); await M().squeeze(i, { to: 10, open: true }); }) }; } });
+
   add({ id: "glass-ignite", name: "Glass Ignite", cat: "Light", from: "Invois Reveal", desc: "A hollow glass shape blurs in, flares as a sheen sweeps across it, then cools to a thin glowing outline.",
     code: `Shaderfield.motion.ignite(badge, { color: "#0ea5e9", glow: 1 });`,
     build(el, big) { const q = stage(el, big, `<div data-g style="display:flex;align-items:center;gap:0.6em;padding:0.75em 1.5em;border-radius:999px;border:${big ? 2 : 1.5}px solid transparent;font-size:2.2em;font-weight:500;letter-spacing:-0.02em;white-space:nowrap"><span style="width:0.42em;height:0.42em;border-radius:50%;background:currentColor;opacity:0.9"></span>Coming soon</div>`, center);

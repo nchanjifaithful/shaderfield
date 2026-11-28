@@ -5,10 +5,10 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 96
+- [Motion effects](#motion-effects) · 97
   - [Text](#text) · 30
   - [Interface](#interface) · 41
-  - [Transitions](#transitions) · 21
+  - [Transitions](#transitions) · 22
   - [Light](#light) · 4
 
 ## Shaders
@@ -213,6 +213,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Circle Sweep](motion/circle-sweep.md) | `circleSweep` | Two large discs sweep in, cover the frame for the swap, then sweep out the other side. |
 | [Runway Wipe](motion/runway.md) | `runway` | The next page rises from the bottom like a curtain while its content lifts into place. |
 | [Whip Pan](motion/whip.md) | `whip` | One window whips off to the side with a speed blur as the next whips in. |
+| [Squeeze](motion/squeeze.md) | `squeeze` | An image between two words pinches down to a sliver and the words close in around it. |
 
 ### Light
 
