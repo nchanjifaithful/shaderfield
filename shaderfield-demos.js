@@ -339,6 +339,12 @@
     build(el, big) { const q = stage(el, big, `<div style="position:absolute;inset:10% 14%;border-radius:1em;background:${tileBg(4)};display:flex;align-items:flex-end;justify-content:center;padding-bottom:1.6em;box-sizing:border-box"><div data-t style="font-size:2.6em;font-weight:700;letter-spacing:-0.02em;max-width:92%"></div></div>`);
       return { play: once(async () => { await M().captions(q("[data-t]"), "Spring, but louder.", { accent: ACC, ink: "#09090b", pill: INK, text: "#09090b" }); await wait(0.6); }) }; } });
 
+  add({ id: "rule-list", name: "Rule List", cat: "Text", from: "Oncheck Brand Book", desc: "Rows rise out of a blur while a hairline draws under each one.",
+    code: `Shaderfield.motion.ruleList(list, { stagger: 0.14 });`,
+    build(el, big) { const rows = ["The brand", "Personality and voice", "Logo", "Colour", "Typography"];
+      const q = stage(el, big, `<div data-l style="width:min(24em,80%);display:flex;flex-direction:column">${rows.map((t, i) => `<div style="display:flex;align-items:baseline;gap:1.6em;padding:0.5em 0"><span style="font-family:${MONO};font-size:0.8em;color:${DIM}">0${i + 1}</span><span style="font-size:1.5em;font-weight:500;letter-spacing:-0.02em">${t}</span></div>`).join("")}</div>`, center);
+      return { play: once(() => M().ruleList(q("[data-l]"), { color: INK, opacity: 0.22 })) }; } });
+
   add({ id: "odometer", name: "Odometer", cat: "Interface", from: "Echoform · Kinetik", desc: "A count rolls to its next value. The old number blurs up and out as the new one rises in.",
     code: `const votes = Shaderfield.motion.odometer(el, { value: 47 });\nvotes.set(48);`,
     build(el, big) { const q = stage(el, big, `<div style="display:flex;align-items:center;gap:1.2em;padding:1em 1.2em;border-radius:1em;background:${PANEL};outline:1px solid ${LINE}"><div data-b style="width:4.4em;height:4.4em;border-radius:0.9em;background:${BG2};outline:1.5px solid rgba(242,242,244,0.14);display:flex;flex-direction:column;align-items:center;justify-content:center"><span data-a style="font-size:1em;font-weight:700;color:${MUTE}">▲</span><span data-n style="font-size:1.6em;font-weight:600"></span></div><div><div style="font-size:1.45em;font-weight:600;letter-spacing:-0.02em">Bulk export to CSV</div><div style="color:${MUTE};margin-top:0.3em">Requested by Northwind and 46 more</div></div></div>`, center);
