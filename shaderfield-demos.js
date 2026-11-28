@@ -447,6 +447,11 @@
       const q = stage(el, big, `<div data-g style="position:absolute;inset:14% 5%;display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:1fr 1fr">${cells}</div>`);
       return { play: once(async () => { await M().tilePop(q("[data-g]"), { color: ACC, tint: ACC }); await wait(0.6); }) }; } });
 
+  add({ id: "timeline-draw", name: "Timeline Draw", cat: "Interface", from: "Corporate Presentation", desc: "The rule draws across, stems grow to each milestone, the boxes open and the copy settles in.",
+    code: `Shaderfield.motion.timeline(el, [\n  { x: 0.14, year: "1987", text: "The idea is born." },\n  { x: 0.38, year: "1989", text: "First office opens." }\n], { color: "#0ea5e9" });`,
+    build(el, big) { const q = stage(el, big, `<div data-t style="width:88%;height:80%;font-size:${big ? 1.15 : 0.75}em;color:${MUTE}"></div>`, center);
+      return { play: once(async () => { await M().timeline(q("[data-t]"), [{ x: 0.12, year: "1987", text: "The idea is born." }, { x: 0.37, year: "1989", text: "First office opens." }, { x: 0.62, year: "2001", text: "Two new offices." }, { x: 0.87, year: "2008", text: "A million customers." }], { color: ACC, line: "rgba(242,242,244,0.3)", labelWidth: "7em" }); await wait(0.6); }) }; } });
+
   add({ id: "blinds", name: "Blinds", cat: "Transitions", from: "Bllind Launch", desc: "Horizontal bands close from their centre lines in a ragged order, the scene swaps, and they open again.",
     code: `Shaderfield.motion.blinds(stage, { bands: 12, color: "#0ea5e9", onSwap: () => showNext() });`,
     build(el, big) { const q = stage(el, big, scene("a", "Hire on skill.", BG1, INK) + scene("b", "Bias out.", ACC, "#09090b", true, 5.6)); const flip = flipB(q);
