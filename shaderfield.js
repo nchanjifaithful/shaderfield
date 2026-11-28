@@ -3276,6 +3276,12 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
     const pos = (n, k) => { const [x, y] = at(clamp(k, 0, 2)); n.style.transform = `translate(${(x - R).toFixed(1)}px,${(y - R).toFixed(1)}px)`; };
     return play(2 * d + lag, t => { pos(A, t / d); pos(B, (t - lag) / d); if (t >= d + lag) swap(); }).then(() => { A.remove(); B.remove(); });
   }
+  // Squeeze: an image between two words pinches down to a sliver (or opens back with open: true) and the words close in around it (Gridd)
+  function squeeze(el, o = {}) {
+    const w0 = el._sfW || (el._sfW = el.offsetWidth), to = o.to ?? 18, d = o.duration ?? 0.35, dl = o.delay || 0, open = !!o.open; el.style.flex = "none"; el.style.overflow = "hidden";
+    return play(dl + d, t => { const k = EZ.inOut(clamp((t - dl) / d)); el.style.width = (open ? lerp(to, w0, k) : lerp(w0, to, k)).toFixed(1) + "px"; });
+  }
+
   // Glass ignite: a hollow glass shape blurs in, flares with a bloom as a sheen sweeps across it, then cools to a thin glowing outline (Invois Reveal)
   function ignite(el, o = {}) {
     rel(el); const col = o.color || "#1e90ff", K = o.glow ?? 1, dl = o.delay || 0, rest = o.rest ?? 0.3, parts = o.parts === false || !el.children.length ? [el] : [...el.children];
@@ -3289,5 +3295,5 @@ gl_FragColor=vec4(max(col,0.0),1.0);}`;
   }
 
   const css = (c) => `rgb(${c.map(v => Math.round(v * 255)).join(",")})`;
-  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, traceBorder, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, splitTone, colorWave, converge, slotRoll, captions, wordTrail, marquee, underlineCycle, pillWords, squareReveal, centerSplit, typewriter, odometer, toastStack, dotMorph, coverflow, cardDrift, morph, flipCard, progressButton, liveFeed, faceScan, coinPill, streak, nodeMap, dragSwap, waveform, promptSend, swatches, tilePop, timeline, toggle, stepList, blinds, columnWipe, blockWipe, doors, beamWipe, markExpand, circleFlood, runway, whip, circleSweep, ignite, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
+  window.Shaderfield = { version: "2.0.0", textPanel, EFFECTS, ORDER, PALETTES, Field, mount, css, motion: { typeIn, curtain, revealWords, springFollow, rise, lineRise, cycleWords, cut, typeLines, countUp, tick, bars, focusCard, pressable, signalBars, tabMorph, maskedScroll, iris, drawFrame, drawLine, stripes, cameraPush, flash, radialReveal, penTrail, underlayReveal, typeSwap, rollWords, solve, lyricFlow, bracketHop, colorIndex, discStack, pop, shock, spectrumRing, shine, typingDots, bracketCursor, glowText, neonType, focusPull, trackIn, clickCursor, scanBeam, wire, glowHub, traceBorder, pickFocus, lockClick, pushThrough, glyphWrite, slamIn, kinetic, splitTone, colorWave, converge, slotRoll, captions, wordTrail, marquee, underlineCycle, pillWords, squareReveal, centerSplit, typewriter, odometer, toastStack, dotMorph, coverflow, cardDrift, morph, flipCard, progressButton, liveFeed, faceScan, coinPill, streak, nodeMap, dragSwap, waveform, promptSend, swatches, tilePop, timeline, toggle, stepList, blinds, columnWipe, blockWipe, doors, beamWipe, markExpand, circleFlood, runway, whip, circleSweep, squeeze, ignite, ease: EZ, play, loop: loopFx, TYPE_MODES: Object.keys(TYPE_MODES) } };
 })();
