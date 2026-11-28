@@ -435,6 +435,13 @@
     build(el, big) { const q = stage(el, big, `<div data-s style="position:absolute;inset:0;font-size:${big ? 1.4 : 0.85}em"></div>`);
       return { play: once(async () => { await M().swatches(q("[data-s]"), [{ color: "#09090b", name: "Ink", ratio: 30, ink: INK, hex: "#09090B" }, { color: BG2, name: "Graphite", ratio: 22, ink: INK }, { color: ACC, name: "Accent", ratio: 18, ink: "#09090b" }, { color: ACC2, name: "Mist", ratio: 15, ink: "#09090b" }, { color: INK, name: "Paper", ratio: 15, ink: "#09090b" }]); await wait(0.5); }) }; } });
 
+  add({ id: "tile-pop", name: "Tile Pop", cat: "Interface", from: "Corporate Presentation", desc: "Photo tiles pop up from small with a tint that clears. Name tiles fill top-down in steps and their text fades in.",
+    code: `<div id="grid">\n  <div><img …></div>\n  <div data-fill>Adam Jordan</div>\n</div>\n\nShaderfield.motion.tilePop(grid, { color: "#0ea5e9", tint: "#0ea5e9" });`,
+    build(el, big) { const nm = ["Adam Jordan", "Lidia Sanches", "Sam Adams", "Mark Chen", "Nora Lind", "Adam Kun"]; let cells = "";
+      for (let r = 0; r < 2; r++) for (let c = 0; c < 6; c++) cells += (r + c) % 2 === 0 ? `<div style="background:${tileBg(r * 6 + c)}"></div>` : `<div data-fill style="color:#09090b;padding:0.6em;font-weight:500;font-size:${big ? 1.05 : 0.7}em;line-height:1.1"><div>${nm[(r * 6 + c) >> 1].replace(" ", "<br>")}</div></div>`;
+      const q = stage(el, big, `<div data-g style="position:absolute;inset:14% 5%;display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:1fr 1fr">${cells}</div>`);
+      return { play: once(async () => { await M().tilePop(q("[data-g]"), { color: ACC, tint: ACC }); await wait(0.6); }) }; } });
+
   add({ id: "blinds", name: "Blinds", cat: "Transitions", from: "Bllind Launch", desc: "Horizontal bands close from their centre lines in a ragged order, the scene swaps, and they open again.",
     code: `Shaderfield.motion.blinds(stage, { bands: 12, color: "#0ea5e9", onSwap: () => showNext() });`,
     build(el, big) { const q = stage(el, big, scene("a", "Hire on skill.", BG1, INK) + scene("b", "Bias out.", ACC, "#09090b", true, 5.6)); const flip = flipB(q);
