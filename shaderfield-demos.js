@@ -452,6 +452,12 @@
     build(el, big) { const q = stage(el, big, `<div data-t style="width:88%;height:80%;font-size:${big ? 1.15 : 0.75}em;color:${MUTE}"></div>`, center);
       return { play: once(async () => { await M().timeline(q("[data-t]"), [{ x: 0.12, year: "1987", text: "The idea is born." }, { x: 0.37, year: "1989", text: "First office opens." }, { x: 0.62, year: "2001", text: "Two new offices." }, { x: 0.87, year: "2008", text: "A million customers." }], { color: ACC, line: "rgba(242,242,244,0.3)", labelWidth: "7em" }); await wait(0.6); }) }; } });
 
+  add({ id: "flicker-on", name: "Flicker On", cat: "Interface", from: "Corporate Presentation", desc: "Tiles switch on in a scattered order, each stepping up in a few hard flickers, as the wall settles back.",
+    code: `Shaderfield.motion.flickerIn(wall.children, { spread: 0.8, steps: 4 });`,
+    build(el, big) { const th = `<div style="aspect-ratio:16/10;background:${BG2};outline:1px solid ${LINE};position:relative"><i style="position:absolute;left:10%;top:16%;width:12%;height:14%;background:${ACC}"></i><i style="position:absolute;left:28%;top:18%;width:40%;height:9%;background:rgba(242,242,244,0.5)"></i><i style="position:absolute;left:10%;top:46%;width:60%;height:5%;background:rgba(242,242,244,0.16)"></i><i style="position:absolute;left:10%;top:60%;width:46%;height:5%;background:rgba(242,242,244,0.16)"></i></div>`;
+      const q = stage(el, big, `<div data-w style="position:absolute;inset:-12%;display:grid;grid-template-columns:repeat(6,1fr);gap:0.8em;align-content:center">${th.repeat(36)}</div>`);
+      return { play: once(async () => { const w = q("[data-w]"); M().play(2, t => (w.style.transform = `scale(${(1.18 - 0.18 * M().ease.out(t / 2)).toFixed(4)})`)); await M().flickerIn(w.children, { spread: 0.9 }); await wait(1.2); }) }; } });
+
   add({ id: "blinds", name: "Blinds", cat: "Transitions", from: "Bllind Launch", desc: "Horizontal bands close from their centre lines in a ragged order, the scene swaps, and they open again.",
     code: `Shaderfield.motion.blinds(stage, { bands: 12, color: "#0ea5e9", onSwap: () => showNext() });`,
     build(el, big) { const q = stage(el, big, scene("a", "Hire on skill.", BG1, INK) + scene("b", "Bias out.", ACC, "#09090b", true, 5.6)); const flip = flipB(q);

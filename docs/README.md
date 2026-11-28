@@ -5,9 +5,9 @@
 Every shader and motion effect in Shaderfield has its own page with a description, usage, parameters or options, and a link to its live demo.
 
 - [Shaders](#shaders) · 31
-- [Motion effects](#motion-effects) · 97
+- [Motion effects](#motion-effects) · 98
   - [Text](#text) · 30
-  - [Interface](#interface) · 41
+  - [Interface](#interface) · 42
   - [Transitions](#transitions) · 22
   - [Light](#light) · 4
 
@@ -187,6 +187,7 @@ All helpers live on `Shaderfield.motion`. One-shot helpers return a `Promise`; c
 | [Swatch Rise](motion/swatches.md) | `swatches` | Palette columns rise from below one after another, then their names and values fade in. |
 | [Tile Pop](motion/tile-pop.md) | `tilePop` | Photo tiles pop up from small with a tint that clears. Name tiles fill top-down in steps and their text fades in. |
 | [Timeline Draw](motion/timeline.md) | `timeline` | The rule draws across, stems grow to each milestone, the boxes open and the copy settles in. |
+| [Flicker On](motion/flicker-in.md) | `flickerIn` | Tiles switch on in a scattered order, each stepping up in a few hard flickers, as the wall settles back. |
 
 ### Transitions
 
